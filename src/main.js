@@ -1,5 +1,3 @@
-
-
 import './set-public-path'
 import { h, createApp } from 'vue'
 import singleSpaVue from 'single-spa-vue'
@@ -17,13 +15,15 @@ import './styles/sweetalert2.css'
 import 'vue-select/dist/vue-select.css'
 import Highcharts from 'highcharts'
 import HighchartsVue from 'highcharts-vue'
-import VCalendar from 'v-calendar';
-import 'v-calendar/style.css';
-if(process.env.VUE_APP_STANDALONE_SINGLE_SPA==='true'){
-  require('@/components/StandAloneStyle.vue');
-}else{
+import VCalendar from 'v-calendar'
+import 'v-calendar/style.css'
+import ApiService from './store/services/api.service'
+if (process.env.VUE_APP_STANDALONE_SINGLE_SPA === 'true') {
+  require('@/components/StandAloneStyle.vue')
+} else {
   require('@/components/SingleSpaStyle.vue')
 }
+
 const vueLifecycles = singleSpaVue({
   createApp,
   appOptions: {
@@ -33,14 +33,15 @@ const vueLifecycles = singleSpaVue({
         // https://single-spa.js.org/docs/building-applications#lifecycle-props
         // if you uncomment these, remember to add matching prop definitions for them in your App.vue file.
         /*
-        name: this.name,
-        mountParcel: this.mountParcel,
-        singleSpa: this.singleSpa,
-        */
+                                                                                                                                                                name: this.name,
+                                                                                                                                                                mountParcel: this.mountParcel,
+                                                                                                                                                                singleSpa: this.singleSpa,
+                                                                                                                                                                */
       })
     },
   },
   handleInstance(app) {
+    ApiService.init()
     app.use(router)
     app.use(store)
     app.use(CoreuiVue)
@@ -49,7 +50,7 @@ const vueLifecycles = singleSpaVue({
     app.component('CIcon', CIcon)
     app.component('v-select', vSelect)
     app.use(HighchartsVue, {
-      highcharts: Highcharts
+      highcharts: Highcharts,
     })
     app.use(VCalendar, {})
   },

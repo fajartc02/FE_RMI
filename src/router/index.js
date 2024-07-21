@@ -14,18 +14,18 @@ const routes = [
       process.env.VUE_APP_STANDALONE_SINGLE_SPA === 'true'
         ? DefaultLayoutStandAlone
         : DefaultLayout,
-    redirect:  ( process.env.VUE_APP_STANDALONE_SINGLE_SPA!=='true' && (!localStorage.id_token || localStorage.id_token == '' )) ?
-      () => {
-        window.location.href = process.env.dc+'/#/sc/login'
-        // return '/redirectingToLogin' // not important since redirecting
-      }: '/app/dashboard',
+    redirect:
+      process.env.VUE_APP_STANDALONE_SINGLE_SPA !== 'true' &&
+      (!localStorage.id_token || localStorage.id_token == '')
+        ? () => {
+            window.location.href = process.env.dc + '/#/sc/login'
+            // return '/redirectingToLogin' // not important since redirecting
+          }
+        : '/app/dashboard',
     children: [
       {
         path: '/app/dashboard',
         name: 'Dashboard',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: () => import('@/views/Dashboard.vue'),
       },
       {
@@ -36,7 +36,8 @@ const routes = [
       {
         path: '/app/CheckIngot',
         name: 'Check Ingot',
-        component: () => import('@/views/pages/RMIIngot.vue'),
+        component: () =>
+          import('@/views/pages/RawMaterialCheck/IngotScreen/RMIIngot.vue'),
       },
       {
         path: '/app/CheckSand',
@@ -53,16 +54,6 @@ const routes = [
         name: 'RMIMasterSand',
         component: () => import('@/views/pages/RMIMasterSand.vue'),
       },
-
-
-      // URL
-      // {
-      //   path: '/qdc/quality-operational',
-      //   name: 'Quality Operational',
-      //   component: () => import('@/views/qdc/QualityOperational.vue'),
-      // },
-
-/*define other in here*/
     ],
   },
   {

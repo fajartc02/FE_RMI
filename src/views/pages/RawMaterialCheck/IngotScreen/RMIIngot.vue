@@ -1,12 +1,12 @@
 <template>
   <CRow>
-    <CCol lg="4">
-      <CardForms FormTitle="Ingot" :FormData="forms" @outputData="scanner"/>
+    <CCol lg="12">
+      <QRScanner FormTitle="Ingot" :FormData="forms" @outputData="scanner" />
     </CCol>
   </CRow>
   <CRow>
     <CCol v-if="is_data && is_valid">
-      <Table CardTitle="Ingot" :labels="labels" :items="items"/>
+      <Table CardTitle="Ingot" :labels="labels" :items="items" />
     </CCol>
     <CCol v-if="is_data && !is_valid">
 
@@ -24,20 +24,17 @@
 </template>
 
 <script>
-import CardForms from '../../components/CardForm.vue'
-import CardValidator from '../../components/CardValidator.vue'
-import Table from '../../components/Table.vue'
+import QRScanner from '@/components/RawMaterialInspection/QRScanner.vue'
+import Table from '@/components/Table.vue'
 
 
 export default {
   name: 'RMIIngot',
 
-  data(){
+  data() {
     return {
       is_data: false,
       is_valid: false,
-
-
       forms: [
         {
           key: 'ingot_id',
@@ -49,29 +46,29 @@ export default {
       ],
 
       columns: [
-          {
-            key: 'id',
-            label: '#',
-            _props: { scope: 'col' },
-          },
-          {
-            key: 'class',
-            _props: { scope: 'col' },
-          },
-          {
-            key: 'heading_1',
-            label: 'Heading',
-            _props: { scope: 'col' },
-          },
-          {
-            key: 'heading_2',
-            label: 'Heading',
-            _props: { scope: 'col' },
-          },
-        ],
+        {
+          key: 'id',
+          label: '#',
+          _props: { scope: 'col' },
+        },
+        {
+          key: 'class',
+          _props: { scope: 'col' },
+        },
+        {
+          key: 'heading_1',
+          label: 'Heading',
+          _props: { scope: 'col' },
+        },
+        {
+          key: 'heading_2',
+          label: 'Heading',
+          _props: { scope: 'col' },
+        },
+      ],
 
       items: [
-      {
+        {
           id: 1,
           class: 'Mark',
           heading_1: 'Otto',
@@ -98,21 +95,20 @@ export default {
   },
 
   components: {
-    CardForms,
-    CardValidator,
+    QRScanner,
     Table,
   },
 
-  methods:{
-    scanner(data){
+  methods: {
+    scanner(data) {
       this.scannedData
       console.log(this.scannedData);
 
-      if(this.scannedData === 2){
+      if (this.scannedData === 2) {
         this.is_data = true
         this.is_valid = true
       }
-      
+
       console.log(this.scannedData);
     }
   },

@@ -1,4 +1,7 @@
 import { createStore } from 'vuex'
+import QRModule from './modules/QR.module'
+import LOADINGModule from './modules/LOADING.module'
+import AUTHModule from './modules/AUTH.module'
 
 export default createStore({
   state: {
@@ -17,5 +20,10 @@ export default createStore({
     },
   },
   actions: {},
-  modules: {},
+  modules: {
+    AUTHModule,
+    LOADINGModule,
+
+    QRModule,
+  },
 })

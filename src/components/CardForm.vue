@@ -9,9 +9,9 @@
     <CCardBody>
       <CRow>
         <!-- <CForm> -->
-          <CCol  v-for="(Form, i) in Data" :key="i">
-            <CFormInput :label="Form.label" :type="Form.type"  :placeholder="Form.placeholder" v-model="Form.value"/>
-          </CCol>
+        <CCol v-for="(Form, i) in Data" :key="i">
+          <CFormInput :label="Form.label" :type="Form.type" :placeholder="Form.placeholder" v-model="Form.value" />
+        </CCol>
         <!-- </CForm> -->
       </CRow>
     </CCardBody>
@@ -39,10 +39,10 @@ export default {
     Form() {
       let key = null
       for (let i = 0; i < this.Data.length; i++) {
-        if(this.Data[i].value != ''){
-          if(key != null){
+        if (this.Data[i].value != '') {
+          if (key != null) {
             params += '&' + this.Data[i].key + '=' + this.Data[i].value
-          }else{
+          } else {
             key = this.Data[i].key + '=' + this.Data[i].value
           }
         }
