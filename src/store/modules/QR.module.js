@@ -25,6 +25,7 @@ const actions = {
   async ACTION_QR_SAMPLE({ commit }, QR_SAMPLEData) {
     try {
       commit(SET_LOADING, true)
+      ApiService.setHeader()
       const response = await ApiService.post('sample-scanner', QR_SAMPLEData)
       commit(SET_QR_SAMPLE, response)
       commit(SET_LOADING, false)

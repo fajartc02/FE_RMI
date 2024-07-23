@@ -1,11 +1,10 @@
 <template>
-  <CSidebar position="fixed" :unfoldable="sidebarUnfoldable" :visible="sidebarVisible" @visible-change="
-    (event) =>
-      $store.commit({
-        type: 'updateSidebarVisible',
-        value: event,
-      })
-  ">
+  <CSidebar position="fixed" :unfoldable="sidebarUnfoldable" :visible="sidebarVisible" @visible-change="(event) =>
+    $store.commit({
+      type: 'updateSidebarVisible',
+      value: event,
+    })
+    ">
     <CSidebarBrand>
       <img src="../assets/brand/Toyota_logo.png" class="img-fluid sidebar-brand-full" width="200" height="200" />
       <img src="../assets/brand/Toyota_logo.png" class="sidebar-brand-narrow" width="36" height="10" />
@@ -68,49 +67,15 @@ export default {
       nav: [
         {
           component: 'CNavItem',
-          name: 'Home',
-          to: '/app/dashboard',
-          icon: 'cilHome',
-          parentId: 'ROOT',
-        },
-        {
-          component: 'CNavItem',
-          to: '/app/RMIMonitoring',
-          name: 'RMI Monitoring',
-          icon: 'cilScreenDesktop',
-          parentId: 'ROOT',
-        },
-        {
-          component: 'CNavItem',
-          to: '/app/CheckIngot',
-          name: 'Check Ingot',
-          icon: 'cilClearAll',
-          parentId: 'ROOT',
-        },
-        {
-          component: 'CNavItem',
-          to: '/app/CheckSand',
-          name: 'Check Sand',
-          icon: 'cilBlur',
-          parentId: 'ROOT',
-        },
-        {
-          component: 'CNavGroup',
-          to: '/app/RMIMaster',
-          name: 'RMI Master',
+          to: '/inspection/ingot',
+          name: 'Ingot Check',
           icon: 'cilNotes',
           parentId: 'GROUP-ROOT',
           items: [
             {
               component: 'CNavItem',
-              to: '/app/RMIMaster/RMIMasterIngot',
-              name: 'Master Ingot',
-              parentId: 'ROOT',
-            },
-            {
-              component: 'CNavItem',
-              to: '/app/RMIMaster/RMIMasterSand',
-              name: 'Master Sand',
+              to: '/inspection/ingot/vendor',
+              name: 'Vendor',
               parentId: 'ROOT',
             },
           ],

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import JwtService from './jwt.service'
 /**
  * Service to call HTTP request via Axios
  */

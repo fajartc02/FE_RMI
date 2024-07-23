@@ -6,7 +6,7 @@ export const SET_LOGIN = 'SET_LOGIN'
 export const ACTION_LOGIN = 'ACTION_LOGIN'
 
 const state = {
-  LOGIN_DATA: [],
+  LOGIN_DATA: localStorage.getItem('id_token') || null,
 }
 
 const getters = {
@@ -20,20 +20,19 @@ const mutations = {
     state.LOGIN_DATA = payload
   },
 }
-
+// MODEL: HG6145D2
 const actions = {
   async ACTION_LOGIN({ commit }, LOGINData = null) {
     try {
       LOGINData = LOGINData
         ? LOGINData
         : {
-            username: 'john.doe@example.com',
-            password: 'P@ssw0rdAPP!',
+            username: 'fajar@example.com',
+            password: 'Toyota@123',
           }
 
-      const response = await ApiService.post('auth/login', LOGINData)
-      console.log(response)
-      jwtService.saveToken(response.data.token)
+      const { data } = await ApiService.post('auth/login', LOGINData)
+      jwtService.saveToken(data.data.access_token)
     } catch (error) {
       console.error(error)
       return error

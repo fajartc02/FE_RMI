@@ -1,6 +1,8 @@
 <template>
-  <div v-if="!IS_LOADING" class="spinner text-muted">
-    Loading...
+  <div v-if="!IS_LOADING" class="d-flex justify-content-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
   </div>
 </template>
 <script>

@@ -7,7 +7,6 @@
 import { ACTION_QR_SAMPLE } from '@/store/modules/QR.module'
 import { QrcodeStream } from 'vue-qrcode-reader'
 import LoadingComponent from '@/components/RawMaterialInspection/LoadingComponent.vue'
-import { ACTION_LOGIN } from '@/store/modules/AUTH.module'
 
 export default {
   name: 'QRScanner',
@@ -15,7 +14,7 @@ export default {
     return {
       result: null,
       form: {
-        sample_code: null,
+        sampleCode: null,
         data: null
       }
     }
@@ -25,13 +24,12 @@ export default {
     LoadingComponent
   },
   methods: {
-    onDetect(detectedCodes) {
-      console.log(detectedCodes)
+    async onDetect(detectedCodes) {
       const rawValue = detectedCodes[0].rawValue.split('\n')
       const sampleCode = rawValue[1].split(';')[0]
-      this.form.sample_code = sampleCode
-      this.form.data = rawValue
-      this.$store.dispatch(ACTION_QR_SAMPLE, this.form)
+      this.form.sampleCode = sampleCode
+      this.form.data = detectedCodes[0].rawValue
+      await this.$store.dispatch(ACTION_QR_SAMPLE, this.form)
     },
     onCameraReady() {
       console.log('camera ready')
@@ -40,8 +38,5 @@ export default {
       console.log('error', error)
     }
   },
-  mounted() {
-    this.$store.dispatch(ACTION_LOGIN)
-  }
 }
 </script>

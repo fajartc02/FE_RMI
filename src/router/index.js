@@ -21,38 +21,13 @@ const routes = [
             window.location.href = process.env.dc + '/#/sc/login'
             // return '/redirectingToLogin' // not important since redirecting
           }
-        : '/app/dashboard',
+        : '/dashboard',
     children: [
       {
-        path: '/app/dashboard',
-        name: 'Dashboard',
-        component: () => import('@/views/Dashboard.vue'),
-      },
-      {
-        path: '/app/RMIMonitoring',
-        name: 'RMIMonitoring',
-        component: () => import('@/views/pages/RMIMonitoring.vue'),
-      },
-      {
-        path: '/app/CheckIngot',
-        name: 'Check Ingot',
+        path: '/inspection/ingot/vendor',
+        name: 'Ingot Check',
         component: () =>
-          import('@/views/pages/RawMaterialCheck/IngotScreen/RMIIngot.vue'),
-      },
-      {
-        path: '/app/CheckSand',
-        name: 'Check Sand',
-        component: () => import('@/views/pages/RMISand.vue'),
-      },
-      {
-        path: '/app/RMIMaster/RMIMasterIngot',
-        name: 'RMIMasterIngot',
-        component: () => import('@/views/pages/RMIMasterIngot.vue'),
-      },
-      {
-        path: '/app/RMIMaster/RMIMasterSand',
-        name: 'RMIMasterSand',
-        component: () => import('@/views/pages/RMIMasterSand.vue'),
+          import('@/views/pages/RawMaterialCheck/IngotScreen/InspectionVendor'),
       },
     ],
   },

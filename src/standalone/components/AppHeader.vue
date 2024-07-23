@@ -5,10 +5,10 @@
         <CIcon icon="cil-menu" size="lg" style="color: #EB0A1E" />
       </CHeaderToggler>
       <CHeaderBrand class="mx-auto d-lg-none d-md-none">
-        <h3 id="headerLabel1">{{headerLabel}}</h3>
+        <h3 id="headerLabel1">{{ headerLabel }}</h3>
       </CHeaderBrand>
       <CHeaderNav class="d-none d-md-flex me-auto">
-        <h3 id="headerLabel2">{{headerLabel}}</h3>
+        <h3 id="headerLabel2">{{ headerLabel }}</h3>
       </CHeaderNav>
       <CHeaderNav>
         <AppHeaderDropdownAccnt />
@@ -31,7 +31,7 @@ export default {
     AppBreadcrumb,
     AppHeaderDropdownAccnt,
   },
-  data(){
+  data() {
     return {
       headerLabel: process.env.VUE_APP_HEADER_LABEL
     }
