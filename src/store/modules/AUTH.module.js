@@ -32,6 +32,7 @@ const actions = {
           }
 
       const { data } = await ApiService.post('auth/login', LOGINData)
+      console.log(data)
       jwtService.saveToken(data.data.access_token)
     } catch (error) {
       console.error(error)

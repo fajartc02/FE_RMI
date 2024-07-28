@@ -4,6 +4,7 @@
 
 <script>
 import { ACTION_LOGIN } from '@/store/modules/AUTH.module'
+import ApiService from './store/services/api.service';
 export default {
   name: 'App',
   mounted() {
@@ -11,11 +12,3 @@ export default {
   }
 }
 </script>
-
-<!--
-<style lang="scss">
-// Import Main styles for this application
-//@import 'styles/style';
-@import 'styles/custom';
-</style>
--->

@@ -2,6 +2,9 @@ import { createStore } from 'vuex'
 import QRModule from './modules/QR.module'
 import LOADINGModule from './modules/LOADING.module'
 import AUTHModule from './modules/AUTH.module'
+import SAMPLE_CODEModule from './modules/SAMPLE_CODE.module'
+import GAUGEModule from './modules/GAUGE.module'
+import SAMPLE_INGOTModule from './modules/SAMPLE_INGOT.module'
 
 export default createStore({
   state: {
@@ -25,5 +28,8 @@ export default createStore({
     LOADINGModule,
 
     QRModule,
+    SAMPLE_CODEModule,
+    GAUGEModule,
+    SAMPLE_INGOTModule,
   },
 })

@@ -78,6 +78,12 @@ export default {
               name: 'Vendor',
               parentId: 'ROOT',
             },
+            {
+              component: 'CNavItem',
+              to: '/inspection/ingot/internal',
+              name: 'Internal',
+              parentId: 'ROOT',
+            },
           ],
         },
       ],

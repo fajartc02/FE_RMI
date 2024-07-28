@@ -5,7 +5,7 @@
         <CInputGroupText>
           K-Mold
         </CInputGroupText>
-        <CFormInput type="number" placeholder="Input K-Mold" />
+        <CFormInput v-model="form.kMold" type="number" placeholder="Input K-Mold" />
       </CInputGroup>
     </div>
     <div class="col-lg-6 col-12">
@@ -13,7 +13,7 @@
         <CInputGroupText>
           Tamago
         </CInputGroupText>
-        <CFormInput type="number" placeholder="Input Tamago" />
+        <CFormInput v-model="form.tamago" type="number" placeholder="Input Tamago" />
       </CInputGroup>
     </div>
   </div>
@@ -21,5 +21,21 @@
 <script>
 export default {
   name: 'KMoldTamago',
+  data() {
+    return {
+      form: {
+        kMold: null,
+        tamago: null
+      }
+    }
+  },
+  watch: {
+    form: {
+      handler() {
+        this.$emit('emit-kmold-tamago', this.form)
+      },
+      deep: true
+    }
+  }
 }
 </script>

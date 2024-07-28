@@ -8,7 +8,7 @@ import DefaultLayoutStandAlone from '@/standalone/layouts/DefaultLayoutStandAlon
 console.log(process.env.VUE_APP_STANDALONE_SINGLE_SPA)
 const routes = [
   {
-    path: '/',
+    path: '/inspection/ingot',
     name: 'Home',
     component:
       process.env.VUE_APP_STANDALONE_SINGLE_SPA === 'true'
@@ -21,13 +21,23 @@ const routes = [
             window.location.href = process.env.dc + '/#/sc/login'
             // return '/redirectingToLogin' // not important since redirecting
           }
-        : '/dashboard',
+        : '/',
     children: [
       {
         path: '/inspection/ingot/vendor',
-        name: 'Ingot Check',
+        name: 'InspectionIngotVendor',
         component: () =>
-          import('@/views/pages/RawMaterialCheck/IngotScreen/InspectionVendor'),
+          import(
+            '@/views/pages/RawMaterialCheck/IngotScreen/InspectionIngotVendor'
+          ),
+      },
+      {
+        path: '/inspection/ingot/internal',
+        name: 'InspectionIngotInternal',
+        component: () =>
+          import(
+            '@/views/pages/RawMaterialCheck/IngotScreen/InspectionIngotInternal'
+          ),
       },
     ],
   },

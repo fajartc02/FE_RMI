@@ -1,10 +1,10 @@
 <template>
   <div class="mb-3">
-    <template v-if="!GET_QR_SAMPLE.tablePureVendor && GET_QR_SAMPLE.tableIntVendor">
+    <template v-if="!GET_QR_SAMPLE.tableIntVendor && !GET_QR_SAMPLE.headers">
       <DataNotFound />
     </template>
-    <template v-if="GET_QR_SAMPLE.sampleCodeSuggested">
-      <treeselect v-model="form.sampleCode" :options="GET_QR_SAMPLE.sampleCodeSuggested" :clearable="true"
+    <template v-if="sampleCodeSuggested.length > 0">
+      <treeselect v-model="form.sampleCode" :options="sampleCodeSuggested" :clearable="true"
         placeholder="Silahkan lihat data dibawah ini, saya khawatir anda salah memasukan sample code" />
       <p class="text-muted">* Silahkan lakukan pengecekan di mesin terlebih dahulu apabila data diatas tidak ditemukan
       </p>
@@ -48,10 +48,6 @@
       </tbody>
     </table>
 
-    <!-- <InitActionNotice v-else :message="'Please Scan QR Code'" /> -->
-
-    <InitActionNotice v-if="!GET_SAMPLE_CODE && !GET_QR_SAMPLE.tableIntVendor && !GET_QR_SAMPLE.headers"
-      :message="message" />
 
     <table v-if="GET_SAMPLE_CODE" class="table table-bordered table-striped">
       <thead>
@@ -104,12 +100,13 @@ import "@zanmato/vue3-treeselect/dist/vue3-treeselect.min.css";
 import { ACTION_SAMPLE_CODE, GET_SAMPLE_CODE } from '@/store/modules/SAMPLE_CODE.module';
 
 export default {
-  name: 'TableVendorIngotInternal',
+  name: 'TableIngotInternal',
   data() {
     return {
       form: {
         sampleCode: null
-      }
+      },
+      sampleCodeSuggested: []
     }
   },
   watch: {
@@ -144,9 +141,6 @@ export default {
     DataNotFound,
     InitActionNotice,
     Treeselect
-  },
-  mounted() {
-    document.getElementById('qr-input').focus();
   }
 }
 </script>

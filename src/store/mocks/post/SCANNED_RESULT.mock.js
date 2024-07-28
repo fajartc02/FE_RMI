@@ -1,5 +1,8 @@
+import SAMPLE_CODE_SUGGESTED_MOCK from '@/store/mocks/get/SAMPLE_CODE_SUGGESTED.mock'
+
 const SCANNED_RESULT_MOCK = {
   headers: {
+    sampleId: 1,
     sampleCode: 'AC2C-DAII-240709-9334',
     shippingDate: '2024-09-13',
     materialName: 'AC2C',
@@ -8,7 +11,7 @@ const SCANNED_RESULT_MOCK = {
     cols: [
       'Product Date',
       'Lot No',
-      'Pcs',
+      'pieces',
       'Weight',
       'Color 1',
       'Color 2',
@@ -52,17 +55,17 @@ const SCANNED_RESULT_MOCK = {
     values: {
       headers: [
         {
-          product_date: '2024-09-13',
-          lot_no: 'AC2C-DAII-240709-9334-1',
-          pcs: 150,
+          productDate: '2024-09-13',
+          lotNo: 'AC2C-DAII-240709-9334-1',
+          pieces: 150,
           weight: 2100,
           color1: '',
           color2: '',
         },
         {
-          product_date: '2024-09-13',
-          lot_no: 'AC2C-DAII-240709-9334-2',
-          pcs: 150,
+          productDate: '2024-09-13',
+          lotNo: 'AC2C-DAII-240709-9334-2',
+          pieces: 150,
           weight: 2110,
           color1: '',
           color2: '',
@@ -72,117 +75,117 @@ const SCANNED_RESULT_MOCK = {
         [
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: false,
+            isOk: false,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
         ],
         [
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: false,
+            isOk: false,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
         ],
       ],
@@ -192,7 +195,7 @@ const SCANNED_RESULT_MOCK = {
     cols: [
       'Product Date',
       'Lot No',
-      'Pcs',
+      'pieces',
       'Weight',
       'Color 1',
       'Color 2',
@@ -236,17 +239,17 @@ const SCANNED_RESULT_MOCK = {
     values: {
       headers: [
         {
-          product_date: '2024-09-13',
-          lot_no: 'AC2C-DAII-240709-9334-1',
-          pcs: 150,
+          productDate: '2024-09-13',
+          lotNo: 'AC2C-DAII-240709-9334-1',
+          pieces: 150,
           weight: 2100,
           color1: '',
           color2: '',
         },
         {
-          product_date: '2024-09-13',
-          lot_no: 'AC2C-DAII-240709-9334-2',
-          pcs: 150,
+          productDate: '2024-09-13',
+          lotNo: 'AC2C-DAII-240709-9334-2',
+          pieces: 150,
           weight: 2110,
           color1: '',
           color2: '',
@@ -256,122 +259,123 @@ const SCANNED_RESULT_MOCK = {
         [
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: false,
+            isOk: false,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
         ],
         [
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: false,
+            isOk: false,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
           {
             value: Math.random().toFixed(2),
-            is_ok: true,
+            isOk: true,
           },
         ],
       ],
     },
   },
+  sampleCodeSuggested: null,
 }
 
 export default SCANNED_RESULT_MOCK

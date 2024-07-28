@@ -17,7 +17,10 @@ import Highcharts from 'highcharts'
 import HighchartsVue from 'highcharts-vue'
 import VCalendar from 'v-calendar'
 import 'v-calendar/style.css'
+
 import ApiService from './store/services/api.service'
+import MockService from './store/mocks/mock.service'
+
 if (process.env.VUE_APP_STANDALONE_SINGLE_SPA === 'true') {
   require('@/components/StandAloneStyle.vue')
 } else {
@@ -33,15 +36,16 @@ const vueLifecycles = singleSpaVue({
         // https://single-spa.js.org/docs/building-applications#lifecycle-props
         // if you uncomment these, remember to add matching prop definitions for them in your App.vue file.
         /*
-                                                                                                                                                                name: this.name,
-                                                                                                                                                                mountParcel: this.mountParcel,
-                                                                                                                                                                singleSpa: this.singleSpa,
-                                                                                                                                                                */
+                                                                                                                                                                        name: this.name,
+                                                                                                                                                                        mountParcel: this.mountParcel,
+                                                                                                                                                                        singleSpa: this.singleSpa,
+                                                                                                                                                                        */
       })
     },
   },
   handleInstance(app) {
     ApiService.init()
+    MockService.init()
     app.use(router)
     app.use(store)
     app.use(CoreuiVue)
