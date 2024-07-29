@@ -1,29 +1,19 @@
 <template>
-  <div class="row">
-    <div class="col-lg-6 col-12">
-      <CInputGroup class="input-prepend">
-        <CInputGroupText>
-          K-Mold
-        </CInputGroupText>
-        <CFormInput v-model="form.kMold" type="number" placeholder="Input K-Mold" />
-      </CInputGroup>
-    </div>
-    <div class="col-lg-6 col-12">
-      <CInputGroup class="input-prepend">
-        <CInputGroupText>
-          Tamago
-        </CInputGroupText>
-        <CFormInput v-model="form.tamago" type="number" placeholder="Input Tamago" />
-      </CInputGroup>
-    </div>
-  </div>
+  <th>
+    <CFormInput v-model="form.kMold" type="number" placeholder="Input K-Mold" />
+  </th>
+  <th>
+    <CFormInput v-model="form.tamago" type="number" placeholder="Input Tamago" />
+  </th>
 </template>
+
 <script>
 export default {
   name: 'KMoldTamago',
   data() {
     return {
       form: {
+        lotNo: null,
         kMold: null,
         tamago: null
       }
@@ -35,6 +25,17 @@ export default {
         this.$emit('emit-kmold-tamago', this.form)
       },
       deep: true
+    }
+  },
+  props: {
+    lotNo: {
+      type: String,
+      default: null
+    }
+  },
+  mounted() {
+    if (this.lotNo) {
+      this.form.lotNo = this.lotNo
     }
   }
 }

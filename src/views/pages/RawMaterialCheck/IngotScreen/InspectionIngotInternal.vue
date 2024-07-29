@@ -19,11 +19,10 @@
         <div v-if="!IS_LOADING" class="card" style="z-index: 1;">
           <div class="card-body overflow-auto p-2">
             <h6>Sample Ingot Internal</h6>
-            <TableIngotInternal :message="'Data not available'" />
+            <TableIngotInternal @emit-sample-code="onChangeSampleCode" @emit-container-input="onChangeContainerInput"
+              :message="'Data not available'" />
           </div>
-          <div v-if="GET_QR_SAMPLE.tableIntVendor || GET_SAMPLE_CODE" class="card-body overflow-auto p-2">
-            <KMoldTamago @emit-kmold-tamago="onChangeKMoldTamago" />
-          </div>
+
           <div v-if="GET_QR_SAMPLE.tableIntVendor || GET_SAMPLE_CODE" class="card-footer d-flex justify-content-evenly">
             <CButton style="width: 250px;" color="success" @click="submitCheckSampleIngot">Save</CButton>
             <CButton style="width: 250px;" color="secondary" @click="goToPreviousScreen">Cancel</CButton>
@@ -44,7 +43,7 @@ import HeaderComp from '@/components/RawMaterialInspection/HeaderComp.vue'
 import LoadingComponent from '@/components/RawMaterialInspection/LoadingComponent.vue';
 import { ACTION_QR_SAMPLE, GET_QR_SAMPLE } from '@/store/modules/QR.module';
 import TableIngotInternal from '@/components/RawMaterialInspection/TableIngotInternal.vue';
-import KMoldTamago from '@/components/RawMaterialInspection/KMoldTamago.vue';
+
 import { IS_LOADING, } from '@/store/modules/LOADING.module';
 import { mapGetters } from 'vuex';
 import { ACTION_ADD_SAMPLE_CODE, GET_SAMPLE_CODE } from '@/store/modules/SAMPLE_CODE.module';
@@ -59,18 +58,22 @@ export default {
         header: null,
         values: null
       },
+      containerInput: [],
       displaySampleCode: '',
       input: {
-        kMold: null,
-        tamago: null,
-        prevSampleCode: null,
-      }
+        sampleCode: null,
+        values: []
+      },
+      prevSampleCode: null
     }
   },
   computed: {
     ...mapGetters([IS_LOADING, GET_QR_SAMPLE, GET_SAMPLE_CODE]),
   },
   methods: {
+    onChangeContainerInput(data) {
+      this.input.values = data
+    },
     cancelScanned() {
       this.form = {
         header: null,
@@ -83,7 +86,7 @@ export default {
       this.input.kMold = data.kMold
     },
     onChangeSampleCode(sampleCode) {
-      this.input.prevSampleCode = sampleCode
+      this.prevSampleCode = sampleCode
     },
     async submitCheckSampleIngot() {
       try {
@@ -101,11 +104,11 @@ export default {
     HeaderComp,
     LoadingComponent,
     TableIngotInternal,
-    KMoldTamago,
     HeaderIngotCheckInternal
   },
-  mounted() {
-    this.$store.dispatch(ACTION_QR_SAMPLE)
+  async mounted() {
+    await this.$store.dispatch(ACTION_QR_SAMPLE)
+    await this.$store.dispatch
   }
 }
 </script>

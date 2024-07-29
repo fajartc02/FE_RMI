@@ -25,11 +25,16 @@ export default {
   },
   methods: {
     async onDetect(detectedCodes) {
-      const rawValue = detectedCodes[0].rawValue.split('\n')
-      const sampleCode = rawValue[1].split(';')[0]
-      this.form.sampleCode = sampleCode
-      this.form.data = detectedCodes[0].rawValue
-      await this.$store.dispatch(ACTION_QR_SAMPLE, this.form)
+      try {
+        const rawValue = detectedCodes[0].rawValue.split('\n')
+        const sampleCode = rawValue[1].split(';')[0]
+        this.form.sampleCode = sampleCode
+        this.form.data = detectedCodes[0].rawValue
+        await this.$store.dispatch(ACTION_QR_SAMPLE, this.form)
+      } catch (error) {
+        console.log(error);
+        this.$swal('Error', error, 'error')
+      }
     },
     onCameraReady() {
       console.log('camera ready')

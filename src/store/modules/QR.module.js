@@ -5,49 +5,49 @@ export const SET_QR_SAMPLE = 'SET_QR_SAMPLE'
 export const ACTION_QR_SAMPLE = 'ACTION_QR_SAMPLE'
 
 const state = {
-    QR_SAMPLE_DATA: {
-        headers: null,
-        tablePureVendor: null,
-        tableIntVendor: null,
-    },
+  QR_SAMPLE_DATA: {
+    headers: null,
+    tablePureVendor: null,
+    tableIntVendor: null,
+  },
 }
 
 const getters = {
-    GET_QR_SAMPLE(state) {
-        return state.QR_SAMPLE_DATA
-    },
+  GET_QR_SAMPLE(state) {
+    return state.QR_SAMPLE_DATA
+  },
 }
 
 const mutations = {
-    SET_QR_SAMPLE(state, payload) {
-        state.QR_SAMPLE_DATA = payload
-    },
+  SET_QR_SAMPLE(state, payload) {
+    state.QR_SAMPLE_DATA = payload
+  },
 }
 
 const actions = {
-    async ACTION_QR_SAMPLE({ commit }, QR_SAMPLEData = null) {
-        try {
-            await ApiService.setHeader()
-            if (QR_SAMPLEData) {
-                const { data } = await ApiService.post('sample-scanner', QR_SAMPLEData)
-                commit(SET_QR_SAMPLE, data.data)
-            } else {
-                commit(SET_QR_SAMPLE, {
-                    headers: null,
-                    tablePureVendor: null,
-                    tableIntVendor: null,
-                })
-            }
-        } catch (error) {
-            console.error(error)
-            return error
-        }
-    },
+  async ACTION_QR_SAMPLE({ commit }, QR_SAMPLEData = null) {
+    try {
+      await ApiService.setHeader()
+      if (QR_SAMPLEData) {
+        const { data } = await ApiService.post('sample-ingot', QR_SAMPLEData)
+        commit(SET_QR_SAMPLE, data.data)
+      } else {
+        commit(SET_QR_SAMPLE, {
+          headers: null,
+          tablePureVendor: null,
+          tableIntVendor: null,
+        })
+      }
+    } catch (error) {
+      console.log(error.response.data.status.message)
+      throw error.response.data.status.message
+    }
+  },
 }
 
 export default {
-    state,
-    getters,
-    mutations,
-    actions,
+  state,
+  getters,
+  mutations,
+  actions,
 }

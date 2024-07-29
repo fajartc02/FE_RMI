@@ -13,14 +13,20 @@
     <table v-else-if="GET_QR_SAMPLE.tableIntVendor" class="table table-bordered table-striped">
       <thead>
         <tr>
-          <th v-for="label in GET_QR_SAMPLE.tableIntVendor.cols" :key="label">{{ label }}</th>
+          <th style="min-width: 100px;">K-Mold</th>
+          <th style="min-width: 100px;">Tamago</th>
+          <th v-for="(label) in GET_QR_SAMPLE.tableIntVendor.cols" :key="label">{{ label }}</th>
         </tr>
       </thead>
       <tbody>
         <tr>
+          <td></td>
+          <td></td>
           <td v-for="row in GET_QR_SAMPLE.tableIntVendor.standards" :key="row">{{ row }}</td>
         </tr>
         <tr v-for="(header, idxRow) in GET_QR_SAMPLE.tableIntVendor.values.headers" :key="header">
+          <!-- Aditional col for kMold & Tamago -->
+          <KMoldTamago @emit-kmold-tamago="onChangeKMoldTamago" :lotNo="header.lotNo" />
           <th>
             {{ header.productDate }}
           </th>
@@ -56,14 +62,20 @@
     <table v-if="GET_SAMPLE_CODE" class="table table-bordered table-striped">
       <thead>
         <tr>
+          <th style="min-width: 100px;">K-Mold</th>
+          <th style="min-width: 100px;">Tamago</th>
           <th v-for="label in GET_SAMPLE_CODE.cols" :key="label">{{ label }}</th>
         </tr>
       </thead>
       <tbody>
         <tr>
+          <td></td>
+          <td></td>
           <td v-for="row in GET_SAMPLE_CODE.standards" :key="row">{{ row }}</td>
         </tr>
         <tr v-for="(header, idxRow) in GET_SAMPLE_CODE.values.headers" :key="header">
+          <!-- Aditional col for kMold & Tamago -->
+          <KMoldTamago @emit-kmold-tamago="onChangeKMoldTamago" :lotNo="header.lotNo" />
           <th>
             {{ header.productDate }}
           </th>
@@ -102,6 +114,7 @@ import InitActionNotice from '@/components/RawMaterialInspection/EmptyDataHandle
 import Treeselect from '@zanmato/vue3-treeselect'
 import "@zanmato/vue3-treeselect/dist/vue3-treeselect.min.css";
 import { ACTION_SAMPLE_CODE, GET_SAMPLE_CODE } from '@/store/modules/SAMPLE_CODE.module';
+import KMoldTamago from './KMoldTamago.vue';
 
 export default {
   name: 'TableVendorIngotInternal',
@@ -109,7 +122,13 @@ export default {
     return {
       form: {
         sampleCode: null
-      }
+      },
+      input: {
+        lotNo: null,
+        kMold: null,
+        tamago: null
+      },
+      containerInput: []
     }
   },
   watch: {
@@ -138,12 +157,32 @@ export default {
         console.log(error);
         alert(JSON.stringify(error));
       }
-    }
+    },
+    onChangeKMoldTamago(data) {
+      this.input.lotNo = data.lotNo
+      this.input.tamago = +data.tamago
+      this.input.kMold = +data.kMold
+
+      let idxAvailable = this.containerInput.findIndex(item => item.lotNo == this.input.lotNo)
+      console.log(idxAvailable);
+      if (idxAvailable != -1) {
+        this.containerInput[idxAvailable] = this.input
+      } else {
+        this.containerInput.push(this.input)
+      }
+      this.$emit('emit-container-input', this.containerInput)
+      this.input = {
+        lotNo: null,
+        kMold: null,
+        tamago: null
+      }
+    },
   },
   components: {
     DataNotFound,
     InitActionNotice,
-    Treeselect
+    Treeselect,
+    KMoldTamago
   },
   mounted() {
     document.getElementById('qr-input').focus();

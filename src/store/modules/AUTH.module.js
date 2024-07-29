@@ -27,8 +27,8 @@ const actions = {
       LOGINData = LOGINData
         ? LOGINData
         : {
-            username: 'fajar@example.com',
-            password: 'Toyota@123',
+            username: 'john.doe@example.com',
+            password: 'P@ssw0rdAPP!',
           }
 
       const { data } = await ApiService.post('auth/login', LOGINData)

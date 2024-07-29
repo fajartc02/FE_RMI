@@ -21,9 +21,7 @@
                 </CButton>
               </CInputGroup>
 
-              <CButton @click="focusToggle()" color="warning">
-                <CIcon icon="cil-newspaper" />
-              </CButton>
+              <ModalStandardIngot />
             </div>
           </div>
         </div>
@@ -40,16 +38,12 @@
             <div class="card-body p-2 mb-4" style="z-index: 3;">
               <h6>Sample Ingot Vendor (Internal)</h6>
               <TableVendorIngotInternal class="overflow-auto" style="height: 100%;"
-                @emit-sample-code="onChangeSampleCode" />
-            </div>
-            <div class="card-body p-2" style="z-index: 2;height: 100%;">
-              <KMoldTamago v-if="GET_QR_SAMPLE.tableIntVendor || GET_SAMPLE_CODE"
-                @emit-kmold-tamago="onChangeKMoldTamago" />
+                @emit-sample-code="onChangeSampleCode" @emit-container-input="onChangeContainerInput" />
             </div>
             <div class="card-footer d-flex justify-content-evenly">
               <template v-if="GET_QR_SAMPLE.tableIntVendor || GET_SAMPLE_CODE">
-                <CButton style="width: 250px;" color="success" @click="submitCheckSampleIngot"
-                  :disabled="!isKmoldTamagoFill">Save</CButton>
+                <CButton style="width: 250px;" color="success" @click="submitCheckSampleIngot">Save</CButton>
+                <!-- :disabled="!isKmoldTamagoFill" -->
                 <CButton style="width: 250px;" color="secondary" @click="goToPreviousScreen">Cancel</CButton>
               </template>
             </div>
@@ -71,10 +65,12 @@ import LoadingComponent from '@/components/RawMaterialInspection/LoadingComponen
 import { ACTION_QR_SAMPLE, GET_QR_SAMPLE } from '@/store/modules/QR.module';
 import TableVendorIngot from '@/components/RawMaterialInspection/TableVendorIngot.vue';
 import TableVendorIngotInternal from '@/components/RawMaterialInspection/TableVendorIngotInternal.vue';
-import KMoldTamago from '@/components/RawMaterialInspection/KMoldTamago.vue';
+// import KMoldTamago from '@/components/RawMaterialInspection/KMoldTamago.vue';
 import { IS_LOADING, ACTION_LOADING } from '@/store/modules/LOADING.module';
 import { mapGetters } from 'vuex';
 import { ACTION_ADD_SAMPLE_CODE, GET_SAMPLE_CODE } from '@/store/modules/SAMPLE_CODE.module';
+
+import ModalStandardIngot from '@/components/RawMaterialInspection/Modal/ModalStandardIngot.vue';
 
 export default {
   name: 'InspectionVendorIngot',
@@ -84,21 +80,24 @@ export default {
         header: null,
         values: null
       },
+      containerInput: [],
       displaySampleCode: '',
       input: {
-        kMold: null,
-        tamago: null,
         sampleCode: null,
+        values: []
       }
     }
   },
   computed: {
     ...mapGetters([IS_LOADING, GET_QR_SAMPLE, GET_SAMPLE_CODE]),
-    isKmoldTamagoFill() {
-      return this.input.kMold && this.input.tamago
-    }
+    // isKmoldTamagoFill() {
+    //   return this.input.kMold && this.input.tamago
+    // }
   },
   methods: {
+    onChangeContainerInput(data) {
+      this.input.values = data
+    },
     focusToggle(status = true) {
       this.is_focus = status
       if (this.is_focus) {
@@ -133,8 +132,13 @@ export default {
           if (i == 0) {
             for (let j = 0; j < childRawData.length; j++) {
               const col = childRawData[j];
-              const value = parentRawData[1]?.split(';')[j]
+              let value = parentRawData[1]?.split(';')[j]
               if (col != '') {
+                // const reg = new RegExp('^[0-9]+$');
+
+                // if (reg.test(value)) {
+                //   value = Number(value)
+                // }
                 let convertSnakeToCammel1 = col.toLowerCase().replace(/[-_][a-z]/g, (group) => group.slice(-1).toUpperCase());
                 headerData[`${convertSnakeToCammel1}`] = value
               }
@@ -152,7 +156,12 @@ export default {
           if (i >= 4) {
             let objValue = {}
             for (let j = 0; j < containerSampleKey.length; j++) {
-              const value = childRawData[j];
+              let value = childRawData[j];
+              // const reg = new RegExp('^[0-9]+$');
+
+              // if (reg.test(value)) {
+              //   value = Number(value)
+              // }
               const convertSnakeToCammel = containerSampleKey[j].toLowerCase().replace(/[-_][a-z]/g, (group) => group.slice(-1).toUpperCase());
               objValue[`${convertSnakeToCammel}`] = value
             }
@@ -165,14 +174,16 @@ export default {
         this.displaySampleCode = this.form.header?.sample_code
         this.$store.dispatch(ACTION_LOADING, false)
       } catch (error) {
-        console.error(error)
+        console.log(error)
+        this.$swal('Error', error, 'error')
+        this.$store.dispatch(ACTION_LOADING, false)
         return error
       }
     },
-    onChangeKMoldTamago(data) {
-      this.input.tamago = data.tamago
-      this.input.kMold = data.kMold
-    },
+    // onChangeKMoldTamago(data) {
+    //   this.input.tamago = data.tamago
+    //   this.input.kMold = data.kMold
+    // },
     onChangeSampleCode(sampleCode) {
       this.input.sampleCode = sampleCode
     },
@@ -180,6 +191,7 @@ export default {
       try {
         // condition for sample ID spectro match or not
         if (this.GET_QR_SAMPLE.headers.sampleId) this.input.sampleCode = this.GET_QR_SAMPLE.headers.sampleId
+        console.log(this.input);
         await this.$store.dispatch(ACTION_ADD_SAMPLE_CODE, this.input)
         this.$swal('Success', 'Add sample success', 'success')
         this.$router.push('/inspection/ingot/internal')
@@ -194,12 +206,11 @@ export default {
     LoadingComponent,
     TableVendorIngot,
     TableVendorIngotInternal,
-    KMoldTamago
+    ModalStandardIngot
+    // KMoldTamago
   },
   mounted() {
-    // this.focusToggle()
     document.getElementById('qr-input').focus();
-    // this.$store.dispatch(ACTION_QR_SAMPLE, this.form)
 
     // FOR MOCK
     // if (this.displaySampleCode) {
