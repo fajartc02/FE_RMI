@@ -41,14 +41,15 @@
 // import QRScanner from '@/components/RawMaterialInspection/QRScanner.vue'
 import HeaderComp from '@/components/RawMaterialInspection/HeaderComp.vue'
 import LoadingComponent from '@/components/RawMaterialInspection/LoadingComponent.vue';
-import { ACTION_QR_SAMPLE, GET_QR_SAMPLE } from '@/store/modules/QR.module';
+import { ACTION_QR_SAMPLE, ACTION_RESET_QR_SAMPLE, GET_QR_SAMPLE } from '@/store/modules/QR.module';
 import TableIngotInternal from '@/components/RawMaterialInspection/TableIngotInternal.vue';
 
 import { IS_LOADING, } from '@/store/modules/LOADING.module';
 import { mapGetters } from 'vuex';
-import { ACTION_ADD_SAMPLE_CODE, GET_SAMPLE_CODE } from '@/store/modules/SAMPLE_CODE.module';
+import { ACTION_ADD_SAMPLE_CODE, ACTION_SAMPLE_CODE, GET_SAMPLE_CODE } from '@/store/modules/SAMPLE_CODE.module';
 
 import HeaderIngotCheckInternal from '@/components/RawMaterialInspection/HeaderIngotCheckInternal.vue';
+import { ACTION_RESET_SAMPLE_INGOT } from '@/store/modules/SAMPLE_INGOT.module';
 
 export default {
   name: 'InspectionIngotInternal',
@@ -107,8 +108,8 @@ export default {
     HeaderIngotCheckInternal
   },
   async mounted() {
-    await this.$store.dispatch(ACTION_QR_SAMPLE)
-    await this.$store.dispatch
+    await this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
+    await this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
   }
 }
 </script>

@@ -185,6 +185,7 @@ export default {
     KMoldTamago
   },
   mounted() {
+    this.fetchSampleCode()
     document.getElementById('qr-input').focus();
   }
 }

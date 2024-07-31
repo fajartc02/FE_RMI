@@ -41,8 +41,9 @@ import Treeselect from '@zanmato/vue3-treeselect'
 import "@zanmato/vue3-treeselect/dist/vue3-treeselect.min.css";
 
 import { mapGetters } from 'vuex';
-import { ACTION_SAMPLE_INGOT } from '@/store/modules/SAMPLE_INGOT.module';
+import { ACTION_RESET_SAMPLE_INGOT, ACTION_SAMPLE_INGOT } from '@/store/modules/SAMPLE_INGOT.module';
 import { ACTION_LOADING } from '@/store/modules/LOADING.module';
+import { ACTION_RESET_QR_SAMPLE } from '@/store/modules/QR.module';
 
 export default {
   name: 'HeaderIngotCheckInternal',
@@ -74,6 +75,8 @@ export default {
   },
   methods: {
     changeBtnSample(i) {
+      this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
+      this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
       this.gaugeOpts.forEach((gauge) => {
         gauge.isSelected = false
       })
@@ -86,6 +89,8 @@ export default {
       })
     },
     changeGaugeSelected(gaugeId) {
+      this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
+      this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
       this.gaugeOpts.forEach((gauge) => {
         console.log(gauge.gaugeId, gaugeId);
         if (gauge.gaugeId === gaugeId) {
@@ -136,6 +141,8 @@ export default {
       if (this.selectedGaugeId && this.isSampleVisible) {
         await this.$store.dispatch(ACTION_LOADING, true)
         await this.$store.dispatch(ACTION_SAMPLE_CODE_SUGGESTED, this.selectedGaugeId)
+        await this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
+        await this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
         await this.$store.dispatch(ACTION_LOADING, false)
       } else {
         await this.$store.dispatch(ACTION_LOADING, true)
@@ -157,7 +164,8 @@ export default {
     },
   },
   async mounted() {
-
+    this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
+    this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
   }
 }
 </script>

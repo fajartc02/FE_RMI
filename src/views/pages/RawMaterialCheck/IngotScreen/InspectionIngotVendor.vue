@@ -1,4 +1,12 @@
 <template>
+  <CModal scrollable size="xl" :visible="modalShowStd" @close="() => { modalShowStd = false }">
+    <CModalHeader>
+      <CModalTitle>Standard Ingot</CModalTitle>
+    </CModalHeader>
+    <CModalBody>
+      <img v-if="image != 'data:image/png;base64,'" :src="image" alt="Standard Ingot" />
+    </CModalBody>
+  </CModal>
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
@@ -20,8 +28,9 @@
                   <CIcon icon="cil-x" />
                 </CButton>
               </CInputGroup>
-
-              <ModalStandardIngot />
+              <CButton @click="modalShowStd = true" color="warning">
+                <CIcon icon="cil-newspaper" />
+              </CButton>
             </div>
           </div>
         </div>
@@ -62,20 +71,20 @@
 // import QRScanner from '@/components/RawMaterialInspection/QRScanner.vue'
 import HeaderComp from '@/components/RawMaterialInspection/HeaderComp.vue'
 import LoadingComponent from '@/components/RawMaterialInspection/LoadingComponent.vue';
-import { ACTION_QR_SAMPLE, GET_QR_SAMPLE } from '@/store/modules/QR.module';
+import { ACTION_QR_SAMPLE, ACTION_RESET_QR_SAMPLE, GET_QR_SAMPLE } from '@/store/modules/QR.module';
 import TableVendorIngot from '@/components/RawMaterialInspection/TableVendorIngot.vue';
 import TableVendorIngotInternal from '@/components/RawMaterialInspection/TableVendorIngotInternal.vue';
 // import KMoldTamago from '@/components/RawMaterialInspection/KMoldTamago.vue';
 import { IS_LOADING, ACTION_LOADING } from '@/store/modules/LOADING.module';
 import { mapGetters } from 'vuex';
 import { ACTION_ADD_SAMPLE_CODE, GET_SAMPLE_CODE } from '@/store/modules/SAMPLE_CODE.module';
-
-import ModalStandardIngot from '@/components/RawMaterialInspection/Modal/ModalStandardIngot.vue';
+import { ACTION_RESET_SAMPLE_INGOT } from '@/store/modules/SAMPLE_INGOT.module';
 
 export default {
   name: 'InspectionVendorIngot',
   data() {
     return {
+      modalShowStd: false,
       form: {
         header: null,
         values: null
@@ -134,11 +143,6 @@ export default {
               const col = childRawData[j];
               let value = parentRawData[1]?.split(';')[j]
               if (col != '') {
-                // const reg = new RegExp('^[0-9]+$');
-
-                // if (reg.test(value)) {
-                //   value = Number(value)
-                // }
                 let convertSnakeToCammel1 = col.toLowerCase().replace(/[-_][a-z]/g, (group) => group.slice(-1).toUpperCase());
                 headerData[`${convertSnakeToCammel1}`] = value
               }
@@ -157,11 +161,6 @@ export default {
             let objValue = {}
             for (let j = 0; j < containerSampleKey.length; j++) {
               let value = childRawData[j];
-              // const reg = new RegExp('^[0-9]+$');
-
-              // if (reg.test(value)) {
-              //   value = Number(value)
-              // }
               const convertSnakeToCammel = containerSampleKey[j].toLowerCase().replace(/[-_][a-z]/g, (group) => group.slice(-1).toUpperCase());
               objValue[`${convertSnakeToCammel}`] = value
             }
@@ -180,10 +179,6 @@ export default {
         return error
       }
     },
-    // onChangeKMoldTamago(data) {
-    //   this.input.tamago = data.tamago
-    //   this.input.kMold = data.kMold
-    // },
     onChangeSampleCode(sampleCode) {
       this.input.sampleCode = sampleCode
     },
@@ -201,24 +196,15 @@ export default {
     }
   },
   components: {
-    // QRScanner,
     HeaderComp,
     LoadingComponent,
     TableVendorIngot,
     TableVendorIngotInternal,
-    ModalStandardIngot
-    // KMoldTamago
   },
-  mounted() {
+  async mounted() {
+    await this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
+    await this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
     document.getElementById('qr-input').focus();
-
-    // FOR MOCK
-    // if (this.displaySampleCode) {
-    //   let scannedData = this.displaySampleCode
-    //   this.form.data = this.displaySampleCode
-    //   this.displaySampleCode = scannedData?.split('|')[1]?.split(';')[0]
-    //   this.$store.dispatch(ACTION_QR_SAMPLE, this.form)
-    // }
   }
 }
 </script>
