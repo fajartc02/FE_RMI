@@ -6,30 +6,36 @@ import SAMPLE_CODEModule from './modules/SAMPLE_CODE.module'
 import GAUGEModule from './modules/GAUGE.module'
 import SAMPLE_INGOTModule from './modules/SAMPLE_INGOT.module'
 
-export default createStore({
-  state: {
-    sidebarVisible: '',
-    sidebarUnfoldable: false,
-  },
-  mutations: {
-    toggleSidebar(state) {
-      state.sidebarVisible = !state.sidebarVisible
-    },
-    toggleUnfoldable(state) {
-      state.sidebarUnfoldable = !state.sidebarUnfoldable
-    },
-    updateSidebarVisible(state, payload) {
-      state.sidebarVisible = payload.value
-    },
-  },
-  actions: {},
-  modules: {
-    AUTHModule,
-    LOADINGModule,
+import MACHINEModule from './modules/MACHINE.module'
+import LINEModule from './modules/LINE.module'
 
-    QRModule,
-    SAMPLE_CODEModule,
-    GAUGEModule,
-    SAMPLE_INGOTModule,
-  },
+export default createStore({
+    state: {
+        sidebarVisible: '',
+        sidebarUnfoldable: false,
+    },
+    mutations: {
+        toggleSidebar(state) {
+            state.sidebarVisible = !state.sidebarVisible
+        },
+        toggleUnfoldable(state) {
+            state.sidebarUnfoldable = !state.sidebarUnfoldable
+        },
+        updateSidebarVisible(state, payload) {
+            state.sidebarVisible = payload.value
+        },
+    },
+    actions: {},
+    modules: {
+        AUTHModule,
+        LOADINGModule,
+
+        MACHINEModule,
+        LINEModule,
+
+        QRModule,
+        SAMPLE_CODEModule,
+        GAUGEModule,
+        SAMPLE_INGOTModule,
+    },
 })

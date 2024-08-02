@@ -1,7 +1,7 @@
 <template>
   <div class="mb-3">
     <!-- v-else-if="!GET_QR_SAMPLE?.tablePureVendor" -->
-    <template v-if="!GET_QR_SAMPLE.tablePureVendor && GET_QR_SAMPLE.tableIntVendor">
+    <template v-if="!GET_QR_SAMPLE.tablePureVendor && GET_QR_SAMPLE.tableInternalVendor">
       <DataNotFound />
     </template>
 

@@ -84,6 +84,12 @@ export default {
               name: 'Internal',
               parentId: 'ROOT',
             },
+            {
+              component: 'CNavItem',
+              to: '/inspection/ingot/historical',
+              name: 'Historical Data',
+              parentId: 'ROOT',
+            },
           ],
         },
       ],

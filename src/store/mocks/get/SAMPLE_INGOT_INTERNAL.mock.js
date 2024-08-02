@@ -6,7 +6,7 @@ const SAMPLE_INGOT_INTERNAL_MOCK = {
         materialName: 'AC2C',
     },
     tablePureVendor: null,
-    tableIntVendor: {
+    tableInternalVendor: {
         cols: [
             'Product Date',
             'Lot No',

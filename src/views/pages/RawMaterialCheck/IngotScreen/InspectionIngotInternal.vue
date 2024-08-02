@@ -23,7 +23,8 @@
               :message="'Data not available'" />
           </div>
 
-          <div v-if="GET_QR_SAMPLE.tableIntVendor || GET_SAMPLE_CODE" class="card-footer d-flex justify-content-evenly">
+          <div v-if="GET_QR_SAMPLE.tableInternalVendor || GET_SAMPLE_CODE"
+            class="card-footer d-flex justify-content-evenly">
             <CButton style="width: 250px;" color="success" @click="submitCheckSampleIngot">Save</CButton>
             <CButton style="width: 250px;" color="secondary" @click="goToPreviousScreen">Cancel</CButton>
           </div>

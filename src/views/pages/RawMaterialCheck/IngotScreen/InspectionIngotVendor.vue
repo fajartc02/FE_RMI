@@ -1,10 +1,45 @@
 <template>
+  <CModal scrollable size="xl" :visible="modalShowJudg" backdrop="static" @close="() => { modalShowJudg = false }">
+    <CModalHeader>
+      <CModalTitle>Result Abnormal Parameter</CModalTitle>
+    </CModalHeader>
+    <CModalBody v-if="elementOutOfRanged.length > 0">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Element</th>
+            <th>Min</th>
+            <th>Max</th>
+            <th>Value</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(data, idx) in elementOutOfRanged" :key="data">
+            <td>{{ idx + 1 }}</td>
+            <td>{{ data.elementName }}</td>
+            <td>{{ data.min }}</td>
+            <td>{{ data.max }}</td>
+            <td>{{ data.elementValue }}</td>
+            <td class="text-danger">NG</td>
+          </tr>
+        </tbody>
+      </table>
+    </CModalBody>
+    <CModalFooter class="d-flex justify-content-center align-items-center">
+      <a :href="report">
+        <CButton color="warning">Download PDF</CButton>
+      </a>
+      <CButton color="secondary" @click="() => { modalShowJudg = false }">Close</CButton>
+    </CModalFooter>
+  </CModal>
   <CModal scrollable size="xl" :visible="modalShowStd" @close="() => { modalShowStd = false }">
     <CModalHeader>
       <CModalTitle>Standard Ingot</CModalTitle>
     </CModalHeader>
     <CModalBody>
-      <img v-if="image != 'data:image/png;base64,'" :src="image" alt="Standard Ingot" />
+      <img :src="imageStd" alt="Standard Ingot" width="100%" height="500" />
     </CModalBody>
   </CModal>
   <div class="container-fluid">
@@ -50,9 +85,8 @@
                 @emit-sample-code="onChangeSampleCode" @emit-container-input="onChangeContainerInput" />
             </div>
             <div class="card-footer d-flex justify-content-evenly">
-              <template v-if="GET_QR_SAMPLE.tableIntVendor || GET_SAMPLE_CODE">
+              <template v-if="GET_QR_SAMPLE.tableInternalVendor || GET_SAMPLE_CODE">
                 <CButton style="width: 250px;" color="success" @click="submitCheckSampleIngot">Save</CButton>
-                <!-- :disabled="!isKmoldTamagoFill" -->
                 <CButton style="width: 250px;" color="secondary" @click="goToPreviousScreen">Cancel</CButton>
               </template>
             </div>
@@ -79,12 +113,16 @@ import { IS_LOADING, ACTION_LOADING } from '@/store/modules/LOADING.module';
 import { mapGetters } from 'vuex';
 import { ACTION_ADD_SAMPLE_CODE, GET_SAMPLE_CODE } from '@/store/modules/SAMPLE_CODE.module';
 import { ACTION_RESET_SAMPLE_INGOT } from '@/store/modules/SAMPLE_INGOT.module';
+import { CModalFooter } from '@coreui/vue';
+import STD_BASE64 from '@/assets/images/STD.base64';
 
 export default {
   name: 'InspectionVendorIngot',
   data() {
     return {
       modalShowStd: false,
+      report: null,
+      modalShowJudg: false,
       form: {
         header: null,
         values: null
@@ -94,7 +132,9 @@ export default {
       input: {
         sampleCode: null,
         values: []
-      }
+      },
+      elementOutOfRanged: [],
+      imageStd: STD_BASE64
     }
   },
   computed: {
@@ -174,6 +214,24 @@ export default {
         this.$store.dispatch(ACTION_LOADING, false)
       } catch (error) {
         console.log(error)
+        if (error.toUpperCase().includes('DUPLICATE')) {
+          this.$swal.fire({
+            title: "Sample Code sudah pernah ada, apakah anda ingin melakukan resample?",
+            showDenyButton: true,
+            confirmButtonText: "Ya",
+            denyButtonText: `Tidak`
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              this.$swal("Saved!", "", "success");
+              this.form.header.sampleCodeParent = this.form.header.sampleCode
+              // console.log(this.form);
+              await this.$store.dispatch(ACTION_QR_SAMPLE, this.form)
+            }
+          });
+          this.$store.dispatch(ACTION_LOADING, false)
+          return
+        }
+
         this.$swal('Error', error, 'error')
         this.$store.dispatch(ACTION_LOADING, false)
         return error
@@ -186,13 +244,24 @@ export default {
       try {
         // condition for sample ID spectro match or not
         if (this.GET_QR_SAMPLE.headers.sampleId) this.input.sampleCode = this.GET_QR_SAMPLE.headers.sampleId
-        console.log(this.input);
-        await this.$store.dispatch(ACTION_ADD_SAMPLE_CODE, this.input)
-        this.$swal('Success', 'Add sample success', 'success')
-        this.$router.push('/inspection/ingot/internal')
+        // console.log(this.input);
+        const response = await this.$store.dispatch(ACTION_ADD_SAMPLE_CODE, this.input)
+        // console.log(response);
+        this.conditionJudgmentIngotCheck(response)
       } catch (error) {
         alert(JSON.stringify(error))
       }
+    },
+    conditionJudgmentIngotCheck({ data }) {
+      if (data.data) {
+        // console.log(data.data);
+        this.elementOutOfRanged = data.data.elementOutOfRanged
+        this.report = data.data.report
+        this.modalShowJudg = true
+        return
+      }
+      this.$router.push('/inspection/ingot/internal')
+      this.$swal('Success', 'Add sample success, Pengecekan tidak ada abnormal', 'success')
     }
   },
   components: {

@@ -1,6 +1,6 @@
 <template>
   <div class="mb-3">
-    <template v-if="!GET_QR_SAMPLE.tablePureVendor && GET_QR_SAMPLE.tableIntVendor">
+    <template v-if="!GET_QR_SAMPLE.tablePureVendor && GET_QR_SAMPLE.tableInternalVendor">
       <DataNotFound />
     </template>
     <template v-if="GET_QR_SAMPLE.sampleCodeSuggested">
@@ -10,21 +10,21 @@
       </p>
     </template>
 
-    <table v-else-if="GET_QR_SAMPLE.tableIntVendor" class="table table-bordered table-striped">
+    <table v-else-if="GET_QR_SAMPLE.tableInternalVendor" class="table table-bordered table-striped">
       <thead>
         <tr>
           <th style="min-width: 100px;">K-Mold</th>
           <th style="min-width: 100px;">Tamago</th>
-          <th v-for="(label) in GET_QR_SAMPLE.tableIntVendor.cols" :key="label">{{ label }}</th>
+          <th v-for="(label) in GET_QR_SAMPLE.tableInternalVendor.cols" :key="label">{{ label }}</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td></td>
           <td></td>
-          <td v-for="row in GET_QR_SAMPLE.tableIntVendor.standards" :key="row">{{ row }}</td>
+          <td v-for="row in GET_QR_SAMPLE.tableInternalVendor.standards" :key="row">{{ row }}</td>
         </tr>
-        <tr v-for="(header, idxRow) in GET_QR_SAMPLE.tableIntVendor.values.headers" :key="header">
+        <tr v-for="(header, idxRow) in GET_QR_SAMPLE.tableInternalVendor.values.headers" :key="header">
           <!-- Aditional col for kMold & Tamago -->
           <KMoldTamago @emit-kmold-tamago="onChangeKMoldTamago" :lotNo="header.lotNo" />
           <th>
@@ -45,7 +45,7 @@
           <th>
             {{ header.color2 }}
           </th>
-          <template v-for="(value) in GET_QR_SAMPLE.tableIntVendor.values.values[idxRow]" :key="value">
+          <template v-for="(value) in GET_QR_SAMPLE.tableInternalVendor.values.values[idxRow]" :key="value">
             <td :class="`text-center ${value.isOk ? 'text-success' : 'text-danger'}`">
               {{ value.value }}
             </td>
@@ -56,24 +56,24 @@
 
     <!-- <InitActionNotice v-else :message="'Please Scan QR Code'" /> -->
 
-    <InitActionNotice v-if="!GET_SAMPLE_CODE && !GET_QR_SAMPLE.tableIntVendor && !GET_QR_SAMPLE.headers"
+    <InitActionNotice v-if="!GET_SAMPLE_CODE && !GET_QR_SAMPLE.tableInternalVendor && !GET_QR_SAMPLE.headers"
       :message="message" />
 
-    <table v-if="GET_SAMPLE_CODE" class="table table-bordered table-striped">
+    <table v-if="GET_SAMPLE_CODE?.tableInternalVendor" class="table table-bordered table-striped">
       <thead>
         <tr>
           <th style="min-width: 100px;">K-Mold</th>
           <th style="min-width: 100px;">Tamago</th>
-          <th v-for="label in GET_SAMPLE_CODE.cols" :key="label">{{ label }}</th>
+          <th v-for="label in GET_SAMPLE_CODE.tableInternalVendor.cols" :key="label">{{ label }}</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td></td>
           <td></td>
-          <td v-for="row in GET_SAMPLE_CODE.standards" :key="row">{{ row }}</td>
+          <td v-for="row in GET_SAMPLE_CODE.tableInternalVendor.standards" :key="row">{{ row }}</td>
         </tr>
-        <tr v-for="(header, idxRow) in GET_SAMPLE_CODE.values.headers" :key="header">
+        <tr v-for="(header, idxRow) in GET_SAMPLE_CODE.tableInternalVendor.values.headers" :key="header">
           <!-- Aditional col for kMold & Tamago -->
           <KMoldTamago @emit-kmold-tamago="onChangeKMoldTamago" :lotNo="header.lotNo" />
           <th>
@@ -94,7 +94,7 @@
           <th>
             {{ header.color2 }}
           </th>
-          <template v-for="(value) in GET_SAMPLE_CODE.values.values[idxRow]" :key="value">
+          <template v-for="(value) in GET_SAMPLE_CODE.tableInternalVendor.values.values[idxRow]" :key="value">
             <td :class="`text-center ${value.isOk ? 'text-success' : 'text-danger'}`">
               {{ value.value }}
             </td>
@@ -186,7 +186,6 @@ export default {
   },
   mounted() {
     this.fetchSampleCode()
-    document.getElementById('qr-input').focus();
   }
 }
 </script>
