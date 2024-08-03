@@ -4,28 +4,31 @@
       <CModalTitle>Result Abnormal Parameter</CModalTitle>
     </CModalHeader>
     <CModalBody v-if="elementOutOfRanged.length > 0">
-      <table class="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Element</th>
-            <th>Min</th>
-            <th>Max</th>
-            <th>Value</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(data, idx) in elementOutOfRanged" :key="data">
-            <td>{{ idx + 1 }}</td>
-            <td>{{ data.elementName }}</td>
-            <td>{{ data.min }}</td>
-            <td>{{ data.max }}</td>
-            <td>{{ data.elementValue }}</td>
-            <td class="text-danger">NG</td>
-          </tr>
-        </tbody>
-      </table>
+      <template v-for="(data, idx) in elementOutOfRanged" :key="data">
+        <h6>{{ data.lotNo }}</h6>
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Element</th>
+              <th>Min</th>
+              <th>Max</th>
+              <th>Value</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(element, i) in data.elements" :key="element">
+              <td>{{ i + 1 }}</td>
+              <td>{{ element.name }}</td>
+              <td>{{ element.min }}</td>
+              <td>{{ element.max }}</td>
+              <td>{{ element.value }}</td>
+              <td class="text-danger">NG</td>
+            </tr>
+          </tbody>
+        </table>
+      </template>
     </CModalBody>
     <CModalFooter class="d-flex justify-content-center align-items-center">
       <a :href="report">
@@ -257,7 +260,7 @@ export default {
 
       if (data) {
         // console.log(data.data);
-        this.elementOutOfRanged = data.elementOutOfRanged
+        this.elementOutOfRanged = data.values
         this.report = data.report
         this.modalShowJudg = true
         return
