@@ -1,5 +1,5 @@
 <template>
-  <CModal scrollable size="xl" :visible="modalShowJudg" backdrop="static" @close="() => { modalShowJudg = false }">
+  <CModal scrollable size="xl" :visible="modalShowJudg" backdrop="static">
     <CModalHeader>
       <CModalTitle>Result Abnormal Parameter</CModalTitle>
     </CModalHeader>
@@ -34,7 +34,7 @@
       <a :href="report">
         <CButton color="warning">Download PDF</CButton>
       </a>
-      <CButton color="secondary" @click="() => { modalShowJudg = false }">Close</CButton>
+      <CButton color="success" @click="() => { $router.push('/inspection/ingot/internal') }">OK</CButton>
     </CModalFooter>
   </CModal>
   <CModal scrollable size="xl" :visible="modalShowStd" @close="() => { modalShowStd = false }">
@@ -247,19 +247,14 @@ export default {
       try {
         // condition for sample ID spectro match or not
         if (this.GET_QR_SAMPLE.headers.sampleId) this.input.sampleCode = this.GET_QR_SAMPLE.headers.sampleId
-        // console.log(this.input);
         const response = await this.$store.dispatch(ACTION_ADD_SAMPLE_CODE, this.input)
-        // console.log(response);
         this.conditionJudgmentIngotCheck(response)
       } catch (error) {
         alert(JSON.stringify(error))
       }
     },
     conditionJudgmentIngotCheck({ data }) {
-      console.log(data);
-
       if (data) {
-        // console.log(data.data);
         this.elementOutOfRanged = data.values
         this.report = data.report
         this.modalShowJudg = true
