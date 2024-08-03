@@ -224,7 +224,7 @@ export default {
             if (result.isConfirmed) {
               this.$swal("Saved!", "", "success");
               this.form.header.sampleCodeParent = this.form.header.sampleCode
-              // console.log(this.form);
+              console.log(this.form);
               await this.$store.dispatch(ACTION_QR_SAMPLE, this.form)
             }
           });
@@ -253,7 +253,7 @@ export default {
       }
     },
     conditionJudgmentIngotCheck({ data }) {
-      if (data.data) {
+      if (data) {
         // console.log(data.data);
         this.elementOutOfRanged = data.data.elementOutOfRanged
         this.report = data.data.report
