@@ -260,7 +260,7 @@ export default {
         this.isSubmited = true
         this.conditionJudgmentIngotCheck(response)
       } catch (error) {
-        this.$swal('Error', 'Something went wrong', 'error')
+        this.$swal('Error', 'Internal Server Error', 'error')
       }
     },
     conditionJudgmentIngotCheck({ data }) {
@@ -274,7 +274,7 @@ export default {
         this.$router.push('/inspection/ingot/internal')
         this.$swal('Success', 'Add sample success, Pengecekan tidak ada abnormal', 'success')
       } catch (error) {
-        this.$swal('Error', 'Something went wrong', 'error')
+        this.$swal('Error', 'Internal Server Error', 'error')
       }
     }
   },
