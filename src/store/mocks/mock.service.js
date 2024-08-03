@@ -68,7 +68,7 @@ const MockService = {
         mock.onGet('gauge/').reply(200, { data: gauges })
 
         mock.onGet('machine/').reply(200, { data: MACHINES_MOCK })
-        mock.onGet('line/').reply(200, { data: LINES_MOCK })
+        mock.onGet('line').reply(200, { data: LINES_MOCK })
 
         mock
             .onGet('sample-ingot/', {

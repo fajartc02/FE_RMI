@@ -1,4 +1,5 @@
 import ApiService from '../services/api.service'
+import { ACTION_LOADING } from './LOADING.module'
 
 export const GET_LINE = 'GET_LINE'
 export const SET_LINE = 'SET_LINE'
@@ -31,13 +32,15 @@ const mutations = {
 }
 
 const actions = {
-    async ACTION_LINE({ commit }, params) {
+    async ACTION_LINE({ commit, dispatch }, params) {
         try {
             ApiService.setHeader()
             dispatch(ACTION_LOADING, true)
             const { data } = await ApiService.query('line', params)
+            dispatch(ACTION_LOADING, false)
             commit(SET_LINE, data.data)
         } catch (error) {
+            dispatch(ACTION_LOADING, false)
             console.error(error)
             return error
         }
