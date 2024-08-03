@@ -34,7 +34,7 @@
           <th>
             {{ header.color2 }}
           </th>
-          <template v-for="(value) in GET_QR_SAMPLE.tablePureVendor.values.values[idxRow]" :key="value">
+          <template v-for="(value) in GET_QR_SAMPLE.tablePureVendor.values?.values[idxRow]" :key="value">
             <td :class="`text-center ${value.isOk ? 'text-success' : 'text-danger'}`">
               {{ value.value }}
             </td>
