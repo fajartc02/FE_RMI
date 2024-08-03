@@ -22,6 +22,8 @@ export default {
   watch: {
     form: {
       handler() {
+        console.log(this.form);
+
         this.$emit('emit-kmold-tamago', this.form)
       },
       deep: true
@@ -36,6 +38,7 @@ export default {
   mounted() {
     if (this.lotNo) {
       this.form.lotNo = this.lotNo
+      this.$emit('emit-kmold-tamago', this.form)
     }
   }
 }

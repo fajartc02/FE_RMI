@@ -1,5 +1,5 @@
 <template>
-  <CModal scrollable size="xl" :visible="modalShowJudg" backdrop="static">
+  <CModal scrollable size="xl" :visible="modalShowJudg" backdrop="static" @close="() => { modalShowJudg = false }">
     <CModalHeader>
       <CModalTitle>Result Abnormal Parameter</CModalTitle>
     </CModalHeader>
@@ -34,7 +34,8 @@
       <a :href="report">
         <CButton color="warning">Download PDF</CButton>
       </a>
-      <CButton color="success" @click="() => { $router.push('/inspection/ingot/internal') }">OK</CButton>
+      <CButton color="success" @click="() => { $router.push('/inspection/ingot/internal'); modalShowJudg = false }">OK
+      </CButton>
     </CModalFooter>
   </CModal>
   <CModal scrollable size="xl" :visible="modalShowStd" @close="() => { modalShowStd = false }">
@@ -89,7 +90,13 @@
             </div>
             <div class="card-footer d-flex justify-content-evenly">
               <template v-if="GET_QR_SAMPLE.tableInternalVendor || GET_SAMPLE_CODE">
-                <CButton style="width: 250px;" color="success" @click="submitCheckSampleIngot">Save</CButton>
+
+                <CButton v-if="isKmoldTamagoFill && !isSubmited" style="width: 250px;" color="success"
+                  @click="submitCheckSampleIngot">
+                  Save</CButton>
+                <CButton v-else-if="isSubmited" style="width: 250px;" color="success" disabled="true">Submitted
+                </CButton>
+                <CButton v-else style="width: 250px;" color="danger" disabled="true">Please fill all input</CButton>
                 <CButton style="width: 250px;" color="secondary" @click="goToPreviousScreen">Cancel</CButton>
               </template>
             </div>
@@ -137,19 +144,18 @@ export default {
         values: []
       },
       elementOutOfRanged: [],
-      imageStd: STD_BASE64
+      imageStd: STD_BASE64,
+      isSubmited: false,
     }
   },
   computed: {
     ...mapGetters([IS_LOADING, GET_QR_SAMPLE, GET_SAMPLE_CODE]),
-    // isKmoldTamagoFill() {
-    //   return this.input.kMold && this.input.tamago
-    // }
+    isKmoldTamagoFill() {
+      // this.input.values
+      return this.input.values.filter(item => item.kMold == null || item.tamago == null).length == 0
+    }
   },
   methods: {
-    onChangeContainerInput(data) {
-      this.input.values = data
-    },
     focusToggle(status = true) {
       this.is_focus = status
       if (this.is_focus) {
@@ -243,11 +249,15 @@ export default {
     onChangeSampleCode(sampleCode) {
       this.input.sampleCode = sampleCode
     },
+    onChangeContainerInput(data) {
+      this.input.values = data
+    },
     async submitCheckSampleIngot() {
       try {
         // condition for sample ID spectro match or not
         if (this.GET_QR_SAMPLE.headers.sampleId) this.input.sampleCode = this.GET_QR_SAMPLE.headers.sampleId
         const response = await this.$store.dispatch(ACTION_ADD_SAMPLE_CODE, this.input)
+        this.isSubmited = true
         this.conditionJudgmentIngotCheck(response)
       } catch (error) {
         alert(JSON.stringify(error))
