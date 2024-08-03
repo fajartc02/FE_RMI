@@ -100,7 +100,7 @@ export default {
       try {
         await this.ACTION_SAMPLE_INGOT_HISTORICAL(filter)
       } catch (error) {
-        this.$swal('Error', 'Something went wrong', 'error')
+        this.$swal('Error', error, 'error')
       }
     },
     async onDataSelected(data) {
@@ -109,7 +109,7 @@ export default {
         // GET: /sample-ingot/{sampleId}
         await this.ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL(data.id)
       } catch (error) {
-        this.$swal('Error', 'Something went wrong', 'error')
+        this.$swal('Error', error, 'error')
       }
     },
     dismissModal() {
@@ -125,9 +125,12 @@ export default {
     DataNotFound,
     LoadingComponent
   },
-  mounted() {
-    this.ACTION_LINE({ page: 1, line: null })
-    // this.modalShow = true
+  async mounted() {
+    try {
+      await this.ACTION_LINE({ page: 1, line: null })
+    } catch (error) {
+      this.$swal('Error', error, 'error')
+    }
   }
 }
 </script>

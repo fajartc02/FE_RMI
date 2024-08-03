@@ -65,10 +65,10 @@ const MockService = {
             // .reply(200, { data: SAMPLE_CODE_SUGGESTED_PARAMS_MOCK })
         mock.onGet('shimadzu/2').reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
 
-        mock.onGet('gauges/').reply(200, { data: gauges })
+        mock.onGet('gauge/').reply(200, { data: gauges })
 
-        mock.onGet('machines/').reply(200, { data: MACHINES_MOCK })
-        mock.onGet('lines/').reply(200, { data: LINES_MOCK })
+        mock.onGet('machine/').reply(200, { data: MACHINES_MOCK })
+        mock.onGet('line/').reply(200, { data: LINES_MOCK })
 
         mock
             .onGet('sample-ingot/', {

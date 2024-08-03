@@ -26,7 +26,7 @@ const actions = {
         try {
             ApiService.setHeader()
             dispatch(ACTION_LOADING, true)
-            const { data } = await ApiService.query('gauges/', params)
+            const { data } = await ApiService.query('gauge/', params)
             dispatch(ACTION_LOADING, false)
             commit(SET_GAUGE, data.data)
         } catch (error) {

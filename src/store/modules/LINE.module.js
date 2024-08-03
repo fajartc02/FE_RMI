@@ -36,7 +36,7 @@ const actions = {
         try {
             ApiService.setHeader()
             dispatch(ACTION_LOADING, true)
-            const { data } = await ApiService.query('lines/', params)
+            const { data } = await ApiService.query('line', params)
             commit(SET_LINE, data.data)
             dispatch(ACTION_LOADING, false)
         } catch (error) {
