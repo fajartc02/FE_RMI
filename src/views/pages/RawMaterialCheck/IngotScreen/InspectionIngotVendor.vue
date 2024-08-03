@@ -5,7 +5,7 @@
     </CModalHeader>
     <CModalBody v-if="elementOutOfRanged.length > 0">
       <template v-for="(data, idx) in elementOutOfRanged" :key="data">
-        <h6>{{ data.lotNo }}</h6>
+        <h6>Sample Code: {{ data.lotNo }}</h6>
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
