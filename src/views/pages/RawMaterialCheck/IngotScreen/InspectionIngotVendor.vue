@@ -258,7 +258,12 @@ export default {
         if (this.GET_QR_SAMPLE.headers.sampleId) this.input.sampleCode = this.GET_QR_SAMPLE.headers.sampleId
         const response = await this.$store.dispatch(ACTION_ADD_SAMPLE_CODE, this.input)
         this.isSubmited = true
-        this.conditionJudgmentIngotCheck(response)
+        let state = this.conditionJudgmentIngotCheck(response)
+
+        if (state) {
+          this.$router.push('/inspection/ingot/internal')
+          this.$swal('Success', 'Add sample success, Pengecekan tidak ada abnormal', 'success')
+        }
       } catch (error) {
         this.$swal('Error', 'Internal Server Error', 'error')
       }
@@ -269,10 +274,9 @@ export default {
           this.elementOutOfRanged = data.values
           this.report = data.report
           this.modalShowJudg = true
-          return
+          return false
         }
-        this.$router.push('/inspection/ingot/internal')
-        this.$swal('Success', 'Add sample success, Pengecekan tidak ada abnormal', 'success')
+        return true
       } catch (error) {
         this.$swal('Error', 'Internal Server Error', 'error')
       }
