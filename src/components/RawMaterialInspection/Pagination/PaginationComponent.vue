@@ -22,7 +22,7 @@
           <li class="page-item" v-for="page in visiblePages" :key="page" :class="{ active: currentPage === page }">
             <a class="page-link" href="#" @click.prevent="changePage(page)">{{
               page
-            }}</a>
+              }}</a>
           </li>
           <li class="page-item" v-if="currentPage < totalPages - 1">
             <span class="page-link">...</span>
@@ -65,6 +65,7 @@ export default {
       required: true,
       default: 10,
     },
+    // page, take, itemCount, pageCount, hasPreviousPage, hasNextPage
   },
   computed: {
     totalPages() {

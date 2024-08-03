@@ -4,10 +4,10 @@
     <template v-for="(btn, i) in btnOpts" :key="btn">
       <button v-if="btn.isActive" class="btn btn-primary m-1" @click="changeBtnSample(i)">{{
         btn.label
-      }}</button>
+        }}</button>
       <button v-else class="btn btn-outline-primary m-1" @click="changeBtnSample(i)">{{
         btn.label
-      }}</button>
+        }}</button>
     </template>
   </div>
   <template v-if="isBtnActive">
@@ -15,12 +15,12 @@
     <div class="row">
       <div class="col-12 col-lg-3">
         <div class="d-flex justify-content-start align-items-center">
-          <template v-for="gauge in gaugeOpts" :key="gauge.gaugeId">
-            <button v-if="gauge.isSelected" class="btn btn-primary m-1" @click="changeGaugeSelected(gauge.gaugeId)">{{
-              gauge.gaugeName
-              }}</button>
-            <button v-else class="btn btn-outline-primary m-1" @click="changeGaugeSelected(gauge.gaugeId)">{{
-              gauge.gaugeName }}</button>
+          <template v-for="gauge in gaugeOpts" :key="gauge.id">
+            <button v-if="gauge.isSelected" class="btn btn-primary m-1" @click="changeGaugeSelected(gauge.id)">{{
+              gauge.name
+            }}</button>
+            <button v-else class="btn btn-outline-primary m-1" @click="changeGaugeSelected(gauge.id)">{{
+              gauge.name }}</button>
           </template>
         </div>
       </div>
@@ -34,7 +34,7 @@
   </template>
 </template>
 <script>
-import { ACTION_SAMPLE_CODE_SUGGESTED, GET_SAMPLE_CODE_SUGGESTED } from '@/store/modules/SAMPLE_CODE.module';
+import { ACTION_SAMPLE_CODE_SUGGESTED, GET_SAMPLE_CODE_SUGGESTED_TREESELECT } from '@/store/modules/SAMPLE_CODE.module';
 import { ACTION_GAUGE, GET_GAUGE } from '@/store/modules/GAUGE.module'
 
 import Treeselect from '@zanmato/vue3-treeselect'
@@ -56,6 +56,10 @@ export default {
       filterGauge: {
         materialCategory: 'INGOT',
         isAuto: true
+      },
+      queryGetSuggested: {
+        gaugeId: null,
+        incharge: 'INTERNAL'
       },
       sampleCodeSuggested: [],
       btnOpts: [
@@ -88,12 +92,13 @@ export default {
         }
       })
     },
-    changeGaugeSelected(gaugeId) {
+    changeGaugeSelected(id) {
+      this.queryGetSuggested.gaugeId = id
       this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
       this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
       this.gaugeOpts.forEach((gauge) => {
-        console.log(gauge.gaugeId, gaugeId);
-        if (gauge.gaugeId === gaugeId) {
+        console.log(gauge.id, id);
+        if (gauge.id === id) {
           gauge.isSelected = true
         } else {
           gauge.isSelected = false
@@ -126,9 +131,9 @@ export default {
         this.gaugeOpts = this.GET_GAUGE
       }
     },
-    GET_SAMPLE_CODE_SUGGESTED: function () {
-      if (this.GET_SAMPLE_CODE_SUGGESTED) {
-        this.sampleCodeSuggested = this.GET_SAMPLE_CODE_SUGGESTED
+    GET_SAMPLE_CODE_SUGGESTED_TREESELECT: function () {
+      if (this.GET_SAMPLE_CODE_SUGGESTED_TREESELECT) {
+        this.sampleCodeSuggested = this.GET_SAMPLE_CODE_SUGGESTED_TREESELECT
       }
     },
     'filter.sampleCode': async function () {
@@ -140,7 +145,10 @@ export default {
     selectedGaugeId: async function () {
       if (this.selectedGaugeId && this.isSampleVisible) {
         await this.$store.dispatch(ACTION_LOADING, true)
-        await this.$store.dispatch(ACTION_SAMPLE_CODE_SUGGESTED, this.selectedGaugeId)
+        await this.$store.dispatch(ACTION_SAMPLE_CODE_SUGGESTED, {
+          gaugeId: this.selectedGaugeId,
+          incharge: 'INTERNAL'
+        })
         await this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
         await this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
         await this.$store.dispatch(ACTION_LOADING, false)
@@ -152,7 +160,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([GET_SAMPLE_CODE_SUGGESTED, GET_GAUGE]),
+    ...mapGetters([GET_SAMPLE_CODE_SUGGESTED_TREESELECT, GET_GAUGE]),
     isBtnActive() {
       return this.btnOpts.some((btn) => btn.isActive)
     },
@@ -160,7 +168,7 @@ export default {
       return this.btnOpts.some((btn) => btn.isActive && btn.isSampleVisible) && this.selectedGaugeId
     },
     selectedGaugeId() {
-      return this.gaugeOpts.find((gauge) => gauge.isSelected)?.gaugeId
+      return this.gaugeOpts.find((gauge) => gauge.isSelected)?.id
     },
   },
   async mounted() {
