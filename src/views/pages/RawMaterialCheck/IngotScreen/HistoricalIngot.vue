@@ -24,12 +24,6 @@
         </div>
       </template>
     </CModalBody>
-    <!-- <CModalFooter class="d-flex justify-content-center align-items-center">
-      <a :href="report">
-        <CButton color="warning">Download PDF</CButton>
-      </a>
-      <CButton color="secondary" @click="dismissModal">Close</CButton>
-    </CModalFooter> -->
   </CModal>
   <div class="container-fluid">
     <div class="row">
@@ -73,22 +67,28 @@ export default {
       filters: [
         InputModel('Start Date', 'date', 'input date', moment().format('YYYY-MM-DD'), 3, false),
         InputModel('End Date', 'date', 'input date', moment().format('YYYY-MM-DD'), 3, false),
+        InputModel('Line', 'treeselect', 'Select Line', null, [], null, false),
+        InputModel('Machine', 'treeselect', 'Select Machine', null, [], null, false),
+        InputModel('Incharge', 'option', 'Select Incharge', null, [{ id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false),
+        InputModel('Status', 'option', 'Select Status', null, [{ id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false)
       ]
     }
   },
   watch: {
     GET_LINE_TREESELECT: function () {
-      this.filters.push(
-        InputModel('Line', 'treeselect', 'Select Line', null, this.GET_LINE_TREESELECT, null, false)
-      )
+      console.log(this.filters);
+      let idxLineInput = this.filters.findIndex(x => x.title == 'Line');
+      this.filters.splice(idxLineInput, 1, InputModel('Line', 'treeselect', 'Select Line', null, this.GET_LINE_TREESELECT, null, false))
+
       this.ACTION_MACHINE({ page: 1, machine: null })
     },
     GET_MACHINE_TREESELECT: function () {
-      this.filters.push(
-        InputModel('Machine', 'treeselect', 'Select Machine', null, this.GET_MACHINE_TREESELECT, null, false),
-        InputModel('Incharge', 'option', 'Select Incharge', null, [{ id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false),
-        InputModel('Status', 'option', 'Select Status', null, [{ id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }], null, false)
-      )
+      let idxMachineInput = this.filters.findIndex(x => x.title == 'Machine');
+      let idxInchargeInput = this.filters.findIndex(x => x.title == 'Incharge');
+      let idxStatusInput = this.filters.findIndex(x => x.title == 'Status');
+      this.filters.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', null, this.GET_MACHINE_TREESELECT, null, false))
+      this.filters.splice(idxInchargeInput, 1, InputModel('Incharge', 'option', 'Select Incharge', null, [{ id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false))
+      this.filters.splice(idxStatusInput, 1, InputModel('Status', 'option', 'Select Status', null, [{ id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false))
     },
   },
   computed: {
