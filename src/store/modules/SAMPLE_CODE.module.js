@@ -1,4 +1,5 @@
 import ApiService from '../services/api.service'
+import { ACTION_LOADING } from './LOADING.module'
 
 export const GET_SAMPLE_CODE = 'GET_SAMPLE_CODE'
 export const SET_SAMPLE_CODE = 'SET_SAMPLE_CODE'
@@ -7,6 +8,8 @@ export const ACTION_SAMPLE_CODE = 'ACTION_SAMPLE_CODE'
 export const ACTION_ADD_SAMPLE_CODE = 'ACTION_ADD_SAMPLE_CODE'
 
 export const GET_SAMPLE_CODE_SUGGESTED = 'GET_SAMPLE_CODE_SUGGESTED'
+export const GET_SAMPLE_CODE_SUGGESTED_TREESELECT =
+    'GET_SAMPLE_CODE_SUGGESTED_TREESELECT'
 export const SET_SAMPLE_CODE_SUGGESTED = 'SET_SAMPLE_CODE_SUGGESTED'
 export const ACTION_SAMPLE_CODE_SUGGESTED = 'ACTION_SAMPLE_CODE_SUGGESTED'
 
@@ -21,6 +24,11 @@ const getters = {
     },
     GET_SAMPLE_CODE_SUGGESTED(state) {
         return state.SAMPLE_CODE_SUGGESTED
+    },
+    GET_SAMPLE_CODE_SUGGESTED_TREESELECT(state) {
+        return state.SAMPLE_CODE_SUGGESTED.map((item) => {
+            return { id: item.id, label: item.sampleCode }
+        })
     },
 }
 
@@ -63,11 +71,15 @@ const actions = {
             return error
         }
     },
-    async ACTION_SAMPLE_CODE_SUGGESTED({ commit }, gaugeId) {
+    async ACTION_SAMPLE_CODE_SUGGESTED({ commit, dispatch }, params) {
         try {
             ApiService.setHeader()
-            const { data } = await ApiService.get('shimadzu', gaugeId)
+            dispatch(ACTION_LOADING, true)
+            const { data } = await ApiService.query('shimadzu', params)
+            console.log(data)
+
             commit(SET_SAMPLE_CODE_SUGGESTED, data.data)
+            dispatch(ACTION_LOADING, false)
         } catch (error) {
             console.error(error)
             return error

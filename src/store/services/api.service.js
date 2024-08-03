@@ -5,7 +5,7 @@ import JwtService from './jwt.service'
  */
 const ApiService = {
     init() {
-        axios.defaults.baseURL = 'http://192.168.1.12:3000/'
+        axios.defaults.baseURL = 'http://192.168.1.17:3000/'
     },
 
     // /**
@@ -24,6 +24,8 @@ const ApiService = {
      * @returns {*}
      */
     query(resource, params = null) {
+        console.log(resource, params)
+
         return axios.get(`${resource}`, { params }).catch((error) => {
             throw new Error(`[KT] ApiService ${error}`)
         })

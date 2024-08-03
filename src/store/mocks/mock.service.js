@@ -60,6 +60,16 @@ const MockService = {
 
         // IF GaugeID not passing
         mock.onGet('shimadzu/').reply(200, { data: SAMPLE_CODE_SUGGESTED_MOCK })
+
+        // FOR suggested from specific shimadzu
+        mock
+            .onGet('shimadzu', {
+                params: {
+                    gaugeId: 1,
+                    incharge: 'INTERNAL',
+                },
+            })
+            .reply(200, { data: SAMPLE_CODE_SUGGESTED_PARAMS_MOCK })
             // ELSE GaugeId passed
         mock.onGet('shimadzu/1').reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
             // .reply(200, { data: SAMPLE_CODE_SUGGESTED_PARAMS_MOCK })
