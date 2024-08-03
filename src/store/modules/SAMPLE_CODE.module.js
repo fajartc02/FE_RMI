@@ -54,7 +54,7 @@ const actions = {
             const idSample = SAMPLE_CODEData.sampleCode
             delete SAMPLE_CODEData.sampleCode
             const { data } = await ApiService.put(
-                `sample-ingot/${idSample}`,
+                `shimadzu/${idSample}`,
                 SAMPLE_CODEData,
             )
             return data
