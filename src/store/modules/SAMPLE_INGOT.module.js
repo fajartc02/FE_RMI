@@ -54,22 +54,22 @@ const actions = {
         try {
             ApiService.setHeader()
             dispatch(ACTION_LOADING, true)
-            console.log(filter)
             const { data } = await ApiService.query('sample-ingot/', filter)
             dispatch(ACTION_LOADING, false)
             commit(SET_QR_SAMPLE, data.data)
         } catch (error) {
             dispatch(ACTION_LOADING, false)
-            console.error(error)
-            return error
+            throw error.response.data.status.message
         }
     },
-    ACTION_RESET_SAMPLE_INGOT({ commit }) {
+    ACTION_RESET_SAMPLE_INGOT({ commit, dispatch }) {
+        dispatch(ACTION_LOADING, true)
         commit(SET_SAMPLE_INGOT, {
             headers: null,
             tablePureVendor: null,
             tableInternalVendor: null,
         })
+        dispatch(ACTION_LOADING, false)
     },
     async ACTION_SAMPLE_INGOT_HISTORICAL({ commit, dispatch }, filter) {
         try {
@@ -80,8 +80,7 @@ const actions = {
             commit(SET_SAMPLE_INGOT_HISTORICAL, data)
         } catch (error) {
             dispatch(ACTION_LOADING, false)
-            console.error(error)
-            return error
+            throw error.response.data.status.message
         }
     },
     async ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL({ commit, dispatch }, sampleId) {
@@ -93,8 +92,7 @@ const actions = {
             commit(SET_QR_SAMPLE, data.data)
         } catch (error) {
             dispatch(ACTION_LOADING, false)
-            console.error(error)
-            return error
+            throw error.response.data.status.message
         }
     },
 }

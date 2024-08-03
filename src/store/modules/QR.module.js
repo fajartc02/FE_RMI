@@ -1,4 +1,5 @@
 import ApiService from '../services/api.service'
+import { ACTION_LOADING } from './LOADING.module'
 
 export const GET_QR_SAMPLE = 'GET_QR_SAMPLE'
 export const SET_QR_SAMPLE = 'SET_QR_SAMPLE'
@@ -27,9 +28,10 @@ const mutations = {
 }
 
 const actions = {
-    async ACTION_QR_SAMPLE({ commit }, QR_SAMPLEData = null) {
+    async ACTION_QR_SAMPLE({ commit, dispatch }, QR_SAMPLEData = null) {
         try {
-            await ApiService.setHeader()
+            ApiService.setHeader()
+            dispatch(ACTION_LOADING, true)
             if (QR_SAMPLEData) {
                 const { data } = await ApiService.post('sample-ingot', QR_SAMPLEData)
                 commit(SET_QR_SAMPLE, data.data)
@@ -40,17 +42,20 @@ const actions = {
                     tableInternalVendor: null,
                 })
             }
+            dispatch(ACTION_LOADING, false)
         } catch (error) {
-            // console.log(error.response.data.status.message)
+            dispatch(ACTION_LOADING, false)
             throw error.response.data.status.message
         }
     },
-    ACTION_RESET_QR_SAMPLE({ commit }) {
+    ACTION_RESET_QR_SAMPLE({ commit, dispatch }) {
+        dispatch(ACTION_LOADING, true)
         commit(SET_QR_SAMPLE, {
             headers: null,
             tablePureVendor: null,
             tableInternalVendor: null,
         })
+        dispatch(ACTION_LOADING, false)
     },
 }
 

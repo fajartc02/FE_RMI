@@ -99,11 +99,11 @@ const MockService = {
             .onGet('sample-ingot/1')
             .reply(200, { data: SCANNED_CODE_SUGGESTED_MOCK })
 
-        mock.onPut('/sample-ingot/1').reply((data) => {
+        mock.onPut('/shimadzu/1').reply((data) => {
             console.log('MOCKS')
             console.log(data.data)
-            return [201, { data: OK_INGOT_CHECK_VENDOR }]
-                // return [201, { data: NG_INGOT_CHECK_VENDOR }]
+                // return [201, { data: OK_INGOT_CHECK_VENDOR }]
+            return [201, { data: NG_INGOT_CHECK_VENDOR.data }]
         })
 
         mock.onGet('sample-ingot/historical').reply(200, {

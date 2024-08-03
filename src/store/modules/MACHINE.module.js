@@ -1,4 +1,5 @@
 import ApiService from '../services/api.service'
+import { ACTION_LOADING } from './LOADING.module'
 
 export const GET_MACHINE = 'GET_MACHINE'
 export const SET_MACHINE = 'SET_MACHINE'
@@ -31,15 +32,16 @@ const mutations = {
 }
 
 const actions = {
-    async ACTION_MACHINE({ commit }, params) {
+    async ACTION_MACHINE({ commit, dispatch }, params) {
         try {
             ApiService.setHeader()
+            dispatch(ACTION_LOADING, true)
             const { data } = await ApiService.query('machines/', params)
-
             commit(SET_MACHINE, data.data)
+            dispatch(ACTION_LOADING, false)
         } catch (error) {
-            console.error(error)
-            return error
+            dispatch(ACTION_LOADING, false)
+            throw error.response.data.status.message
         }
     },
 }

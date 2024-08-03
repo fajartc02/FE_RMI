@@ -231,19 +231,21 @@ export default {
             denyButtonText: `Tidak`
           }).then(async (result) => {
             if (result.isConfirmed) {
-              this.$swal("Saved!", "", "success");
               this.form.header.sampleCodeParent = this.form.header.sampleCode
-              console.log(this.form);
               await this.$store.dispatch(ACTION_QR_SAMPLE, this.form)
+              this.$swal("Saved!", "", "success");
             }
-          });
+          })
+            .catch(err => {
+              this.$swal('Error', err, 'error')
+            });
           this.$store.dispatch(ACTION_LOADING, false)
           return
         }
 
         this.$swal('Error', error, 'error')
         this.$store.dispatch(ACTION_LOADING, false)
-        return error
+        throw error
       }
     },
     onChangeSampleCode(sampleCode) {
