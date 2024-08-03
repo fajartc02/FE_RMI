@@ -24,14 +24,9 @@ const actions = {
     async ACTION_GAUGE({ commit }, params) {
         try {
             ApiService.setHeader()
-<<<<<<< HEAD
             dispatch(ACTION_LOADING, true)
             const { data } = await ApiService.query('gauge/', params)
             dispatch(ACTION_LOADING, false)
-=======
-            const { data } = await ApiService.query('gauges/', params)
-
->>>>>>> parent of 932d0c5 (handling all error will comming popup message error)
             commit(SET_GAUGE, data.data)
         } catch (error) {
             console.error(error)

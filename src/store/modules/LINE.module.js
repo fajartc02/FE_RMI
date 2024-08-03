@@ -34,13 +34,8 @@ const actions = {
     async ACTION_LINE({ commit }, params) {
         try {
             ApiService.setHeader()
-<<<<<<< HEAD
             dispatch(ACTION_LOADING, true)
             const { data } = await ApiService.query('line', params)
-=======
-            const { data } = await ApiService.query('lines/', params)
-            console.log(data)
->>>>>>> parent of 932d0c5 (handling all error will comming popup message error)
             commit(SET_LINE, data.data)
         } catch (error) {
             console.error(error)

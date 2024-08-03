@@ -34,13 +34,8 @@ const actions = {
     async ACTION_MACHINE({ commit }, params) {
         try {
             ApiService.setHeader()
-<<<<<<< HEAD
             dispatch(ACTION_LOADING, true)
             const { data } = await ApiService.query('machine/', params)
-=======
-            const { data } = await ApiService.query('machines/', params)
-
->>>>>>> parent of 932d0c5 (handling all error will comming popup message error)
             commit(SET_MACHINE, data.data)
         } catch (error) {
             console.error(error)
