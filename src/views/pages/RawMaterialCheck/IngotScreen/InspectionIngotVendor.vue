@@ -260,18 +260,22 @@ export default {
         this.isSubmited = true
         this.conditionJudgmentIngotCheck(response)
       } catch (error) {
-        alert(JSON.stringify(error))
+        this.$swal('Error', 'Something went wrong', 'error')
       }
     },
     conditionJudgmentIngotCheck({ data }) {
-      if (data) {
-        this.elementOutOfRanged = data.values
-        this.report = data.report
-        this.modalShowJudg = true
-        return
+      try {
+        if (data) {
+          this.elementOutOfRanged = data.values
+          this.report = data.report
+          this.modalShowJudg = true
+          return
+        }
+        this.$router.push('/inspection/ingot/internal')
+        this.$swal('Success', 'Add sample success, Pengecekan tidak ada abnormal', 'success')
+      } catch (error) {
+        this.$swal('Error', 'Something went wrong', 'error')
       }
-      this.$router.push('/inspection/ingot/internal')
-      this.$swal('Success', 'Add sample success, Pengecekan tidak ada abnormal', 'success')
     }
   },
   components: {
