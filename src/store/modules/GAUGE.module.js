@@ -1,5 +1,4 @@
 import ApiService from '../services/api.service'
-import { ACTION_LOADING } from './LOADING.module'
 
 export const GET_GAUGE = 'GET_GAUGE'
 export const SET_GAUGE = 'SET_GAUGE'
@@ -22,16 +21,21 @@ const mutations = {
 }
 
 const actions = {
-    async ACTION_GAUGE({ commit, dispatch }, params) {
+    async ACTION_GAUGE({ commit }, params) {
         try {
             ApiService.setHeader()
+<<<<<<< HEAD
             dispatch(ACTION_LOADING, true)
             const { data } = await ApiService.query('gauge/', params)
             dispatch(ACTION_LOADING, false)
+=======
+            const { data } = await ApiService.query('gauges/', params)
+
+>>>>>>> parent of 932d0c5 (handling all error will comming popup message error)
             commit(SET_GAUGE, data.data)
         } catch (error) {
-            dispatch(ACTION_LOADING, false)
-            throw error.response.data.status.message
+            console.error(error)
+            return error
         }
     },
 }

@@ -1,5 +1,4 @@
 import ApiService from '../services/api.service'
-import { ACTION_LOADING } from './LOADING.module'
 
 export const GET_LINE = 'GET_LINE'
 export const SET_LINE = 'SET_LINE'
@@ -32,16 +31,20 @@ const mutations = {
 }
 
 const actions = {
-    async ACTION_LINE({ commit, dispatch }, params) {
+    async ACTION_LINE({ commit }, params) {
         try {
             ApiService.setHeader()
+<<<<<<< HEAD
             dispatch(ACTION_LOADING, true)
             const { data } = await ApiService.query('line', params)
+=======
+            const { data } = await ApiService.query('lines/', params)
+            console.log(data)
+>>>>>>> parent of 932d0c5 (handling all error will comming popup message error)
             commit(SET_LINE, data.data)
-            dispatch(ACTION_LOADING, false)
         } catch (error) {
-            dispatch(ACTION_LOADING, false)
-            throw error.response.data.status.message
+            console.error(error)
+            return error
         }
     },
 }
