@@ -225,7 +225,7 @@ export default {
         console.log(error)
         if (error.toUpperCase().includes('DUPLICATE')) {
           this.$swal.fire({
-            title: "Sample Code sudah pernah ada, apakah anda ingin melakukan resample?",
+            title: "Sample Code sudah pernah ada, apakah anda ingin melakukan revisi?",
             showDenyButton: true,
             confirmButtonText: "Ya",
             denyButtonText: `Tidak`
