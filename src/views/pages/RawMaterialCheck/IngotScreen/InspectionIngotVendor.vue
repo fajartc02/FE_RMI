@@ -253,6 +253,8 @@ export default {
       }
     },
     conditionJudgmentIngotCheck({ data }) {
+      console.log(data);
+
       if (data) {
         // console.log(data.data);
         this.elementOutOfRanged = data.data.elementOutOfRanged
