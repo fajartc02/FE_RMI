@@ -257,8 +257,8 @@ export default {
 
       if (data) {
         // console.log(data.data);
-        this.elementOutOfRanged = data.data.elementOutOfRanged
-        this.report = data.data.report
+        this.elementOutOfRanged = data.elementOutOfRanged
+        this.report = data.report
         this.modalShowJudg = true
         return
       }
