@@ -67,6 +67,13 @@ export default {
       nav: [
         {
           component: 'CNavItem',
+          to: '/dashboard',
+          name: 'Dashboard',
+          icon: 'cil-home',
+          parentId: 'ROOT',
+        },
+        {
+          component: 'CNavItem',
           to: '/inspection/ingot',
           name: 'Ingot Check',
           icon: 'cilNotes',

@@ -50,12 +50,12 @@ const mutations = {
 }
 
 const actions = {
-    async ACTION_SAMPLE_INGOT({ commit, dispatch }, filter) {
+    async ACTION_SAMPLE_INGOT({ commit, dispatch }, sampleCode) {
         try {
             ApiService.setHeader()
             dispatch(ACTION_LOADING, true)
-            console.log(filter)
-            const { data } = await ApiService.query('sample-ingot/', filter)
+                // const { data } = await ApiService.query('sample-ingot/', filter)
+            const { data } = await ApiService.get('shimadzu', sampleCode)
             dispatch(ACTION_LOADING, false)
             commit(SET_QR_SAMPLE, data.data)
         } catch (error) {

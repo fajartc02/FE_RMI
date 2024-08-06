@@ -6,9 +6,10 @@ function InputModel(
     options = null,
     size = null,
     disabled = false,
+    id = null,
 ) {
     let obj = {}
-
+    if (!id) obj.id = title
     obj.title = title
     obj.type = type
     obj.placeholder = placeholder

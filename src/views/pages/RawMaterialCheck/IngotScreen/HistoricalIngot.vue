@@ -34,7 +34,7 @@
     <div class="row mt-1">
       <div class="col-12">
         <div class="card p-2">
-          <TableComponentVue :filters="filters" :dataTable="GET_SAMPLE_INGOT_HISTORICAL" @emit-data="onDataSelected" />
+          <TableComponentVue :dataTable="GET_SAMPLE_INGOT_HISTORICAL" @emit-data="onDataSelected" />
         </div>
       </div>
     </div>
@@ -65,18 +65,17 @@ export default {
       modalShow: false,
       selectedData: null,
       filters: [
-        InputModel('Start Date', 'date', 'input date', moment().format('YYYY-MM-DD'), 3, false),
-        InputModel('End Date', 'date', 'input date', moment().format('YYYY-MM-DD'), 3, false),
-        InputModel('Line', 'treeselect', 'Select Line', null, [], null, false),
+        // InputModel('Start Date', 'date', 'input date', moment().format('YYYY-MM-DD'), 3, false),
+        // InputModel('End Date', 'date', 'input date', moment().format('YYYY-MM-DD'), 3, false),
+        InputModel('Line', 'treeselect', 'Select Line', null, [], null, false, 'lineId'),
         InputModel('Machine', 'treeselect', 'Select Machine', null, [], null, false),
-        InputModel('Incharge', 'option', 'Select Incharge', null, [{ id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false),
+        InputModel('In Charge', 'option', 'Select Incharge', null, [{ id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false),
         InputModel('Status', 'option', 'Select Status', null, [{ id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false)
       ]
     }
   },
   watch: {
     GET_LINE_TREESELECT: function () {
-      console.log(this.filters);
       let idxLineInput = this.filters.findIndex(x => x.title == 'Line');
       this.filters.splice(idxLineInput, 1, InputModel('Line', 'treeselect', 'Select Line', null, this.GET_LINE_TREESELECT, null, false))
 

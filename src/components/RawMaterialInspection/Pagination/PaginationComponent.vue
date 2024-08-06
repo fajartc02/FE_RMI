@@ -5,7 +5,7 @@
         <CInputGroupText>
           Limit
         </CInputGroupText>
-        <select class="form-select" v-model="filter.rowPerPage">
+        <select class="form-select">
           <option v-for="limit in optionsPerPage" :key="limit" :value="limit">{{ limit }}</option>
         </select>
       </CInputGroup>
@@ -13,25 +13,25 @@
     <div class="col-10 d-flex justify-content-end align-items-end">
       <nav aria-label="Page navigation">
         <ul class="pagination">
-          <li class="page-item" :class="{ disabled: currentPage === 1 }">
-            <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">Previous</a>
+          <li class="page-item" :class="{ disabled: page === 1 }">
+            <a class="page-link" href="#" @click.prevent="changePage(page - 1)">Previous</a>
           </li>
-          <li class="page-item" v-if="currentPage > 2">
+          <li class="page-item" v-if="page > 2">
             <span class="page-link">...</span>
           </li>
-          <li class="page-item" v-for="page in visiblePages" :key="page" :class="{ active: currentPage === page }">
+          <li class="page-item" v-for="page in visiblePages" :key="page" :class="{ active: page === page }">
             <a class="page-link" href="#" @click.prevent="changePage(page)">{{
               page
-              }}</a>
+            }}</a>
           </li>
-          <li class="page-item" v-if="currentPage < totalPages - 1">
+          <li class="page-item" v-if="page < totalPages - 1">
             <span class="page-link">...</span>
           </li>
-          <li class="page-item" v-if="currentPage < totalPages" @click.prevent="changePage(totalPages)">
+          <li class="page-item" v-if="page < totalPages" @click.prevent="changePage(totalPages)">
             <a class="page-link" href="#">{{ totalPages }}</a>
           </li>
-          <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-            <a class="page-link" href="#" @click.prevent="changePage(currentPage + 1)">Next</a>
+          <li class="page-item" :class="{ disabled: page === totalPages }">
+            <a class="page-link" href="#" @click.prevent="changePage(page + 1)">Next</a>
           </li>
         </ul>
       </nav>
@@ -43,24 +43,21 @@
 export default {
   data() {
     return {
-      filter: {
-        rowPerPage: 10,
-      },
       optionsPerPage: [10, 25, 50, 100],
     }
   },
   props: {
-    totalData: {
+    itemCount: {
       type: Number,
       required: true,
       default: 1,
     },
-    currentPage: {
+    page: {
       type: Number,
       required: true,
       default: 1,
     },
-    itemsPerPage: {
+    take: {
       type: Number,
       required: true,
       default: 10,
@@ -69,13 +66,13 @@ export default {
   },
   computed: {
     totalPages() {
-      return Math.ceil(this.totalData / this.itemsPerPage)
+      return Math.ceil(this.itemCount / this.take)
     },
     visiblePages() {
       const maxVisiblePages = 5
       const pages = []
       let startPage = Math.max(
-        this.currentPage - Math.floor(maxVisiblePages / 2),
+        this.page - Math.floor(maxVisiblePages / 2),
         1,
       )
       let endPage = startPage + maxVisiblePages - 1
@@ -86,7 +83,6 @@ export default {
       }
       for (let i = startPage; i <= endPage; i++) {
         pages.push(i)
-        // console.log(i);
       }
       return pages
     },
