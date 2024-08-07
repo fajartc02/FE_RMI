@@ -24,7 +24,7 @@
       </CTableRow>
     </CTableBody>
   </CTable>
-  <PaginationComponent v-if="dataTable.data" :itemCount="meta.itemCount" :page="meta.page" :take="meta.take" />
+  <PaginationComponent v-if="dataTable.data" />
   <DataNotFound v-else />
 </template>
 
@@ -35,33 +35,12 @@ import DataNotFound from '@/components/RawMaterialInspection/EmptyDataHandler/Da
 
 export default {
   name: 'TableComponent',
-  data() {
-    return {
-      meta: {
-        itemCount: 1,
-        page: 1,
-        take: 25
-      }
-    }
-  },
   computed: {
     getKeys: function () {
       return Object.keys(this.dataTable.data[0]);
     }
   },
-  watch: {
-    meta: {
-      deep: true,
-      handler() {
-        this.$emit('emit-page', this.meta)
-      }
-    }
-  },
   props: {
-    filters: {
-      type: Array,
-      required: true
-    },
     dataTable: {
       type: Array,
       required: true

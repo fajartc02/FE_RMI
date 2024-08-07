@@ -1,5 +1,6 @@
 import ApiService from '../services/api.service'
 import { ACTION_LOADING } from './LOADING.module'
+import { ACTION_SET_META } from './META.module'
 import { SET_QR_SAMPLE } from './QR.module'
 
 export const GET_SAMPLE_INGOT = 'GET_SAMPLE_INGOT'
@@ -76,6 +77,9 @@ const actions = {
             ApiService.setHeader()
             dispatch(ACTION_LOADING, true)
             const { data } = await ApiService.query('sample-ingot/historical', filter)
+            console.log(data)
+            const pagination = data.meta.pagination
+            pagination ? dispatch(ACTION_SET_META, pagination) : null
             dispatch(ACTION_LOADING, false)
             commit(SET_SAMPLE_INGOT_HISTORICAL, data)
         } catch (error) {

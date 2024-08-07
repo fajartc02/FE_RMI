@@ -25,7 +25,7 @@ const ApiService = {
      * @returns {*}
      */
     query(resource, params = null) {
-        console.log(resource, params)
+        console.log('GET-QUERY: ', resource, params)
 
         return axios.get(`${resource}`, { params }).catch((error) => {
             throw new Error(`[KT] ApiService ${error}`)
@@ -40,7 +40,7 @@ const ApiService = {
      */
     get(resource, slug = '') {
         // console.log(axios)
-        console.log(`${resource}/${slug}`)
+        console.log(`GET: ${resource}/${slug}`)
 
         return axios.get(`${resource}/${slug}`).catch((error) => {
             console.log(error)
@@ -55,6 +55,8 @@ const ApiService = {
      * @returns {*}
      */
     post(resource, params) {
+        console.log('POST: ', resource, params)
+
         return axios.post(`${resource}`, params)
     },
 
@@ -66,6 +68,8 @@ const ApiService = {
      * @returns {IDBRequest<IDBValidKey> | Promise<void>}
      */
     update(resource, slug, params) {
+        console.log('UPDATE: ', `${resource}/${slug}`, params)
+
         return axios.put(`${resource}/${slug}`, params)
     },
 
@@ -76,6 +80,7 @@ const ApiService = {
      * @returns {IDBRequest<IDBValidKey> | Promise<void>}
      */
     put(resource, params) {
+        console.log('PUT: ', resource, params)
         return axios.put(`${resource}`, params)
     },
 
@@ -85,6 +90,7 @@ const ApiService = {
      * @returns {*}
      */
     delete(resource) {
+        console.log('DELETE: ', resource)
         return axios.delete(resource).catch((error) => {
             // console.log(error);
             throw new Error(`[RWV] ApiService ${error}`)

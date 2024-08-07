@@ -9,6 +9,7 @@ function InputModel(
     id = null,
 ) {
     let obj = {}
+    obj.id = id
     if (!id) obj.id = title
     obj.title = title
     obj.type = type

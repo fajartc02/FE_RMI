@@ -151,7 +151,6 @@ export default {
   computed: {
     ...mapGetters([IS_LOADING, GET_QR_SAMPLE, GET_SAMPLE_CODE]),
     isKmoldTamagoFill() {
-      // this.input.values
       return this.input.values.filter(item => item.kMold == null || item.tamago == null).length == 0
     }
   },
@@ -236,6 +235,7 @@ export default {
               console.log(this.form);
               await this.$store.dispatch(ACTION_QR_SAMPLE, this.form)
             }
+            this.displaySampleCode = null
           });
           this.$store.dispatch(ACTION_LOADING, false)
           return

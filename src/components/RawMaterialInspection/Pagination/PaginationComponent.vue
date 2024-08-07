@@ -5,7 +5,7 @@
         <CInputGroupText>
           Limit
         </CInputGroupText>
-        <select class="form-select">
+        <select v-model="meta.take" class="form-select">
           <option v-for="limit in optionsPerPage" :key="limit" :value="limit">{{ limit }}</option>
         </select>
       </CInputGroup>
@@ -19,7 +19,7 @@
           <li class="page-item" v-if="page > 2">
             <span class="page-link">...</span>
           </li>
-          <li class="page-item" v-for="page in visiblePages" :key="page" :class="{ active: page === page }">
+          <li class="page-item" v-for="page in visiblePages" :key="page" :class="page === this.page ? 'bg-danger' : ''">
             <a class="page-link" href="#" @click.prevent="changePage(page)">{{
               page
             }}</a>
@@ -40,33 +40,41 @@
 </template>
 
 <script>
+import { ACTION_SET_META, GET_META } from '@/store/modules/META.module'
+import { mapActions, mapGetters } from 'vuex'
+import moment from 'moment'
+
 export default {
   data() {
     return {
       optionsPerPage: [10, 25, 50, 100],
+      meta: {
+        page: 1,
+        take: 10,
+        itemCount: 5,
+        pageCount: 1,
+        hasPreviousPage: false,
+        hasNextPage: false,
+        timestamp: moment().format('YYYY-MM-DD'),
+      },
+      page: 1,
     }
   },
-  props: {
-    itemCount: {
-      type: Number,
-      required: true,
-      default: 1,
+  watch: {
+    'meta.take': function () {
+      this.ACTION_SET_META({ page: 1, take: this.meta.take })
     },
-    page: {
-      type: Number,
-      required: true,
-      default: 1,
+    GET_META: function () {
+      this.meta = { ...this.GET_META }
     },
-    take: {
-      type: Number,
-      required: true,
-      default: 10,
-    },
-    // page, take, itemCount, pageCount, hasPreviousPage, hasNextPage
+    page: function () {
+      this.changePage(this.page)
+    }
   },
   computed: {
+    ...mapGetters([GET_META]),
     totalPages() {
-      return Math.ceil(this.itemCount / this.take)
+      return Math.ceil(this.meta.itemCount / this.meta.take)
     },
     visiblePages() {
       const maxVisiblePages = 5
@@ -88,9 +96,13 @@ export default {
     },
   },
   methods: {
+    ...mapActions([ACTION_SET_META]),
     changePage(page) {
+      this.page = page
+      this.meta.page = page
       if (page >= 1 && page <= this.totalPages) {
-        this.$emit('page-changed', page)
+        // this.$emit('page-changed', page)
+        this.ACTION_SET_META({ page: page, take: this.meta.take })
       }
     },
   },

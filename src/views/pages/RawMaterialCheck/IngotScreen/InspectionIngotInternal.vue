@@ -25,7 +25,12 @@
 
           <div v-if="GET_QR_SAMPLE.tableInternalVendor || GET_SAMPLE_CODE"
             class="card-footer d-flex justify-content-evenly">
-            <CButton style="width: 250px;" color="success" @click="submitCheckSampleIngot">Save</CButton>
+            <CButton v-if="isKmoldTamagoFill && !isSubmited" style="width: 250px;" color="success"
+              @click="submitCheckSampleIngot">
+              Save</CButton>
+            <CButton v-else-if="isSubmited" style="width: 250px;" color="success" disabled="true">Submitted
+            </CButton>
+            <CButton v-else style="width: 250px;" color="danger" disabled="true">Please fill all input</CButton>
             <CButton style="width: 250px;" color="secondary" @click="goToPreviousScreen">Cancel</CButton>
           </div>
         </div>
@@ -66,11 +71,15 @@ export default {
         sampleCode: null,
         values: []
       },
-      prevSampleCode: null
+      prevSampleCode: null,
+      isSubmited: false,
     }
   },
   computed: {
     ...mapGetters([IS_LOADING, GET_QR_SAMPLE, GET_SAMPLE_CODE]),
+    isKmoldTamagoFill() {
+      return this.input.values.filter(item => item.kMold == null || item.tamago == null).length == 0
+    }
   },
   methods: {
     onChangeContainerInput(data) {
@@ -92,6 +101,7 @@ export default {
     },
     async submitCheckSampleIngot() {
       try {
+        this.isSubmited = true
         if (this.GET_QR_SAMPLE.headers.sampleId) this.input.sampleCode = this.GET_QR_SAMPLE.headers.sampleId
         await this.$store.dispatch(ACTION_ADD_SAMPLE_CODE, this.input)
         this.$swal('Success', 'Success add sample', 'success')

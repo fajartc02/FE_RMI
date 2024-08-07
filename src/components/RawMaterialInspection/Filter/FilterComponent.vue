@@ -26,9 +26,11 @@
 <script>
 
 import FN_CASE_CONVERTER from '@/functions/FN_CASE_CONVERTER';
+import { GET_META } from '@/store/modules/META.module';
 import Treeselect from '@zanmato/vue3-treeselect'
 import "@zanmato/vue3-treeselect/dist/vue3-treeselect.min.css";
 import moment from 'moment';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'FilterComponent',
@@ -37,6 +39,9 @@ export default {
       form: {}
     }
   },
+  computed: {
+    ...mapGetters([GET_META])
+  },
   watch: {
     fieldsInput: {
       deep: true,
@@ -44,15 +49,43 @@ export default {
         if (this.fieldsInput.length > 0) {
           for (let i = 0; i < this.fieldsInput.length; i++) {
             const isValidDate = moment(this.fieldsInput[i].value, 'YYYY-MM-DD', true).isValid();
+            let label = this.fieldsInput[i].title === this.fieldsInput[i].id
             if (isValidDate) {
-              this.form[FN_CASE_CONVERTER.titleToCamelCase(this.fieldsInput[i].title)] = moment(this.fieldsInput[i].value).unix()
+              this.form[label ? FN_CASE_CONVERTER.titleToCamelCase(this.fieldsInput[i].title) : this.fieldsInput[i].id] = moment(this.fieldsInput[i].value).unix()
             } else {
-              this.form[FN_CASE_CONVERTER.titleToCamelCase(this.fieldsInput[i].title)] = this.fieldsInput[i].value
+              this.form[label ? FN_CASE_CONVERTER.titleToCamelCase(this.fieldsInput[i].title) : this.fieldsInput[i].id] = this.fieldsInput[i].value
             }
+          }
+          this.form = {
+            ...this.form,
+            take: this.GET_META.take,
+            page: this.GET_META.page,
           }
           this.$emit('emit-filter', this.form)
         }
       }
+    },
+    form: {
+      deep: true,
+      handler: function () {
+        console.log(this.form);
+      }
+    },
+    'GET_META.page': function () {
+      this.form = {
+        ...this.form,
+        take: this.GET_META.take,
+        page: this.GET_META.page,
+      }
+      this.$emit('emit-filter', this.form)
+    },
+    'GET_META.take': function () {
+      this.form = {
+        ...this.form,
+        take: this.GET_META.take,
+        page: this.GET_META.page,
+      }
+      this.$emit('emit-filter', this.form)
     }
   },
   props: {

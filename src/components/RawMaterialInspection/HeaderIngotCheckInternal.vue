@@ -26,8 +26,8 @@
       </div>
       <div class="col-12 col-lg-9">
         <div class="d-flex justify-content-start align-items-center">
-          <treeselect v-if="isSampleVisible" v-model="filter.sampleCode" :options="sampleCodeSuggested"
-            :clearable="true" placeholder="Silahkan pilih sample code" />
+          <treeselect v-if="isSampleVisible && selectedGaugeId" v-model="filter.sampleCode"
+            :options="sampleCodeSuggested" :clearable="true" placeholder="Silahkan pilih sample code" />
         </div>
       </div>
     </div>
@@ -94,21 +94,24 @@ export default {
     },
     changeGaugeSelected(id) {
       this.queryGetSuggested.gaugeId = id
+      if (!this.isSampleVisible) {
+        this.getSampleIngot(id)
+      }
       this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
       this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
       this.gaugeOpts.forEach((gauge) => {
-        console.log(gauge.id, id);
         if (gauge.id === id) {
-          this.filter.sampleCode = gauge.id
+          console.log(gauge);
+          // this.getSampleIngot(gauge.id)
           gauge.isSelected = true
         } else {
           gauge.isSelected = false
         }
       })
     },
-    async getSampleIngot() {
+    async getSampleIngot(gaugeId = null) {
       try {
-        await this.$store.dispatch(ACTION_SAMPLE_INGOT, this.filter.sampleCode)
+        await this.$store.dispatch(ACTION_SAMPLE_INGOT, gaugeId ? gaugeId : this.filter.sampleCode)
       } catch (error) {
         this.errorHandler(error)
       }
@@ -144,6 +147,7 @@ export default {
       }
     },
     selectedGaugeId: async function () {
+      this.filter.sampleCode = null
       if (this.selectedGaugeId && this.isSampleVisible) {
         await this.$store.dispatch(ACTION_LOADING, true)
         await this.$store.dispatch(ACTION_SAMPLE_CODE_SUGGESTED, {
@@ -152,10 +156,6 @@ export default {
         })
         await this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
         await this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
-        await this.$store.dispatch(ACTION_LOADING, false)
-      } else {
-        await this.$store.dispatch(ACTION_LOADING, true)
-        await this.getSampleIngot()
         await this.$store.dispatch(ACTION_LOADING, false)
       }
     },
@@ -166,7 +166,7 @@ export default {
       return this.btnOpts.some((btn) => btn.isActive)
     },
     isSampleVisible() {
-      return this.btnOpts.some((btn) => btn.isActive && btn.isSampleVisible) && this.selectedGaugeId
+      return this.btnOpts.some((btn) => btn.isActive && btn.isSampleVisible)
     },
     selectedGaugeId() {
       return this.gaugeOpts.find((gauge) => gauge.isSelected)?.id

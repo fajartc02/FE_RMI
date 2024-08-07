@@ -8,6 +8,7 @@ import SAMPLE_INGOTModule from './modules/SAMPLE_INGOT.module'
 
 import MACHINEModule from './modules/MACHINE.module'
 import LINEModule from './modules/LINE.module'
+import METAModule from './modules/META.module'
 
 export default createStore({
     state: {
@@ -27,6 +28,7 @@ export default createStore({
     },
     actions: {},
     modules: {
+        METAModule,
         AUTHModule,
         LOADINGModule,
 

@@ -11,7 +11,18 @@ const state = {
 
 const getters = {
     GET_GAUGE(state) {
-        return state.GAUGE_DATA
+        if (state) {
+            return state.GAUGE_DATA.map((gauge) => {
+                return {
+                    ...gauge,
+                    id: gauge.id,
+                    label: gauge.name,
+                    isSelected: false,
+                }
+            })
+        } else {
+            return []
+        }
     },
 }
 
