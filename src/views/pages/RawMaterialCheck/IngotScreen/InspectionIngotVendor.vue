@@ -259,12 +259,17 @@ export default {
         console.log(this.GET_SAMPLE_CODE);
         console.log(this.GET_QR_SAMPLE);
 
-        if (this.GET_SAMPLE_CODE.headers.sampleCode) {
+        if (this.GET_SAMPLE_CODE?.headers.sampleCode) {
           this.input = {
             ...this.input,
             header: {
               sampleCodeVendor: this.GET_SAMPLE_CODE.headers.sampleCode
             }
+          }
+        } else if (this.GET_QR_SAMPLE.headers?.gaugeId) {
+          this.input = {
+            ...this.input,
+            sampleCode: this.GET_QR_SAMPLE.headers.gaugeId
           }
         }
 
