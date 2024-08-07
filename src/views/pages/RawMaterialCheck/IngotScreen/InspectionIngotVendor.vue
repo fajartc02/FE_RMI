@@ -266,10 +266,10 @@ export default {
               sampleCodeVendor: this.GET_SAMPLE_CODE.headers.sampleCode
             }
           }
-        } else if (this.GET_QR_SAMPLE.headers?.gaugeId) {
+        } else if (this.GET_QR_SAMPLE.tableInternalVendor?.id) {
           this.input = {
             ...this.input,
-            sampleCode: this.GET_QR_SAMPLE.headers.gaugeId
+            sampleCode: this.GET_QR_SAMPLE.tableInternalVendor?.id
           }
         }
 
