@@ -274,6 +274,8 @@ export default {
           this.$swal('Success', 'Add sample success, Pengecekan tidak ada abnormal', 'success')
         }
       } catch (error) {
+        console.log(error);
+
         this.$swal('Error', 'Internal Server Error', 'error')
       }
     },
