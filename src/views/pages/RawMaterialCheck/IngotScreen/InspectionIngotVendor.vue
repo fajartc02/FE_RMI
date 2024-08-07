@@ -255,12 +255,16 @@ export default {
     async submitCheckSampleIngot() {
       try {
         // condition for sample ID spectro match or not
-        this.input = {
-          ...this.input,
-          header: {
-            sampleCodeVendor: this.GET_SAMPLE_CODE.headers.sampleCode
+        if (this.GET_SAMPLE_CODE.headers.sampleCode) {
+          this.input = {
+            ...this.input,
+            header: {
+              sampleCodeVendor: this.GET_SAMPLE_CODE.headers.sampleCode
+            }
           }
         }
+        console.log(this.input);
+
         const response = await this.$store.dispatch(ACTION_ADD_SAMPLE_CODE, this.input)
         this.isSubmited = true
         let state = this.conditionJudgmentIngotCheck(response)
