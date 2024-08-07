@@ -255,6 +255,10 @@ export default {
     async submitCheckSampleIngot() {
       try {
         // condition for sample ID spectro match or not
+        console.log(this.input);
+        console.log(this.GET_SAMPLE_CODE);
+        console.log(this.GET_QR_SAMPLE);
+
         if (this.GET_SAMPLE_CODE.headers.sampleCode) {
           this.input = {
             ...this.input,
@@ -263,7 +267,7 @@ export default {
             }
           }
         }
-        console.log(this.input);
+
 
         const response = await this.$store.dispatch(ACTION_ADD_SAMPLE_CODE, this.input)
         this.isSubmited = true
