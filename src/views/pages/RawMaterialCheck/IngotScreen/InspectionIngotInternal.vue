@@ -102,7 +102,7 @@ export default {
     async submitCheckSampleIngot() {
       try {
         this.isSubmited = true
-        if (this.GET_QR_SAMPLE.headers.sampleId) this.input.sampleCode = this.GET_QR_SAMPLE.headers.sampleId
+        this.input.sampleCode = this.prevSampleCode
         await this.$store.dispatch(ACTION_ADD_SAMPLE_CODE, this.input)
         this.$swal('Success', 'Success add sample', 'success')
       } catch (error) {
