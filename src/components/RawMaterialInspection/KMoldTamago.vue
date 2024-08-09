@@ -22,7 +22,7 @@ export default {
   watch: {
     form: {
       handler() {
-        console.log(this.form);
+        // console.log(this.form);
 
         this.$emit('emit-kmold-tamago', this.form)
       },

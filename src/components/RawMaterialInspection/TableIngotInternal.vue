@@ -109,14 +109,14 @@ export default {
       }
     },
     onChangeKMoldTamago(data) {
-      console.log(data);
+      // console.log(data);
 
       this.input.lotNo = data.lotNo
       this.input.tamago = data.tamago ? +data.tamago : null
       this.input.kMold = data.kMold ? +data.kMold : null
 
       let idxAvailable = this.containerInput.findIndex(item => item.lotNo == this.input.lotNo)
-      console.log(idxAvailable);
+      // console.log(idxAvailable);
       if (idxAvailable != -1) {
         this.containerInput[idxAvailable] = this.input
       } else {

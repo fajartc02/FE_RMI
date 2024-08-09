@@ -9,18 +9,27 @@
       <div class="col-12">
         <div class="card" style="z-index: 2;">
           <div class="card-body p-1">
-            <HeaderIngotCheckInternal @emit-sample-code="onChangeSampleCode" />
+            <HeaderIngotCheckInternal @emit-sample-code="onChangeSampleCode" @emit-change-gaugeId="onChangeGaugeId"
+              @emit-btn-active="onChangeBtnResample" />
           </div>
         </div>
       </div>
     </div>
     <div class="row mt-1">
       <div class="col-12">
-        <div v-if="!IS_LOADING" class="card" style="z-index: 1;">
+        <template v-if="sampleCodeSuggested.length > 0 && isCodeNotValid">
+          <label>Select Valid Sample Code:</label>
+          <treeselect v-model="selectedValidSampleCode" :options="sampleCodeSuggested" :clearable="true"
+            placeholder="Silahkan pilih sample code" />
+        </template>
+        <div v-if="!IS_LOADING" class="card my-2" style="z-index: 1;">
           <div class="card-body overflow-auto p-2">
             <h6>Sample Ingot Internal</h6>
+            <h5 v-if="GET_QR_SAMPLE.tableInternalVendor || GET_SAMPLE_CODE">Sample Code: {{
+              GET_QR_SAMPLE.headers?.sampleCode }}</h5>
             <TableIngotInternal @emit-sample-code="onChangeSampleCode" @emit-container-input="onChangeContainerInput"
               :message="'Data not available'" />
+
           </div>
 
           <div v-if="GET_QR_SAMPLE.tableInternalVendor || GET_SAMPLE_CODE"
@@ -47,15 +56,22 @@
 // import QRScanner from '@/components/RawMaterialInspection/QRScanner.vue'
 import HeaderComp from '@/components/RawMaterialInspection/HeaderComp.vue'
 import LoadingComponent from '@/components/RawMaterialInspection/LoadingComponent.vue';
-import { ACTION_QR_SAMPLE, ACTION_RESET_QR_SAMPLE, GET_QR_SAMPLE } from '@/store/modules/QR.module';
+import { ACTION_RESET_QR_SAMPLE, GET_QR_SAMPLE } from '@/store/modules/QR.module';
 import TableIngotInternal from '@/components/RawMaterialInspection/TableIngotInternal.vue';
 
 import { IS_LOADING, } from '@/store/modules/LOADING.module';
 import { mapGetters } from 'vuex';
-import { ACTION_ADD_SAMPLE_CODE, ACTION_SAMPLE_CODE, GET_SAMPLE_CODE } from '@/store/modules/SAMPLE_CODE.module';
+import { ACTION_ADD_SAMPLE_CODE, GET_SAMPLE_CODE, GET_SAMPLE_CODE_SUGGESTED_TREESELECT, ACTION_SAMPLE_CODE_SUGGESTED } from '@/store/modules/SAMPLE_CODE.module';
 
 import HeaderIngotCheckInternal from '@/components/RawMaterialInspection/HeaderIngotCheckInternal.vue';
-import { ACTION_RESET_SAMPLE_INGOT } from '@/store/modules/SAMPLE_INGOT.module';
+import { ACTION_RESET_SAMPLE_INGOT, ACTION_SAMPLE_INGOT } from '@/store/modules/SAMPLE_INGOT.module';
+
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+const $toast = useToast();
+
+import Treeselect from '@zanmato/vue3-treeselect'
+import "@zanmato/vue3-treeselect/dist/vue3-treeselect.min.css";
 
 export default {
   name: 'InspectionIngotInternal',
@@ -65,6 +81,8 @@ export default {
         header: null,
         values: null
       },
+      selectedValidSampleCode: null,
+      selectedGaugeId: null,
       containerInput: [],
       displaySampleCode: '',
       input: {
@@ -73,15 +91,60 @@ export default {
       },
       prevSampleCode: null,
       isSubmited: false,
+      isCodeNotValid: false,
+      sampleCodeSuggested: [],
+    }
+  },
+  watch: {
+    GET_QR_SAMPLE: {
+      handler() {
+        if (this.GET_QR_SAMPLE.headers) {
+          $toast.success('Sample Code: ' + this.GET_QR_SAMPLE.headers.sampleCode + ' (klik di sini apabila tidak sesuai!)', {
+            type: 'info',
+            position: 'top-right',
+            duration: 10000,
+            onClick: async () => {
+              this.isCodeNotValid = true
+              await this.$store.dispatch(ACTION_SAMPLE_CODE_SUGGESTED, {
+                gaugeId: this.selectedGaugeId,
+                incharge: 'INTERNAL'
+              })
+              this.selectedValidSampleCode = null
+              await this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
+              await this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
+              this.sampleCodeSuggested = this.GET_SAMPLE_CODE_SUGGESTED_TREESELECT
+            }
+          })
+        }
+      },
+      deep: true
+    },
+    async selectedValidSampleCode() {
+      await this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
+      await this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
+      if (this.selectedValidSampleCode) {
+        this.input.sampleCode = this.selectedValidSampleCode
+        await this.$store.dispatch(ACTION_SAMPLE_INGOT, { gaugeId: this.selectedGaugeId, filter: { sampleId: this.selectedValidSampleCode } })
+      }
     }
   },
   computed: {
-    ...mapGetters([IS_LOADING, GET_QR_SAMPLE, GET_SAMPLE_CODE]),
+    ...mapGetters([IS_LOADING, GET_QR_SAMPLE, GET_SAMPLE_CODE, GET_SAMPLE_CODE_SUGGESTED_TREESELECT]),
     isKmoldTamagoFill() {
       return this.input.values.filter(item => item.kMold == null || item.tamago == null).length == 0
     }
   },
   methods: {
+    onChangeBtnResample(isBtnChange) {
+      if (isBtnChange) {
+        this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
+        this.isCodeNotValid = false
+        $toast.clear()
+      }
+    },
+    onChangeGaugeId(gaugeId) {
+      this.selectedGaugeId = gaugeId
+    },
     onChangeContainerInput(data) {
       this.input.values = data
     },
@@ -116,7 +179,8 @@ export default {
     HeaderComp,
     LoadingComponent,
     TableIngotInternal,
-    HeaderIngotCheckInternal
+    HeaderIngotCheckInternal,
+    Treeselect
   },
   async mounted() {
     await this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)

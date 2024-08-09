@@ -4,10 +4,10 @@
     <template v-for="(btn, i) in btnOpts" :key="btn">
       <button v-if="btn.isActive" class="btn btn-primary m-1" @click="changeBtnSample(i)">{{
         btn.label
-        }}</button>
+      }}</button>
       <button v-else class="btn btn-outline-primary m-1" @click="changeBtnSample(i)">{{
         btn.label
-        }}</button>
+      }}</button>
     </template>
   </div>
   <template v-if="isBtnActive">
@@ -18,7 +18,7 @@
           <template v-for="gauge in gaugeOpts" :key="gauge.id">
             <button v-if="gauge.isSelected" class="btn btn-primary m-1" @click="changeGaugeSelected(gauge.id)">{{
               gauge.name
-            }}</button>
+              }}</button>
             <button v-else class="btn btn-outline-primary m-1" @click="changeGaugeSelected(gauge.id)">{{
               gauge.name }}</button>
           </template>
@@ -87,6 +87,7 @@ export default {
       this.btnOpts.forEach((btn, index) => {
         if (index === i) {
           btn.isActive = true
+          this.$emit('emit-btn-active', btn.label)
         } else {
           btn.isActive = false
         }
@@ -94,11 +95,6 @@ export default {
     },
     changeGaugeSelected(id) {
       this.queryGetSuggested.gaugeId = id
-      if (!this.isSampleVisible) {
-        this.getSampleIngot(id)
-      }
-      this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
-      this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
       this.gaugeOpts.forEach((gauge) => {
         if (gauge.id === id) {
           console.log(gauge);
@@ -108,10 +104,15 @@ export default {
           gauge.isSelected = false
         }
       })
+      if (!this.isSampleVisible) {
+        return this.getSampleIngot(id)
+      }
+      this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
+      this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
     },
     async getSampleIngot(gaugeId = null) {
       try {
-        await this.$store.dispatch(ACTION_SAMPLE_INGOT, gaugeId ? gaugeId : this.filter.sampleCode)
+        await this.$store.dispatch(ACTION_SAMPLE_INGOT, { gaugeId })
       } catch (error) {
         this.errorHandler(error)
       }
@@ -143,7 +144,12 @@ export default {
     'filter.sampleCode': async function () {
       if (this.filter.sampleCode) {
         this.$emit('emit-sample-code', this.filter.sampleCode)
-        await this.getSampleIngot()
+        await this.getSampleIngot(this.selectedGaugeId)
+      }
+    },
+    'queryGetSuggested.gaugeId': async function () {
+      if (this.queryGetSuggested.gaugeId) {
+        this.$emit('emit-change-gaugeId', this.queryGetSuggested.gaugeId)
       }
     },
     selectedGaugeId: async function () {

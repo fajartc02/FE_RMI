@@ -62,41 +62,62 @@ const MockService = {
         mock.onGet('shimadzu/').reply(200, { data: SAMPLE_CODE_SUGGESTED_MOCK })
 
         // FOR suggested from specific shimadzu
+
         mock
             .onGet('shimadzu', {
                 params: {
-                    gaugeId: 1,
+                    gaugeId: '9999bcbb-0e8a-4695-8f80-caaf0a057dff',
                     incharge: 'INTERNAL',
                 },
             })
             .reply(200, { data: SAMPLE_CODE_SUGGESTED_PARAMS_MOCK })
-            // ELSE GaugeId passed
-        mock.onGet('shimadzu/1').reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
+        mock
+            .onGet('shimadzu', {
+                params: {
+                    gaugeId: '8de4e9ca-f854-4380-9aa0-8f1d6d440202',
+                    incharge: 'INTERNAL',
+                },
+            })
+            .reply(200, { data: SAMPLE_CODE_SUGGESTED_PARAMS2_MOCK })
+
+        mock
+            .onGet('shimadzu/9999bcbb-0e8a-4695-8f80-caaf0a057dff')
+            .reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
             // .reply(200, { data: SAMPLE_CODE_SUGGESTED_PARAMS_MOCK })
-        mock.onGet('shimadzu/2').reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
+        mock
+            .onGet('shimadzu/8de4e9ca-f854-4380-9aa0-8f1d6d440202')
+            .reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
+        mock
+            .onGet('shimadzu/9999bcbb-0e8a-4695-8f80-caaf0a057dff', {
+                params: {
+                    sampleId: '9999bcbb-0e8a-4695-8f80-0000',
+                    incharge: 'INTERNAL',
+                },
+            })
+            .reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
 
         mock.onGet('gauge/').reply(200, { data: gauges })
 
         mock.onGet('machine/').reply(200, { data: MACHINES_MOCK })
         mock.onGet('line').reply(200, { data: LINES_MOCK })
 
-        mock
-            .onGet('sample-ingot/', {
-                params: {
-                    sampleCode: null,
-                    incharge: 'INTERNAL',
-                },
-            })
-            .reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
+        // mock
+        //     .onGet('sample-ingot/', {
+        //         params: {
+        //             sampleCode: null,
+        //             incharge: 'INTERNAL',
+        //         },
+        //     })
+        //     .reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
 
-        mock
-            .onGet('sample-ingot/', {
-                params: {
-                    sampleCode: 1,
-                    incharge: 'INTERNAL',
-                },
-            })
-            .reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
+        // mock
+        //     .onGet('sample-ingot/', {
+        //         params: {
+        //             sampleCode: 1,
+        //             incharge: 'INTERNAL',
+        //         },
+        //     })
+        //     .reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
 
         mock
             .onPost('/sample-ingot')

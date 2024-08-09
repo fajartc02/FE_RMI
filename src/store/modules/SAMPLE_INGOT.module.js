@@ -51,12 +51,12 @@ const mutations = {
 }
 
 const actions = {
-    async ACTION_SAMPLE_INGOT({ commit, dispatch }, sampleCode) {
+    async ACTION_SAMPLE_INGOT({ commit, dispatch }, { gaugeId, params = null }) {
         try {
             ApiService.setHeader()
             dispatch(ACTION_LOADING, true)
-                // const { data } = await ApiService.query('sample-ingot/', filter)
-            const { data } = await ApiService.get('shimadzu', sampleCode)
+            const { data } = await ApiService.query(`shimadzu/${gaugeId}`, params)
+                // const { data } = await ApiService.get('shimadzu', gaugeId)
             dispatch(ACTION_LOADING, false)
             commit(SET_QR_SAMPLE, data.data)
         } catch (error) {
