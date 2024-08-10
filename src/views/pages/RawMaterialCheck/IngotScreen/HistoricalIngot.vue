@@ -56,7 +56,7 @@ import { ACTION_LINE, GET_LINE_TREESELECT } from '@/store/modules/LINE.module';
 import { ACTION_MACHINE, GET_MACHINE_TREESELECT } from '@/store/modules/MACHINE.module';
 
 import { mapActions, mapGetters } from 'vuex';
-import { ACTION_SAMPLE_INGOT_HISTORICAL, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, GET_SAMPLE_INGOT_HISTORICAL } from '@/store/modules/SAMPLE_INGOT.module';
+import { ACTION_SAMPLE_INGOT_HISTORICAL, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, GET_SAMPLE_INGOT_HISTORICAL, ACT_SAMP_INGOT_VEN_HIS_DET } from '@/store/modules/SAMPLE_INGOT.module';
 import { ACTION_RESET_QR_SAMPLE, GET_QR_SAMPLE } from '@/store/modules/QR.module';
 import { GET_META } from '@/store/modules/META.module';
 import moment from 'moment'
@@ -68,7 +68,7 @@ export default {
       modalShow: false,
       selectedData: null,
       filters: [
-        InputModel('Start Date', 'date', 'input date', moment().hour(0).minute(0).second(0).format('YYYY-MM-DD'), 3, false),
+        InputModel('Start Date', 'date', 'input date', moment().startOf('month').hour(0).minute(0).second(0).format('YYYY-MM-DD'), 3, false),
         InputModel('End Date', 'date', 'input date', moment().hour(0).minute(0).second(0).format('YYYY-MM-DD'), 3, false),
         InputModel('Line', 'treeselect', 'Select Line', null, [], null, false, 'lineId'),
         InputModel('Machine', 'treeselect', 'Select Machine', null, [], null, true, 'machineId'),
@@ -76,6 +76,7 @@ export default {
         InputModel('Status', 'option', 'Select Status', null, [{ id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false)
       ],
       isLineChanges: false,
+      selectedIncharge: null
     }
   },
   watch: {
@@ -99,12 +100,14 @@ export default {
     ...mapGetters([GET_MACHINE_TREESELECT, GET_LINE_TREESELECT, GET_SAMPLE_INGOT_HISTORICAL, GET_QR_SAMPLE, GET_META])
   },
   methods: {
-    ...mapActions([ACTION_LINE, ACTION_MACHINE, ACTION_SAMPLE_INGOT_HISTORICAL, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, ACTION_RESET_QR_SAMPLE]),
+    ...mapActions([ACTION_LINE, ACTION_MACHINE, ACTION_SAMPLE_INGOT_HISTORICAL, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, ACTION_RESET_QR_SAMPLE, ACT_SAMP_INGOT_VEN_HIS_DET]),
     async onChangeFilter(filter) {
       if (filter.lineId) {
         this.isLineChanges = filter.lineId
       }
       try {
+        console.log(filter.inCharge);
+        this.selectedIncharge = filter.inCharge
         await this.ACTION_SAMPLE_INGOT_HISTORICAL(filter)
       } catch (error) {
         console.log(error);
@@ -114,11 +117,20 @@ export default {
     async onDataSelected(data) {
       this.modalShow = true
       try {
+        // Vendor
         // GET: /sample-ingot/{sampleId}
-        await this.ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL(data.id)
+        // Internal
+        // GET: /shimadzu/{sampleId}
+        console.log(data);
+
+        if (`${this.selectedIncharge ? this.selectedIncharge : data.inCharge}`.toUpperCase() == 'INTERNAL') {
+          await this.ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL(data.id)
+        } else if (`${this.selectedIncharge ? this.selectedIncharge : data.inCharge}`.toUpperCase() == 'VENDOR') {
+          await this.ACT_SAMP_INGOT_VEN_HIS_DET(data.id)
+        }
       } catch (error) {
         console.log(error);
-        tthis.$swal('Error', 'Internal Server Error', 'error')
+        this.$swal('Error', 'Internal Server Error', 'error')
       }
     },
     dismissModal() {

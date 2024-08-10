@@ -51,8 +51,8 @@ export default {
         },
         annotations: {
           points: [{
-            x: new Date(1538789800000),
-            y: 0,
+            x: new Date(1538789800000).getTime(),
+            y: 0.2,
             label: {
               borderColor: '#FF4560',
               style: {
@@ -61,25 +61,6 @@ export default {
               },
               text: 'Annotation 1',
             },
-          }],
-          texts: [{
-            x: 0,
-            y: 0,
-            text: '',
-            textAnchor: 'start',
-            foreColor: undefined,
-            fontSize: '13px',
-            fontFamily: undefined,
-            fontWeight: 400,
-            appendTo: '.apexcharts-annotations',
-            backgroundColor: 'transparent',
-            borderColor: '#c2c2c2',
-            borderRadius: 0,
-            borderWidth: 0,
-            paddingLeft: 4,
-            paddingRight: 4,
-            paddingTop: 2,
-            paddingBottom: 2,
           }],
         },
         xaxis: {
@@ -101,35 +82,35 @@ export default {
         name: 'lower-limit',
         data: [
           {
-            x: new Date(1538778600000),
+            x: new Date(1538778600000).getTime(),
             y: 0
           },
           {
-            x: new Date(1538782000000),
+            x: new Date(1538782000000).getTime(),
             y: 0
           },
           {
-            x: new Date(1538784600000),
+            x: new Date(1538784600000).getTime(),
             y: 0
           },
           {
-            x: new Date(1538787200000),
+            x: new Date(1538787200000).getTime(),
             y: 0
           },
           {
-            x: new Date(1538789800000),
+            x: new Date(1538789800000).getTime(),
             y: 0
           },
           {
-            x: new Date(1538792400000),
+            x: new Date(1538792400000).getTime(),
             y: 0
           },
           {
-            x: new Date(1538795000000),
+            x: new Date(1538795000000).getTime(),
             y: 0
           },
           {
-            x: new Date(1538797600000),
+            x: new Date(1538797600000).getTime(),
             y: 0
           },
         ]
@@ -137,35 +118,35 @@ export default {
         name: 'Warning (LL)',
         data: [
           {
-            x: new Date(1538778600000),
+            x: new Date(1538778600000).getTime(),
             y: 0.2
           },
           {
-            x: new Date(1538782000000),
+            x: new Date(1538782000000).getTime(),
             y: 0.2
           },
           {
-            x: new Date(1538784600000),
+            x: new Date(1538784600000).getTime(),
             y: 0.2
           },
           {
-            x: new Date(1538787200000),
+            x: new Date(1538787200000).getTime(),
             y: 0.2
           },
           {
-            x: new Date(1538789800000),
+            x: new Date(1538789800000).getTime(),
             y: 0.2
           },
           {
-            x: new Date(1538792400000),
+            x: new Date(1538792400000).getTime(),
             y: 0.2
           },
           {
-            x: new Date(1538795000000),
+            x: new Date(1538795000000).getTime(),
             y: 0.2
           },
           {
-            x: new Date(1538797600000),
+            x: new Date(1538797600000).getTime(),
             y: 0.2
           },
         ]
@@ -173,35 +154,35 @@ export default {
         name: 'parameter-label',
         data: [
           {
-            x: new Date(1538778600000),
+            x: new Date(1538778600000).getTime(),
             y: Math.random()
           },
           {
-            x: new Date(1538782000000),
+            x: new Date(1538782000000).getTime(),
             y: Math.random()
           },
           {
-            x: new Date(1538784600000),
+            x: new Date(1538784600000).getTime(),
             y: Math.random()
           },
           {
-            x: new Date(1538787200000),
+            x: new Date(1538787200000).getTime(),
             y: Math.random()
           },
           {
-            x: new Date(1538789800000),
+            x: new Date(1538789800000).getTime(),
             y: Math.random()
           },
           {
-            x: new Date(1538792400000),
+            x: new Date(1538792400000).getTime(),
             y: Math.random()
           },
           {
-            x: new Date(1538795000000),
+            x: new Date(1538795000000).getTime(),
             y: Math.random()
           },
           {
-            x: new Date(1538797600000),
+            x: new Date(1538797600000).getTime(),
             y: Math.random()
           },
         ]
@@ -210,35 +191,35 @@ export default {
         name: 'Warning (UL)',
         data: [
           {
-            x: new Date(1538778600000),
+            x: new Date(1538778600000).getTime(),
             y: 1.8
           },
           {
-            x: new Date(1538782000000),
+            x: new Date(1538782000000).getTime(),
             y: 1.8
           },
           {
-            x: new Date(1538784600000),
+            x: new Date(1538784600000).getTime(),
             y: 1.8
           },
           {
-            x: new Date(1538787200000),
+            x: new Date(1538787200000).getTime(),
             y: 1.8
           },
           {
-            x: new Date(1538789800000),
+            x: new Date(1538789800000).getTime(),
             y: 1.8
           },
           {
-            x: new Date(1538792400000),
+            x: new Date(1538792400000).getTime(),
             y: 1.8
           },
           {
-            x: new Date(1538795000000),
+            x: new Date(1538795000000).getTime(),
             y: 1.8
           },
           {
-            x: new Date(1538797600000),
+            x: new Date(1538797600000).getTime(),
             y: 1.8
           },
         ]
@@ -247,35 +228,35 @@ export default {
         name: 'Upper Limit',
         data: [
           {
-            x: new Date(1538778600000),
+            x: new Date(1538778600000).getTime(),
             y: 2
           },
           {
-            x: new Date(1538782000000),
+            x: new Date(1538782000000).getTime(),
             y: 2
           },
           {
-            x: new Date(1538784600000),
+            x: new Date(1538784600000).getTime(),
             y: 2
           },
           {
-            x: new Date(1538787200000),
+            x: new Date(1538787200000).getTime(),
             y: 2
           },
           {
-            x: new Date(1538789800000),
+            x: new Date(1538789800000).getTime(),
             y: 2
           },
           {
-            x: new Date(1538792400000),
+            x: new Date(1538792400000).getTime(),
             y: 2
           },
           {
-            x: new Date(1538795000000),
+            x: new Date(1538795000000).getTime(),
             y: 2
           },
           {
-            x: new Date(1538797600000),
+            x: new Date(1538797600000).getTime(),
             y: 2
           },
         ]

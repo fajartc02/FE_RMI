@@ -3,8 +3,15 @@
     <CRow class="align-items-start">
       <CCol class="mt-1" v-for="(field, i) in fieldsInput" :key="i" :md="field.size ? field.size : 3" sm="12">
         <template v-if="field.type !== 'option' && field.type !== 'treeselect' && field.type !== 'textarea'">
-          <CFormInput v-model="field.value" :type="field.type" :label="field.title" :placeholder="field.placeholder"
-            :disabled="field.disabled" />
+          <template v-if="field.type === 'date'">
+            <CFormInput v-model="field.value" :type="field.type" :label="field.title" :placeholder="field.placeholder"
+              :max="currentDate" :disabled="field.disabled" />
+          </template>
+          <template v-else>
+            <CFormInput v-model="field.value" :type="field.type" :label="field.title" :placeholder="field.placeholder"
+              :disabled="field.disabled" />
+          </template>
+
         </template>
         <template v-else>
           <CFormTextarea v-if="field.type === 'textarea'" v-model="field.value" :label="field.title"
@@ -39,7 +46,8 @@ export default {
       form: {
         take: 20,
         page: 1
-      }
+      },
+      currentDate: moment().format('YYYY-MM-DD'),
     }
   },
   computed: {

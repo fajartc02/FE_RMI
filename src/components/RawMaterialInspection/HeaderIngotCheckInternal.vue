@@ -115,7 +115,7 @@ export default {
           gaugeId = this.filter.sampleCode
         }
         let response = await this.$store.dispatch(ACTION_SAMPLE_INGOT, { gaugeId, getLastData })
-        console.log(response);
+
 
         if (!response.headers) {
           this.$store.dispatch(ACTION_LOADING, false)

@@ -14,6 +14,7 @@ export const ACTION_RESET_SAMPLE_INGOT = 'ACTION_RESET_SAMPLE_INGOT'
 export const ACTION_SAMPLE_INGOT_HISTORICAL = 'ACTION_SAMPLE_INGOT_HISTORICAL'
 export const ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL =
     'ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL'
+export const ACT_SAMP_INGOT_VEN_HIS_DET = 'ACT_SAMP_INGOT_VEN_HIS_DET'
 
 const state = {
     SAMPLE_INGOT_DATA: {
@@ -107,6 +108,19 @@ const actions = {
             ApiService.setHeader()
             dispatch(ACTION_LOADING, true)
             const { data } = await ApiService.get(`shimadzu`, sampleId)
+            dispatch(ACTION_LOADING, false)
+            commit(SET_QR_SAMPLE, data.data)
+        } catch (error) {
+            dispatch(ACTION_LOADING, false)
+            console.error(error)
+            return error
+        }
+    },
+    async ACT_SAMP_INGOT_VEN_HIS_DET({ commit, dispatch }, sampleId) {
+        try {
+            ApiService.setHeader()
+            dispatch(ACTION_LOADING, true)
+            const { data } = await ApiService.get(`sample-ingot`, sampleId)
             dispatch(ACTION_LOADING, false)
             commit(SET_QR_SAMPLE, data.data)
         } catch (error) {

@@ -188,13 +188,16 @@ const CHART_PARAMETER_MOCK = {
         units: 'mm',
         annotations: {
             points: [{
-                x: new Date(1538784600000),
-                y: Math.random(),
-                yAxisIndex: 0,
-                seriesIndex: 0,
-                mouseEnter: undefined,
-                mouseLeave: undefined,
-                click: undefined,
+                x: new Date(1538789800000).getTime(),
+                y: 0.2,
+                label: {
+                    borderColor: '#FF4560',
+                    style: {
+                        color: '#fff',
+                        background: '#FF4560',
+                    },
+                    text: 'Annotation 1',
+                },
             }, ],
         },
     },
