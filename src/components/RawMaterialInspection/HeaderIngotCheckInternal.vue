@@ -4,10 +4,10 @@
     <template v-for="(btn, i) in btnOpts" :key="btn">
       <button v-if="btn.isActive" class="btn btn-primary m-1" @click="changeBtnSample(i)">{{
         btn.label
-      }}</button>
+        }}</button>
       <button v-else class="btn btn-outline-primary m-1" @click="changeBtnSample(i)">{{
         btn.label
-      }}</button>
+        }}</button>
     </template>
   </div>
   <template v-if="isBtnActive">
@@ -18,7 +18,7 @@
           <template v-for="gauge in gaugeOpts" :key="gauge.id">
             <button v-if="gauge.isSelected" class="btn btn-primary m-1" @click="changeGaugeSelected(gauge.id)">{{
               gauge.name
-              }}</button>
+            }}</button>
             <button v-else class="btn btn-outline-primary m-1" @click="changeGaugeSelected(gauge.id)">{{
               gauge.name }}</button>
           </template>
@@ -129,7 +129,7 @@ export default {
     },
     errorHandler(error) {
       console.log(error);
-      this.$swal('Error', error, 'error')
+      this.$swal('Error', `${error}`, 'error')
     }
   },
   components: {
