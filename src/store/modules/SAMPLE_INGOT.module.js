@@ -101,7 +101,7 @@ const actions = {
         try {
             ApiService.setHeader()
             dispatch(ACTION_LOADING, true)
-            const { data } = await ApiService.get(`sample-ingot/historical`, sampleId)
+            const { data } = await ApiService.get(`shimadzu`, sampleId)
             dispatch(ACTION_LOADING, false)
             commit(SET_QR_SAMPLE, data.data)
         } catch (error) {

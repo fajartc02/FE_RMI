@@ -170,9 +170,13 @@ const MockService = {
             // .reply(200, { data: SAMPLE_INGOT_HISORICALS_EMPTY_MOCK })
 
         mock
-            .onGet('sample-ingot/historical/1')
+            .onGet('shimadzu/c31c4192-c127-4ace-b805-bbb00987788a')
             .reply(200, { data: SCANNED_RESULT_MOCK })
+            // shimadzu/9999bcbb-0e8a-4695-8f80-00000
             // .reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
+        mock
+            .onGet('shimadzu/9999bcbb-0e8a-4695-8f80-00000')
+            .reply(200, { data: SCANNED_RESULT_MOCK })
     },
 }
 

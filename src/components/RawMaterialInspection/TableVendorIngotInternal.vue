@@ -13,20 +13,20 @@
     <table v-else-if="GET_QR_SAMPLE.tableInternalVendor" class="table table-bordered table-striped">
       <thead>
         <tr>
-          <th style="min-width: 100px;">K-Mold</th>
-          <th style="min-width: 100px;">Tamago</th>
+          <th v-if="isInputTamagoKmold" style="min-width: 100px;">K-Mold</th>
+          <th v-if="isInputTamagoKmold" style="min-width: 100px;">Tamago</th>
           <th v-for="(label) in GET_QR_SAMPLE.tableInternalVendor.cols" :key="label">{{ label }}</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td></td>
-          <td></td>
+          <td v-if="isInputTamagoKmold"></td>
+          <td v-if="isInputTamagoKmold"></td>
           <td v-for="row in GET_QR_SAMPLE.tableInternalVendor.standards" :key="row">{{ row }}</td>
         </tr>
         <tr v-for="(header, idxRow) in GET_QR_SAMPLE.tableInternalVendor.values.headers" :key="header">
           <!-- Aditional col for kMold & Tamago -->
-          <KMoldTamago @emit-kmold-tamago="onChangeKMoldTamago" :lotNo="header.lotNo" />
+          <KMoldTamago v-if="isInputTamagoKmold" @emit-kmold-tamago="onChangeKMoldTamago" :lotNo="header.lotNo" />
           <th>
             {{ header.productDate }}
           </th>
@@ -62,20 +62,20 @@
     <table v-if="GET_SAMPLE_CODE?.tableInternalVendor" class="table table-bordered table-striped">
       <thead>
         <tr>
-          <th style="min-width: 100px;">K-Mold</th>
-          <th style="min-width: 100px;">Tamago</th>
+          <th v-if="isInputTamagoKmold" style="min-width: 100px;">K-Mold</th>
+          <th v-if="isInputTamagoKmold" style="min-width: 100px;">Tamago</th>
           <th v-for="label in GET_SAMPLE_CODE.tableInternalVendor.cols" :key="label">{{ label }}</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td></td>
-          <td></td>
+          <td v-if="isInputTamagoKmold"></td>
+          <td v-if="isInputTamagoKmold"></td>
           <td v-for="row in GET_SAMPLE_CODE.tableInternalVendor.standards" :key="row">{{ row }}</td>
         </tr>
         <tr v-for="(header, idxRow) in GET_SAMPLE_CODE.tableInternalVendor.values.headers" :key="header">
           <!-- Aditional col for kMold & Tamago -->
-          <KMoldTamago @emit-kmold-tamago="onChangeKMoldTamago" :lotNo="header.lotNo" />
+          <KMoldTamago v-if="isInputTamagoKmold" @emit-kmold-tamago="onChangeKMoldTamago" :lotNo="header.lotNo" />
           <th>
             {{ header.productDate }}
           </th>
@@ -147,6 +147,10 @@ export default {
       type: String,
       default: 'Please Scan QR Code',
       required: false
+    },
+    isInputTamagoKmold: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {

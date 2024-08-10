@@ -64,7 +64,7 @@ import { mapGetters } from 'vuex';
 import { ACTION_ADD_SAMPLE_CODE, GET_SAMPLE_CODE, GET_SAMPLE_CODE_SUGGESTED_TREESELECT, ACTION_SAMPLE_CODE_SUGGESTED } from '@/store/modules/SAMPLE_CODE.module';
 
 import HeaderIngotCheckInternal from '@/components/RawMaterialInspection/HeaderIngotCheckInternal.vue';
-import { ACTION_RESET_SAMPLE_INGOT, ACTION_SAMPLE_INGOT } from '@/store/modules/SAMPLE_INGOT.module';
+import { ACTION_RESET_SAMPLE_INGOT, ACTION_SAMPLE_INGOT, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL } from '@/store/modules/SAMPLE_INGOT.module';
 
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
@@ -124,7 +124,7 @@ export default {
       await this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
       if (this.selectedValidSampleCode) {
         this.input.sampleCode = this.selectedValidSampleCode
-        await this.$store.dispatch(ACTION_SAMPLE_INGOT, { gaugeId: this.selectedGaugeId, filter: { sampleId: this.selectedValidSampleCode } })
+        await this.$store.dispatch(ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, this.selectedValidSampleCode)
       }
     }
   },

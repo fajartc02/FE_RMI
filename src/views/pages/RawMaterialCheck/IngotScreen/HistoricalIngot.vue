@@ -8,13 +8,13 @@
       <template v-if="GET_QR_SAMPLE.tableInternalVendor">
         <div class="card" style="height: 100%;">
           <div class="card-body p-2" style="height: 100%;">
-            <h6>Sample Ingot Vendor (Vendor)</h6>
-            <TableVendorIngot class="overflow-auto" />
+            <h6>Sample Ingot (Vendor)</h6>
+            <TableVendorIngot class="overflow-auto" :isInputTamagoKmold="false" />
           </div>
-          <div class="card-body p-2 mb-4" style="z-index: 3;">
-            <h6>Sample Ingot Vendor (Internal)</h6>
-            <TableVendorIngotInternal class="overflow-auto" style="height: 100%;"
-              @emit-sample-code="onChangeSampleCode" />
+          <div class="card-body p-2 mb-4 overflow-auto" style="z-index: 3;">
+            <h6>Sample Ingot (Internal)</h6>
+            <TableVendorIngotInternal class="overflow-auto" style="height: 100%;" @emit-sample-code="onChangeSampleCode"
+              :isInputTamagoKmold="false" />
           </div>
         </div>
       </template>
@@ -99,7 +99,6 @@ export default {
   methods: {
     ...mapActions([ACTION_LINE, ACTION_MACHINE, ACTION_SAMPLE_INGOT_HISTORICAL, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, ACTION_RESET_QR_SAMPLE]),
     async onChangeFilter(filter) {
-      console.log(filter);
       if (filter.lineId) {
         this.isLineChanges = filter.lineId
       }
