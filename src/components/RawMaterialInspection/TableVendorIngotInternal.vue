@@ -1,6 +1,6 @@
 <template>
   <div class="mb-3">
-    <template v-if="!GET_QR_SAMPLE.tablePureVendor && GET_QR_SAMPLE.tableInternalVendor">
+    <template v-if="!GET_QR_SAMPLE.tablePureVendor && !GET_QR_SAMPLE.tableInternalVendor">
       <DataNotFound />
     </template>
     <template v-if="GET_QR_SAMPLE.sampleCodeSuggested">
