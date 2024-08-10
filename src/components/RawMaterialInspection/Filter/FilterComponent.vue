@@ -36,7 +36,10 @@ export default {
   name: 'FilterComponent',
   data() {
     return {
-      form: {}
+      form: {
+        take: 20,
+        page: 1
+      }
     }
   },
   computed: {
@@ -69,29 +72,32 @@ export default {
           }
           this.$emit('emit-filter', this.form)
         }
+
       }
     },
-    form: {
-      deep: true,
-      handler: function () {
-        console.log(this.form);
+    'GET_META.page': function (oldValue, newValue) {
+      console.log('GET_META.page');
+
+      if (oldValue !== newValue) {
+        this.form = {
+          ...this.form,
+          take: this.GET_META.take,
+          page: this.GET_META.page,
+        }
+        this.$emit('emit-filter', this.form)
       }
     },
-    'GET_META.page': function () {
-      this.form = {
-        ...this.form,
-        take: this.GET_META.take,
-        page: this.GET_META.page,
+    'GET_META.take': function (oldValue, newValue) {
+      console.log('GET_META.take');
+
+      if (oldValue !== newValue) {
+        this.form = {
+          ...this.form,
+          take: this.GET_META.take,
+          page: this.GET_META.page,
+        }
+        this.$emit('emit-filter', this.form)
       }
-      this.$emit('emit-filter', this.form)
-    },
-    'GET_META.take': function () {
-      this.form = {
-        ...this.form,
-        take: this.GET_META.take,
-        page: this.GET_META.page,
-      }
-      this.$emit('emit-filter', this.form)
     }
   },
   props: {

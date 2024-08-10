@@ -24,13 +24,11 @@
       </CTableRow>
     </CTableBody>
   </CTable>
-  <PaginationComponent v-if="dataTable.data" />
   <DataNotFound v-else />
 </template>
 
 <script>
 import FN_CASE_CONVERTER from '@/functions/FN_CASE_CONVERTER';
-import PaginationComponent from '../Pagination/PaginationComponent.vue';
 import DataNotFound from '@/components/RawMaterialInspection/EmptyDataHandler/DataNotFound.vue';
 
 export default {
@@ -56,7 +54,6 @@ export default {
     },
   },
   components: {
-    PaginationComponent,
     DataNotFound
   }
 }

@@ -5,7 +5,7 @@
     </CModalHeader>
     <CModalBody>
       <!-- v-if="!IS_LOADING" -->
-      <template v-if="GET_QR_SAMPLE.tableInternalVendor">
+      <template v-if="GET_QR_SAMPLE.tableInternalVendor || GET_QR_SAMPLE.tablePureVendor">
         <div class="card" style="height: 100%;">
           <div v-if="GET_QR_SAMPLE.tablePureVendor" class="card-body p-2" style="height: 100%;">
             <h6>Sample Ingot (Vendor)</h6>
@@ -33,9 +33,10 @@
     </div>
     <div class="row mt-1">
       <div class="col-12">
-        <div class="card p-2 overflow-auto">
+        <div class="card p-2 overflow-auto mb-2">
           <TableComponentVue :dataTable="GET_SAMPLE_INGOT_HISTORICAL" @emit-data="onDataSelected" />
         </div>
+        <PaginationComponent />
       </div>
     </div>
   </div>
@@ -48,6 +49,7 @@ import TableVendorIngot from '@/components/RawMaterialInspection/TableVendorIngo
 import TableVendorIngotInternal from '@/components/RawMaterialInspection/TableVendorIngotInternal.vue';
 import DataNotFound from '@/components/RawMaterialInspection/EmptyDataHandler/DataNotFound.vue';
 import LoadingComponent from '@/components/RawMaterialInspection/LoadingComponent.vue';
+import PaginationComponent from '@/components/RawMaterialInspection/Pagination/PaginationComponent.vue';
 
 import InputModel from '@/components/RawMaterialInspection/Filter/InputModel.js'
 import { ACTION_LINE, GET_LINE_TREESELECT } from '@/store/modules/LINE.module';
@@ -105,7 +107,8 @@ export default {
       try {
         await this.ACTION_SAMPLE_INGOT_HISTORICAL(filter)
       } catch (error) {
-        this.$swal('Error', error, 'error')
+        console.log(error);
+        this.$swal('Error', 'Internal Server Error', 'error')
       }
     },
     async onDataSelected(data) {
@@ -114,7 +117,8 @@ export default {
         // GET: /sample-ingot/{sampleId}
         await this.ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL(data.id)
       } catch (error) {
-        this.$swal('Error', error, 'error')
+        console.log(error);
+        tthis.$swal('Error', 'Internal Server Error', 'error')
       }
     },
     dismissModal() {
@@ -128,7 +132,8 @@ export default {
     TableVendorIngot,
     TableVendorIngotInternal,
     DataNotFound,
-    LoadingComponent
+    LoadingComponent,
+    PaginationComponent
   },
   async mounted() {
     try {

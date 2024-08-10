@@ -7,9 +7,9 @@ export const ACTION_SET_META = 'ACTION_SET_META'
 const state = {
     META_DATA: {
         page: 1,
-        take: 10,
+        take: 20,
         itemCount: 5,
-        pageCount: 1,
+        pageCount: 4,
         hasPreviousPage: false,
         hasNextPage: false,
         timestamp: moment().format('YYYY-MM-DD'),
@@ -25,9 +25,10 @@ const getters = {
 const mutations = {
     SET_META(state, payload) {
         state.META_DATA = {
-            ...state.META_DATA,
-            ...payload,
-        }
+                ...state.META_DATA,
+                ...payload,
+            }
+            // console.log('metaData', metaData)
     },
 }
 

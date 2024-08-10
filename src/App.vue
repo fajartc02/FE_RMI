@@ -8,7 +8,11 @@ import ApiService from './store/services/api.service';
 export default {
   name: 'App',
   mounted() {
-    this.$store.dispatch(ACTION_LOGIN)
+    try {
+      this.$store.dispatch(ACTION_LOGIN)
+    } catch (error) {
+      this.$swal('Error', error, 'error')
+    }
   }
 }
 </script>
