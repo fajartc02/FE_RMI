@@ -51,8 +51,8 @@ export default {
         },
         annotations: {
           points: [{
-            x: new Date(1538784600000),
-            y: 2,
+            x: new Date(1538789800000),
+            y: 0,
             label: {
               borderColor: '#FF4560',
               style: {
@@ -60,8 +60,27 @@ export default {
                 background: '#FF4560',
               },
               text: 'Annotation 1',
-            }
-          },],
+            },
+          }],
+          texts: [{
+            x: 0,
+            y: 0,
+            text: '',
+            textAnchor: 'start',
+            foreColor: undefined,
+            fontSize: '13px',
+            fontFamily: undefined,
+            fontWeight: 400,
+            appendTo: '.apexcharts-annotations',
+            backgroundColor: 'transparent',
+            borderColor: '#c2c2c2',
+            borderRadius: 0,
+            borderWidth: 0,
+            paddingLeft: 4,
+            paddingRight: 4,
+            paddingTop: 2,
+            paddingBottom: 2,
+          }],
         },
         xaxis: {
           type: 'datetime',

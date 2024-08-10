@@ -17,6 +17,7 @@ import LINES_MOCK from './get/LINES.mock'
 import SAMPLE_INGOT_HISORICALS_MOCK from './get/SAMPLE_INGOT_HISTORICALS.mock'
 import SAMPLE_INGOT_HISORICALS_EMPTY_MOCK from './get/SAMPLE_INGOT_HISTORICALS_EMPTY.mock'
 import MACHINES_DC_MOCK from './get/MACHINES_DC.mock'
+import RES_REQ_QUERY_SHIMADZU_MOCK from './get/RES_REQ_QUERY_SHIMADZU.mock'
 
 // mock testing user accounts
 const users = [{
@@ -72,7 +73,7 @@ const MockService = {
                     orderDirection: 'DESC',
                 },
             })
-            .reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
+            .reply(200, { data: RES_REQ_QUERY_SHIMADZU_MOCK.data })
 
         mock
             .onGet('shimadzu', {
@@ -83,7 +84,7 @@ const MockService = {
                     orderDirection: 'DESC',
                 },
             })
-            .reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
+            .reply(200, { data: RES_REQ_QUERY_SHIMADZU_MOCK })
 
         mock
             .onGet('shimadzu', {
@@ -110,7 +111,9 @@ const MockService = {
                 // },
             })
             .reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
-
+        mock
+            .onGet('shimadzu/5afbfaa9-5154-11ef-aae2-0242ac120002')
+            .reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
         mock.onGet('gauge/').reply(200, { data: gauges })
 
         mock

@@ -114,7 +114,15 @@ export default {
         if (this.filter.sampleCode) {
           gaugeId = this.filter.sampleCode
         }
-        await this.$store.dispatch(ACTION_SAMPLE_INGOT, { gaugeId, getLastData })
+        let response = await this.$store.dispatch(ACTION_SAMPLE_INGOT, { gaugeId, getLastData })
+        console.log(response);
+        if (response[0].status == 'NONE') {
+          this.$store.dispatch(ACTION_LOADING, false)
+          let sampleId = response[0].id
+
+          await this.$store.dispatch(ACTION_SAMPLE_INGOT, { gaugeId: sampleId, getLastData: false })
+        }
+
       } catch (error) {
         this.errorHandler(error)
       }
