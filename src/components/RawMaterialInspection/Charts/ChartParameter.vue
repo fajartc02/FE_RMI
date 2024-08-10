@@ -49,6 +49,20 @@ export default {
             text: '<satuan nya apa>'
           },
         },
+        annotations: {
+          points: [{
+            x: new Date(1538784600000),
+            y: 2,
+            label: {
+              borderColor: '#FF4560',
+              style: {
+                color: '#fff',
+                background: '#FF4560',
+              },
+              text: 'Annotation 1',
+            }
+          },],
+        },
         xaxis: {
           type: 'datetime',
         },
@@ -101,7 +115,7 @@ export default {
           },
         ]
       }, {
-        name: 'Warning (UL)',
+        name: 'Warning (LL)',
         data: [
           {
             x: new Date(1538778600000),

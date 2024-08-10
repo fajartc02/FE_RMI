@@ -4,10 +4,10 @@
     <template v-for="(btn, i) in btnOpts" :key="btn">
       <button v-if="btn.isActive" class="btn btn-primary m-1" @click="changeBtnSample(i)">{{
         btn.label
-        }}</button>
+      }}</button>
       <button v-else class="btn btn-outline-primary m-1" @click="changeBtnSample(i)">{{
         btn.label
-        }}</button>
+      }}</button>
     </template>
   </div>
   <template v-if="isBtnActive">
@@ -18,7 +18,7 @@
           <template v-for="gauge in gaugeOpts" :key="gauge.id">
             <button v-if="gauge.isSelected" class="btn btn-primary m-1" @click="changeGaugeSelected(gauge.id)">{{
               gauge.name
-            }}</button>
+              }}</button>
             <button v-else class="btn btn-outline-primary m-1" @click="changeGaugeSelected(gauge.id)">{{
               gauge.name }}</button>
           </template>
@@ -103,15 +103,18 @@ export default {
         }
       })
       if (!this.isSampleVisible) {
-        return this.getSampleIngot(id)
+        return this.getSampleIngot(id, true)
       }
       this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
       this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
     },
-    async getSampleIngot(gaugeId = null) {
+    async getSampleIngot(gaugeId = null, getLastData = false) {
       try {
         // shimadzu get Last Id
-        await this.$store.dispatch(ACTION_SAMPLE_INGOT, { gaugeId, getLastData: true })
+        if (this.filter.sampleCode) {
+          gaugeId = this.filter.sampleCode
+        }
+        await this.$store.dispatch(ACTION_SAMPLE_INGOT, { gaugeId, getLastData })
       } catch (error) {
         this.errorHandler(error)
       }

@@ -104,10 +104,10 @@ const MockService = {
 
         mock
             .onGet('shimadzu/9999bcbb-0e8a-4695-8f80-caaf0a057dff', {
-                params: {
-                    sampleId: '9999bcbb-0e8a-4695-8f80-0000',
-                    incharge: 'INTERNAL',
-                },
+                // params: {
+                //     sampleId: '9999bcbb-0e8a-4695-8f80-0000',
+                //     incharge: 'INTERNAL',
+                // },
             })
             .reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
 

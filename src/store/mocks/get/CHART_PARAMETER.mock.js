@@ -4,9 +4,199 @@ const CHART_PARAMETER_MOCK = {
         message: 'OK',
     },
     data: {
-        headers: null,
-        tablePureVendor: null,
-        tableInternalVendor: null,
+        series: [{
+                name: 'lower-limit',
+                data: [{
+                        x: new Date(1538778600000),
+                        y: 0,
+                    },
+                    {
+                        x: new Date(1538782000000),
+                        y: 0,
+                    },
+                    {
+                        x: new Date(1538784600000),
+                        y: 0,
+                    },
+                    {
+                        x: new Date(1538787200000),
+                        y: 0,
+                    },
+                    {
+                        x: new Date(1538789800000),
+                        y: 0,
+                    },
+                    {
+                        x: new Date(1538792400000),
+                        y: 0,
+                    },
+                    {
+                        x: new Date(1538795000000),
+                        y: 0,
+                    },
+                    {
+                        x: new Date(1538797600000),
+                        y: 0,
+                    },
+                ],
+            },
+            {
+                name: 'Warning (UL)',
+                data: [{
+                        x: new Date(1538778600000),
+                        y: 0.2,
+                    },
+                    {
+                        x: new Date(1538782000000),
+                        y: 0.2,
+                    },
+                    {
+                        x: new Date(1538784600000),
+                        y: 0.2,
+                    },
+                    {
+                        x: new Date(1538787200000),
+                        y: 0.2,
+                    },
+                    {
+                        x: new Date(1538789800000),
+                        y: 0.2,
+                    },
+                    {
+                        x: new Date(1538792400000),
+                        y: 0.2,
+                    },
+                    {
+                        x: new Date(1538795000000),
+                        y: 0.2,
+                    },
+                    {
+                        x: new Date(1538797600000),
+                        y: 0.2,
+                    },
+                ],
+            },
+            {
+                name: 'parameter-label',
+                data: [{
+                        x: new Date(1538778600000),
+                        y: Math.random(),
+                    },
+                    {
+                        x: new Date(1538782000000),
+                        y: Math.random(),
+                    },
+                    {
+                        x: new Date(1538784600000),
+                        y: Math.random(),
+                    },
+                    {
+                        x: new Date(1538787200000),
+                        y: Math.random(),
+                    },
+                    {
+                        x: new Date(1538789800000),
+                        y: Math.random(),
+                    },
+                    {
+                        x: new Date(1538792400000),
+                        y: Math.random(),
+                    },
+                    {
+                        x: new Date(1538795000000),
+                        y: Math.random(),
+                    },
+                    {
+                        x: new Date(1538797600000),
+                        y: Math.random(),
+                    },
+                ],
+            },
+            {
+                name: 'Warning (UL)',
+                data: [{
+                        x: new Date(1538778600000),
+                        y: 1.8,
+                    },
+                    {
+                        x: new Date(1538782000000),
+                        y: 1.8,
+                    },
+                    {
+                        x: new Date(1538784600000),
+                        y: 1.8,
+                    },
+                    {
+                        x: new Date(1538787200000),
+                        y: 1.8,
+                    },
+                    {
+                        x: new Date(1538789800000),
+                        y: 1.8,
+                    },
+                    {
+                        x: new Date(1538792400000),
+                        y: 1.8,
+                    },
+                    {
+                        x: new Date(1538795000000),
+                        y: 1.8,
+                    },
+                    {
+                        x: new Date(1538797600000),
+                        y: 1.8,
+                    },
+                ],
+            },
+            {
+                name: 'Upper Limit',
+                data: [{
+                        x: new Date(1538778600000),
+                        y: 2,
+                    },
+                    {
+                        x: new Date(1538782000000),
+                        y: 2,
+                    },
+                    {
+                        x: new Date(1538784600000),
+                        y: 2,
+                    },
+                    {
+                        x: new Date(1538787200000),
+                        y: 2,
+                    },
+                    {
+                        x: new Date(1538789800000),
+                        y: 2,
+                    },
+                    {
+                        x: new Date(1538792400000),
+                        y: 2,
+                    },
+                    {
+                        x: new Date(1538795000000),
+                        y: 2,
+                    },
+                    {
+                        x: new Date(1538797600000),
+                        y: 2,
+                    },
+                ],
+            },
+        ],
+        units: 'mm',
+        annotations: {
+            points: [{
+                x: new Date(1538784600000),
+                y: Math.random(),
+                yAxisIndex: 0,
+                seriesIndex: 0,
+                mouseEnter: undefined,
+                mouseLeave: undefined,
+                click: undefined,
+            }, ],
+        },
     },
 }
 

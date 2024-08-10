@@ -62,12 +62,21 @@ const actions = {
                 params.page = 1
                 params.orderDirection = 'DESC'
             }
-            const { data } = await ApiService.query(`shimadzu`, params)
+            if (getLastData) {
+                const { data } = await ApiService.query(`shimadzu`, params)
 
-            // const { data } = await ApiService.get('shimadzu', gaugeId)
+                // const { data } = await ApiService.get('shimadzu', gaugeId)
 
-            dispatch(ACTION_LOADING, false)
-            commit(SET_QR_SAMPLE, data.data)
+                dispatch(ACTION_LOADING, false)
+                commit(SET_QR_SAMPLE, data.data)
+            } else {
+                const { data } = await ApiService.get(`shimadzu`, gaugeId)
+
+                // const { data } = await ApiService.get('shimadzu', gaugeId)
+
+                dispatch(ACTION_LOADING, false)
+                commit(SET_QR_SAMPLE, data.data)
+            }
         } catch (error) {
             dispatch(ACTION_LOADING, false)
             console.error(error)
