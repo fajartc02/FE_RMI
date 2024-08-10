@@ -33,7 +33,7 @@
     </div>
     <div class="row mt-1">
       <div class="col-12">
-        <div class="card p-2">
+        <div class="card p-2 overflow-auto">
           <TableComponentVue :dataTable="GET_SAMPLE_INGOT_HISTORICAL" @emit-data="onDataSelected" />
         </div>
       </div>
