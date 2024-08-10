@@ -30,7 +30,7 @@
         "highcharts-vue": "^1.4.3",
         "html2canvas": "^1.4.1",
         "moment": "^2.29.4",
-        "moment-timezone": "^0.5.43",
+        "moment-timezone": "^0.5.45",
         "postcss": "^8.4.29",
         "single-spa-vue": "^2.1.0",
         "systemjs-webpack-interop": "^2.3.7",

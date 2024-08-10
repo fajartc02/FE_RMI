@@ -273,13 +273,12 @@ export default {
           }
         }
 
-
         const response = await this.$store.dispatch(ACTION_ADD_SAMPLE_CODE, this.input)
         this.isSubmited = true
         let state = this.conditionJudgmentIngotCheck(response)
 
         if (state) {
-          this.$router.push('/inspection/ingot/internal')
+          this.$router.push('/inspection/ingot/historical')
           this.$swal('Success', 'Add sample success, Pengecekan tidak ada abnormal', 'success')
         }
       } catch (error) {

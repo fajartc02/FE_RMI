@@ -57,7 +57,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { ACTION_SAMPLE_INGOT_HISTORICAL, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, GET_SAMPLE_INGOT_HISTORICAL } from '@/store/modules/SAMPLE_INGOT.module';
 import { ACTION_RESET_QR_SAMPLE, GET_QR_SAMPLE } from '@/store/modules/QR.module';
 import { GET_META } from '@/store/modules/META.module';
-
+import moment from 'moment'
 
 export default {
   name: "HistoricalIngotVendor",
@@ -66,30 +66,32 @@ export default {
       modalShow: false,
       selectedData: null,
       filters: [
-        // InputModel('Start Date', 'date', 'input date', moment().format('YYYY-MM-DD'), 3, false),
-        // InputModel('End Date', 'date', 'input date', moment().format('YYYY-MM-DD'), 3, false),
+        InputModel('Start Date', 'date', 'input date', moment().hour(0).minute(0).second(0).format('YYYY-MM-DD'), 3, false),
+        InputModel('End Date', 'date', 'input date', moment().hour(0).minute(0).second(0).format('YYYY-MM-DD'), 3, false),
         InputModel('Line', 'treeselect', 'Select Line', null, [], null, false, 'lineId'),
-        InputModel('Machine', 'treeselect', 'Select Machine', null, [], null, false, 'machineId'),
+        InputModel('Machine', 'treeselect', 'Select Machine', null, [], null, true, 'machineId'),
         InputModel('In Charge', 'option', 'Select Incharge', null, [{ id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false),
         InputModel('Status', 'option', 'Select Status', null, [{ id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false)
-      ]
+      ],
+      isLineChanges: false,
     }
   },
   watch: {
     GET_LINE_TREESELECT: function () {
       let idxLineInput = this.filters.findIndex(x => x.title == 'Line');
       this.filters.splice(idxLineInput, 1, InputModel('Line', 'treeselect', 'Select Line', null, this.GET_LINE_TREESELECT, null, false, 'lineId'))
-
-      this.ACTION_MACHINE({ page: 1, machine: null })
     },
     GET_MACHINE_TREESELECT: function () {
       let idxMachineInput = this.filters.findIndex(x => x.title == 'Machine');
       let idxInchargeInput = this.filters.findIndex(x => x.title == 'Incharge');
       let idxStatusInput = this.filters.findIndex(x => x.title == 'Status');
-      this.filters.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', null, this.GET_MACHINE_TREESELECT, null, false))
+      this.filters.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', null, this.GET_MACHINE_TREESELECT, null, false, 'machineId'))
       this.filters.splice(idxInchargeInput, 1, InputModel('Incharge', 'option', 'Select Incharge', null, [{ id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false))
       this.filters.splice(idxStatusInput, 1, InputModel('Status', 'option', 'Select Status', null, [{ id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false))
     },
+    isLineChanges: function () {
+      this.ACTION_MACHINE({ lineId: this.isLineChanges })
+    }
   },
   computed: {
     ...mapGetters([GET_MACHINE_TREESELECT, GET_LINE_TREESELECT, GET_SAMPLE_INGOT_HISTORICAL, GET_QR_SAMPLE, GET_META])
@@ -97,6 +99,10 @@ export default {
   methods: {
     ...mapActions([ACTION_LINE, ACTION_MACHINE, ACTION_SAMPLE_INGOT_HISTORICAL, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, ACTION_RESET_QR_SAMPLE]),
     async onChangeFilter(filter) {
+      console.log(filter);
+      if (filter.lineId) {
+        this.isLineChanges = filter.lineId
+      }
       try {
         await this.ACTION_SAMPLE_INGOT_HISTORICAL(filter)
       } catch (error) {
@@ -131,6 +137,7 @@ export default {
     } catch (error) {
       this.$swal('Error', error, 'error')
     }
+
   }
 }
 </script>

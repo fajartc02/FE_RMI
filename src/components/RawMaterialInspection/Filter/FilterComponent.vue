@@ -16,7 +16,7 @@
           </CFormSelect>
           <div v-else-if="field.type === 'treeselect'">
             <label class="form-label">{{ field.title }}</label>
-            <Treeselect v-model="field.value" :options="field.options" :clearable="true" />
+            <Treeselect v-model="field.value" :options="field.options" :clearable="true" :disabled="field.disabled" />
           </div>
         </template>
       </CCol>
@@ -29,7 +29,7 @@ import FN_CASE_CONVERTER from '@/functions/FN_CASE_CONVERTER';
 import { GET_META } from '@/store/modules/META.module';
 import Treeselect from '@zanmato/vue3-treeselect'
 import "@zanmato/vue3-treeselect/dist/vue3-treeselect.min.css";
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -48,12 +48,18 @@ export default {
       handler: function () {
         if (this.fieldsInput.length > 0) {
           for (let i = 0; i < this.fieldsInput.length; i++) {
-            const isValidDate = moment(this.fieldsInput[i].value, 'YYYY-MM-DD', true).isValid();
-            let label = this.fieldsInput[i].title === this.fieldsInput[i].id
+            const input = this.fieldsInput[i]
+            const isValidDate = moment(input.value, 'YYYY-MM-DD', true).isValid();
+            let label = input.title === input.id
+            let key = FN_CASE_CONVERTER.titleToCamelCase(input.title)
             if (isValidDate) {
-              this.form[label ? FN_CASE_CONVERTER.titleToCamelCase(this.fieldsInput[i].title) : this.fieldsInput[i].id] = moment(this.fieldsInput[i].value).unix()
+              if (key === 'startDate') {
+                this.form[label ? key : input.id] = moment(moment(input.value)).utc(true).hour(0).minute(0).second(0).unix()
+              } else {
+                this.form[label ? key : input.id] = moment(moment(input.value)).utc(true).hour(23).minute(59).second(59).unix()
+              }
             } else {
-              this.form[label ? FN_CASE_CONVERTER.titleToCamelCase(this.fieldsInput[i].title) : this.fieldsInput[i].id] = this.fieldsInput[i].value
+              this.form[label ? key : input.id] = input.value
             }
           }
           this.form = {

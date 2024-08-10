@@ -39,6 +39,7 @@ const actions = {
             const { data } = await ApiService.query('machine/', params)
             dispatch(ACTION_LOADING, false)
             commit(SET_MACHINE, data.data)
+            return
         } catch (error) {
             dispatch(ACTION_LOADING, false)
             console.error(error)
