@@ -19,6 +19,7 @@ import VCalendar from 'v-calendar'
 import 'v-calendar/style.css'
 import ApiService from './store/services/api.service'
 import MockService from './store/mocks/mock.service'
+import VueApexCharts from 'vue3-apexcharts'
 
 if (process.env.VUE_APP_STANDALONE_SINGLE_SPA === 'true') {
     require('@/components/StandAloneStyle.vue')
@@ -35,10 +36,10 @@ const vueLifecycles = singleSpaVue({
                 // https://single-spa.js.org/docs/building-applications#lifecycle-props
                 // if you uncomment these, remember to add matching prop definitions for them in your App.vue file.
                 /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        name: this.name,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        mountParcel: this.mountParcel,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        singleSpa: this.singleSpa,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                name: this.name,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                mountParcel: this.mountParcel,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                singleSpa: this.singleSpa,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
             })
         },
     },
@@ -56,6 +57,7 @@ const vueLifecycles = singleSpaVue({
             highcharts: Highcharts,
         })
         app.use(VCalendar, {})
+        app.use(VueApexCharts)
     },
 })
 

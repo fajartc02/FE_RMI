@@ -7,11 +7,11 @@
       <!-- v-if="!IS_LOADING" -->
       <template v-if="GET_QR_SAMPLE.tableInternalVendor">
         <div class="card" style="height: 100%;">
-          <div class="card-body p-2" style="height: 100%;">
+          <div v-if="GET_QR_SAMPLE.tablePureVendor" class="card-body p-2" style="height: 100%;">
             <h6>Sample Ingot (Vendor)</h6>
             <TableVendorIngot class="overflow-auto" :isInputTamagoKmold="false" />
           </div>
-          <div class="card-body p-2 mb-4 overflow-auto" style="z-index: 3;">
+          <div v-if="GET_QR_SAMPLE.tableInternalVendor" class="card-body p-2 mb-4 overflow-auto" style="z-index: 3;">
             <h6>Sample Ingot (Internal)</h6>
             <TableVendorIngotInternal class="overflow-auto" style="height: 100%;" @emit-sample-code="onChangeSampleCode"
               :isInputTamagoKmold="false" />
@@ -132,7 +132,10 @@ export default {
   },
   async mounted() {
     try {
-      await this.ACTION_LINE({ page: 1, line: null })
+      setTimeout(() => {
+        this.ACTION_LINE({ page: 1, line: null })
+
+      }, 1000)
     } catch (error) {
       this.$swal('Error', error, 'error')
     }
