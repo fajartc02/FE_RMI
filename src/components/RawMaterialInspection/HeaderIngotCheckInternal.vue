@@ -4,10 +4,10 @@
     <template v-for="(btn, i) in btnOpts" :key="btn">
       <button v-if="btn.isActive" class="btn btn-primary m-1" @click="changeBtnSample(i)">{{
         btn.label
-        }}</button>
+      }}</button>
       <button v-else class="btn btn-outline-primary m-1" @click="changeBtnSample(i)">{{
         btn.label
-        }}</button>
+      }}</button>
     </template>
   </div>
   <template v-if="isBtnActive">
@@ -18,7 +18,7 @@
           <template v-for="gauge in gaugeOpts" :key="gauge.id">
             <button v-if="gauge.isSelected" class="btn btn-primary m-1" @click="changeGaugeSelected(gauge.id)">{{
               gauge.name
-            }}</button>
+              }}</button>
             <button v-else class="btn btn-outline-primary m-1" @click="changeGaugeSelected(gauge.id)">{{
               gauge.name }}</button>
           </template>
@@ -116,7 +116,8 @@ export default {
         }
         let response = await this.$store.dispatch(ACTION_SAMPLE_INGOT, { gaugeId, getLastData })
         console.log(response);
-        if (response[0].status == 'NONE') {
+
+        if (!response.headers) {
           this.$store.dispatch(ACTION_LOADING, false)
           let sampleId = response[0].id
 
