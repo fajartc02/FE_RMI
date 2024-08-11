@@ -57,33 +57,35 @@ export default {
     fieldsInput: {
       deep: true,
       handler: function (oldValue, newValue) {
-        if (oldValue != newValue) {
-          if (this.fieldsInput.length > 0) {
-            for (let i = 0; i < this.fieldsInput.length; i++) {
-              const input = this.fieldsInput[i]
-              const isValidDate = moment(input.value, 'YYYY-MM-DD', true).isValid();
-              let label = input.title === input.id
-              let key = FN_CASE_CONVERTER.titleToCamelCase(input.title)
-              if (isValidDate) {
-                if (key === 'startDate') {
-                  this.form[label ? key : input.id] = moment(moment(input.value)).utc(true).hour(0).minute(0).second(0).unix()
-                } else {
-                  this.form[label ? key : input.id] = moment(moment(input.value)).utc(true).hour(23).minute(59).second(59).unix()
-                }
-              } else {
-                this.form[label ? key : input.id] = input.value
-              }
+        // if (oldValue != newValue) {
+        // if (this.fieldsInput.length > 0) {
+        for (let i = 0; i < this.fieldsInput.length; i++) {
+          const input = this.fieldsInput[i]
+          const isValidDate = moment(input.value, 'YYYY-MM-DD', true).isValid();
+          let label = input.title === input.id
+          let key = FN_CASE_CONVERTER.titleToCamelCase(input.title)
+          if (isValidDate) {
+            if (key === 'startDate') {
+              this.form[label ? key : input.id] = moment(moment(input.value)).utc(true).hour(0).minute(0).second(0).unix()
+            } else {
+              this.form[label ? key : input.id] = moment(moment(input.value)).utc(true).hour(23).minute(59).second(59).unix()
             }
-            this.form = {
-              ...this.form,
-              take: this.GET_META.take,
-              page: this.GET_META.page,
-            }
+          } else {
+            this.form[label ? key : input.id] = input.value
           }
-          this.$emit('emit-filter', this.form)
-        } else {
-          this.$emit('emit-filter', this.form)
         }
+        this.form = {
+          ...this.form,
+          take: this.GET_META.take,
+          page: this.GET_META.page,
+        }
+
+
+        // }
+        this.$emit('emit-filter', this.form)
+        // } else {
+        //   this.$emit('emit-filter', this.form)
+        // }
 
       }
     },
@@ -106,7 +108,7 @@ export default {
         }
         this.$emit('emit-filter', this.form)
       }
-    }
+    },
   },
   props: {
     fieldsInput: {
