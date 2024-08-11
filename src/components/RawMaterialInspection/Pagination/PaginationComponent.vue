@@ -28,9 +28,9 @@
           <li class="page-item" v-if="meta.page < totalPages - 1">
             <span class="page-link">...</span>
           </li>
-          <li class="page-item" v-if="meta.page < totalPages" @click.prevent="changePage(totalPages)">
+          <!-- <li class="page-item" v-if="meta.page < totalPages" @click.prevent="changePage(totalPages)">
             <a class="page-link" href="#">{{ totalPages }}</a>
-          </li>
+          </li> -->
           <li class="page-item" :class="{ disabled: meta.page === totalPages }">
             <a class="page-link" href="#" @click.prevent="changePage(meta.page + 1)">Next</a>
           </li>

@@ -81,10 +81,10 @@ const SAMPLE_INGOT_HISORICALS_MOCK = {
     ],
     meta: {
         pagination: {
-            page: 1,
+            // page: 1,
             take: 20,
-            itemCount: 5,
-            pageCount: 1,
+            itemCount: 22,
+            pageCount: 2,
             hasPreviousPage: false,
             hasNextPage: false,
         },
