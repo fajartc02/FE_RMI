@@ -106,7 +106,6 @@ export default {
         this.isLineChanges = filter.lineId
       }
       try {
-        console.log(filter.inCharge);
         this.selectedIncharge = filter.inCharge
         await this.ACTION_SAMPLE_INGOT_HISTORICAL(filter)
       } catch (error) {
@@ -117,11 +116,10 @@ export default {
     async onDataSelected(data) {
       this.modalShow = true
       try {
-        // Vendor
-        // GET: /sample-ingot/{sampleId}
-        // Internal
-        // GET: /shimadzu/{sampleId}
-        console.log(data);
+        /// Vendor
+        /// GET: /sample-ingot/{sampleId}
+        /// Internal
+        /// GET: /shimadzu/{sampleId}
 
         if (`${this.selectedIncharge ? this.selectedIncharge : data.inCharge}`.toUpperCase() == 'INTERNAL') {
           await this.ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL(data.id)

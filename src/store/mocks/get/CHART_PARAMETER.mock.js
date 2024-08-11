@@ -7,71 +7,71 @@ const CHART_PARAMETER_MOCK = {
         series: [{
                 name: 'lower-limit',
                 data: [{
-                        x: new Date(1538778600000),
+                        x: new Date(1538778600000).getTime(),
                         y: 0,
                     },
                     {
-                        x: new Date(1538782000000),
+                        x: new Date(1538782000000).getTime(),
                         y: 0,
                     },
                     {
-                        x: new Date(1538784600000),
+                        x: new Date(1538784600000).getTime(),
                         y: 0,
                     },
                     {
-                        x: new Date(1538787200000),
+                        x: new Date(1538787200000).getTime(),
                         y: 0,
                     },
                     {
-                        x: new Date(1538789800000),
+                        x: new Date(1538789800000).getTime(),
                         y: 0,
                     },
                     {
-                        x: new Date(1538792400000),
+                        x: new Date(1538792400000).getTime(),
                         y: 0,
                     },
                     {
-                        x: new Date(1538795000000),
+                        x: new Date(1538795000000).getTime(),
                         y: 0,
                     },
                     {
-                        x: new Date(1538797600000),
+                        x: new Date(1538797600000).getTime(),
                         y: 0,
                     },
                 ],
             },
             {
-                name: 'Warning (UL)',
+                name: 'Warning (LL)',
                 data: [{
-                        x: new Date(1538778600000),
+                        x: new Date(1538778600000).getTime(),
                         y: 0.2,
                     },
                     {
-                        x: new Date(1538782000000),
+                        x: new Date(1538782000000).getTime(),
                         y: 0.2,
                     },
                     {
-                        x: new Date(1538784600000),
+                        x: new Date(1538784600000).getTime(),
                         y: 0.2,
                     },
                     {
-                        x: new Date(1538787200000),
+                        x: new Date(1538787200000).getTime(),
                         y: 0.2,
                     },
                     {
-                        x: new Date(1538789800000),
+                        x: new Date(1538789800000).getTime(),
                         y: 0.2,
                     },
                     {
-                        x: new Date(1538792400000),
+                        x: new Date(1538792400000).getTime(),
                         y: 0.2,
                     },
                     {
-                        x: new Date(1538795000000),
+                        x: new Date(1538795000000).getTime(),
                         y: 0.2,
                     },
                     {
-                        x: new Date(1538797600000),
+                        x: new Date(1538797600000).getTime(),
                         y: 0.2,
                     },
                 ],
@@ -79,71 +79,71 @@ const CHART_PARAMETER_MOCK = {
             {
                 name: 'parameter-label',
                 data: [{
-                        x: new Date(1538778600000),
-                        y: Math.random(),
+                        x: new Date(1538778600000).getTime(),
+                        y: Math.random().getTime(),
                     },
                     {
-                        x: new Date(1538782000000),
-                        y: Math.random(),
+                        x: new Date(1538782000000).getTime(),
+                        y: Math.random().getTime(),
                     },
                     {
-                        x: new Date(1538784600000),
-                        y: Math.random(),
+                        x: new Date(1538784600000).getTime(),
+                        y: Math.random().getTime(),
                     },
                     {
-                        x: new Date(1538787200000),
-                        y: Math.random(),
+                        x: new Date(1538787200000).getTime(),
+                        y: Math.random().getTime(),
                     },
                     {
-                        x: new Date(1538789800000),
-                        y: Math.random(),
+                        x: new Date(1538789800000).getTime(),
+                        y: Math.random().getTime(),
                     },
                     {
-                        x: new Date(1538792400000),
-                        y: Math.random(),
+                        x: new Date(1538792400000).getTime(),
+                        y: Math.random().getTime(),
                     },
                     {
-                        x: new Date(1538795000000),
-                        y: Math.random(),
+                        x: new Date(1538795000000).getTime(),
+                        y: Math.random().getTime(),
                     },
                     {
-                        x: new Date(1538797600000),
-                        y: Math.random(),
+                        x: new Date(1538797600000).getTime(),
+                        y: Math.random().getTime(),
                     },
                 ],
             },
             {
                 name: 'Warning (UL)',
                 data: [{
-                        x: new Date(1538778600000),
+                        x: new Date(1538778600000).getTime(),
                         y: 1.8,
                     },
                     {
-                        x: new Date(1538782000000),
+                        x: new Date(1538782000000).getTime(),
                         y: 1.8,
                     },
                     {
-                        x: new Date(1538784600000),
+                        x: new Date(1538784600000).getTime(),
                         y: 1.8,
                     },
                     {
-                        x: new Date(1538787200000),
+                        x: new Date(1538787200000).getTime(),
                         y: 1.8,
                     },
                     {
-                        x: new Date(1538789800000),
+                        x: new Date(1538789800000).getTime(),
                         y: 1.8,
                     },
                     {
-                        x: new Date(1538792400000),
+                        x: new Date(1538792400000).getTime(),
                         y: 1.8,
                     },
                     {
-                        x: new Date(1538795000000),
+                        x: new Date(1538795000000).getTime(),
                         y: 1.8,
                     },
                     {
-                        x: new Date(1538797600000),
+                        x: new Date(1538797600000).getTime(),
                         y: 1.8,
                     },
                 ],
@@ -151,35 +151,35 @@ const CHART_PARAMETER_MOCK = {
             {
                 name: 'Upper Limit',
                 data: [{
-                        x: new Date(1538778600000),
+                        x: new Date(1538778600000).getTime(),
                         y: 2,
                     },
                     {
-                        x: new Date(1538782000000),
+                        x: new Date(1538782000000).getTime(),
                         y: 2,
                     },
                     {
-                        x: new Date(1538784600000),
+                        x: new Date(1538784600000).getTime(),
                         y: 2,
                     },
                     {
-                        x: new Date(1538787200000),
+                        x: new Date(1538787200000).getTime(),
                         y: 2,
                     },
                     {
-                        x: new Date(1538789800000),
+                        x: new Date(1538789800000).getTime(),
                         y: 2,
                     },
                     {
-                        x: new Date(1538792400000),
+                        x: new Date(1538792400000).getTime(),
                         y: 2,
                     },
                     {
-                        x: new Date(1538795000000),
+                        x: new Date(1538795000000).getTime(),
                         y: 2,
                     },
                     {
-                        x: new Date(1538797600000),
+                        x: new Date(1538797600000).getTime(),
                         y: 2,
                     },
                 ],
@@ -188,7 +188,7 @@ const CHART_PARAMETER_MOCK = {
         units: 'mm',
         annotations: {
             points: [{
-                x: new Date(1538789800000).getTime(),
+                x: new Date(1538789800000).getTime().getTime(),
                 y: 0.2,
                 label: {
                     borderColor: '#FF4560',

@@ -14,7 +14,7 @@
               Grafik Internal
             </CAccordionHeader>
             <CAccordionBody>
-              <h6>Grafik - {{ 'Nama Parameter' }} ({{ 'Internal' }})</h6>
+              <h6>{{ 'Nama Parameter' }} ({{ 'Internal' }})</h6>
               <div class="card">
                 <div class="card-body p-0">
                   <ChartParameterVue />
@@ -31,7 +31,7 @@
               Grafik Vendor
             </CAccordionHeader>
             <CAccordionBody>
-              <h6>Grafik - {{ 'Nama Parameter' }} ({{ 'Vendor' }})</h6>
+              <h6>{{ 'Nama Parameter' }} ({{ 'Vendor' }})</h6>
               <div class="card">
                 <div class="card-body p-0">
                   <ChartParameterVue />

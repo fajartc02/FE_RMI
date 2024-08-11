@@ -91,6 +91,8 @@ const actions = {
         try {
             ApiService.setHeader()
             dispatch(ACTION_LOADING, true)
+            console.log(filter)
+
             const { data } = await ApiService.query('sample-ingot/historical', filter)
             console.log(data)
             const pagination = data.meta.pagination
