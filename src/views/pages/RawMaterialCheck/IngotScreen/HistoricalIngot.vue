@@ -72,40 +72,49 @@ export default {
         InputModel('End Date', 'date', 'input date', moment().hour(0).minute(0).second(0).format('YYYY-MM-DD'), 3, false),
         InputModel('Line', 'treeselect', 'Select Line', null, [], null, false, 'lineId'),
         InputModel('Machine', 'treeselect', 'Select Machine', null, [], null, true, 'machineId'),
-        InputModel('In Charge', 'option', 'Select Incharge', null, [{ id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false),
-        InputModel('Status', 'option', 'Select Status', null, [{ id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false)
+        InputModel('In Charge', 'option', 'Select Incharge', null, [{ id: 'NONE', label: 'All' }, { id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false),
+        InputModel('Status', 'option', 'Select Status', null, [{ id: 'NONE', label: 'All' }, { id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false)
       ],
       isLineChanges: false,
-      selectedIncharge: null
+      selectedIncharge: null,
+      isLineSelected: false
     }
   },
   watch: {
     GET_LINE_TREESELECT: function () {
       let idxLineInput = this.filters.findIndex(x => x.title == 'Line');
-      this.filters.splice(idxLineInput, 1, InputModel('Line', 'treeselect', 'Select Line', null, this.GET_LINE_TREESELECT, null, false, 'lineId'))
+      this.filters.splice(idxLineInput, 1, InputModel('Line', 'treeselect', 'Select Line', 'NONE', this.GET_LINE_TREESELECT, null, false, 'lineId'))
     },
     GET_MACHINE_TREESELECT: function () {
       let idxMachineInput = this.filters.findIndex(x => x.title == 'Machine');
       let idxInchargeInput = this.filters.findIndex(x => x.title == 'Incharge');
       let idxStatusInput = this.filters.findIndex(x => x.title == 'Status');
-      this.filters.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', null, this.GET_MACHINE_TREESELECT, null, false, 'machineId'))
-      this.filters.splice(idxInchargeInput, 1, InputModel('Incharge', 'option', 'Select Incharge', null, [{ id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false))
-      this.filters.splice(idxStatusInput, 1, InputModel('Status', 'option', 'Select Status', null, [{ id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false))
+      this.filters.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', this.GET_MACHINE_TREESELECT, null, false, 'machineId'))
+      this.filters.splice(idxInchargeInput, 1, InputModel('Incharge', 'option', 'Select Incharge', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false))
+      this.filters.splice(idxStatusInput, 1, InputModel('Status', 'option', 'Select Status', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false))
     },
     isLineChanges: function () {
       this.ACTION_MACHINE({ lineId: this.isLineChanges })
+    },
+    isLineSelected: function () {
+      if (!this.isLineSelected) {
+        let idxMachineInput = this.filters.findIndex(x => x.title == 'Machine');
+        this.filters.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', [], null, true, 'machineId'))
+      }
     }
   },
   computed: {
-    ...mapGetters([GET_MACHINE_TREESELECT, GET_LINE_TREESELECT, GET_SAMPLE_INGOT_HISTORICAL, GET_QR_SAMPLE, GET_META])
+    ...mapGetters([GET_MACHINE_TREESELECT, GET_LINE_TREESELECT, GET_SAMPLE_INGOT_HISTORICAL, GET_QR_SAMPLE, GET_META]),
+
   },
   methods: {
     ...mapActions([ACTION_LINE, ACTION_MACHINE, ACTION_SAMPLE_INGOT_HISTORICAL, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, ACTION_RESET_QR_SAMPLE, ACT_SAMP_INGOT_VEN_HIS_DET]),
     async onChangeFilter(filter) {
       console.log(filter);
-
+      this.isLineSelected = false
       if (filter.lineId) {
         this.isLineChanges = filter.lineId
+        this.isLineSelected = true
       }
       try {
         this.selectedIncharge = filter.inCharge

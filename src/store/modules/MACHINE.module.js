@@ -16,6 +16,7 @@ const getters = {
         return state.MACHINE_DATA
     },
     GET_MACHINE_TREESELECT(state) {
+        state.MACHINE_DATA.push({ id: 'NONE', name: 'All' })
         return state.MACHINE_DATA.map((machine) => {
             return {
                 id: machine.id,

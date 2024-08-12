@@ -18,7 +18,6 @@
             :placeholder="field.placeholder" :disabled="field.disabled">
           </CFormTextarea>
           <CFormSelect v-model="field.value" v-else-if="field.type === 'option'" :label="field.title">
-            <option selected value=null>{{ field.placeholder }}</option>
             <option v-for="option in field.options" :key="option" :value="option.id">{{ option.label }}</option>
           </CFormSelect>
           <div v-else-if="field.type === 'treeselect'">
@@ -59,6 +58,10 @@ export default {
       handler: function (oldValue, newValue) {
         // if (oldValue != newValue) {
         // if (this.fieldsInput.length > 0) {
+        this.form = {
+          take: 20,
+          page: 1
+        }
         for (let i = 0; i < this.fieldsInput.length; i++) {
           const input = this.fieldsInput[i]
           const isValidDate = moment(input.value, 'YYYY-MM-DD', true).isValid();
@@ -72,7 +75,7 @@ export default {
               this.form[label ? key : input.id] = moment(moment(input.value)).utc(true).hour(23).minute(59).second(59).unix()
             }
           } else {
-            if (input.value)
+            if (input.value != 'NONE' && input.value)
               this.form[label ? key : input.id] = input.value
           }
         }

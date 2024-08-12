@@ -16,6 +16,7 @@ const getters = {
         return state.LINE_DATA
     },
     GET_LINE_TREESELECT(state) {
+        state.LINE_DATA.push({ id: 'NONE', name: 'All' })
         return state.LINE_DATA.map((line) => {
             return {
                 id: line.id,
