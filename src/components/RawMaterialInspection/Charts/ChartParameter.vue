@@ -97,8 +97,70 @@ export default {
           inCharge: this.inCharge,
           elementId: this.elementId
         }
-        if (this.elementId != 'NONE')
-          await this.ACTION_GRAPH(this.filterChart)
+        if (this.elementId != 'NONE') {
+          const { data } = await this.ACTION_GRAPH(this.filterChart)
+
+          if (data) {
+            this.series = data.series
+            this.chartOptions = {
+              chart: {
+                type: 'area',
+                stacked: false,
+                height: 350,
+                zoom: {
+                  type: 'x',
+                  enabled: true,
+                  autoScaleYaxis: true
+                },
+                toolbar: {
+                  autoSelected: 'zoom'
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              markers: {
+                size: 0,
+              },
+              title: {
+                show: false
+              },
+              fill: {
+                type: 'solid',
+                colors: ['transparent'],
+              },
+              stroke: {
+                dashArray: [4, 4, 0, 4, 4],
+              },
+              colors: ['#FF4560', '#FEB019', '#00E396', '#FEB019', '#FF4560'],
+              yaxis: {
+                labels: {
+                  formatter: function (val) {
+                    return (val).toFixed(2);
+                  },
+                },
+                title: {
+                  text: data.units
+                },
+              },
+              annotations: data.annotations,
+              xaxis: {
+                type: 'datetime',
+              },
+              legend: {
+                show: false
+              },
+              tooltip: {
+                shared: false,
+                y: {
+                  formatter: function (val) {
+                    return (val).toFixed(2)
+                  }
+                }
+              }
+            }
+          }
+        }
       } catch (error) {
         console.log(error);
         this.$swal('Error', JSON.stringify(error), 'error')
@@ -115,66 +177,7 @@ export default {
     },
     GET_GRAPH() {
       console.log(this.GET_GRAPH);
-      if (this.GET_GRAPH) {
-        this.series = this.GET_GRAPH.series
-        this.chartOptions = {
-          chart: {
-            type: 'area',
-            stacked: false,
-            height: 350,
-            zoom: {
-              type: 'x',
-              enabled: true,
-              autoScaleYaxis: true
-            },
-            toolbar: {
-              autoSelected: 'zoom'
-            }
-          },
-          dataLabels: {
-            enabled: false
-          },
-          markers: {
-            size: 0,
-          },
-          title: {
-            show: false
-          },
-          fill: {
-            type: 'solid',
-            colors: ['transparent'],
-          },
-          stroke: {
-            dashArray: [4, 4, 0, 4, 4],
-          },
-          colors: ['#FF4560', '#FEB019', '#00E396', '#FEB019', '#FF4560'],
-          yaxis: {
-            labels: {
-              formatter: function (val) {
-                return (val).toFixed(2);
-              },
-            },
-            title: {
-              text: this.GET_GRAPH.units
-            },
-          },
-          annotations: this.GET_GRAPH.annotations,
-          xaxis: {
-            type: 'datetime',
-          },
-          legend: {
-            show: false
-          },
-          tooltip: {
-            shared: false,
-            y: {
-              formatter: function (val) {
-                return (val).toFixed(2)
-              }
-            }
-          }
-        }
-      }
+
     }
   },
   props: {

@@ -29,6 +29,9 @@ const actions = {
             const { data } = await ApiService.query('graph/ingot', params)
             dispatch(ACTION_LOADING, false)
             commit(SET_GRAPH, data.data)
+            console.log(data)
+
+            return data
         } catch (error) {
             console.error(error)
             dispatch(ACTION_LOADING, false)

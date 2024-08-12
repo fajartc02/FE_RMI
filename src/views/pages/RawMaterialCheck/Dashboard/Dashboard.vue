@@ -16,12 +16,14 @@
             <CAccordionBody class="p-1">
               <div class="row">
                 <div v-for="element in GET_ELEMENT" :key="element.id" class="col-12 col-lg-6 my-1">
-                  <h6>{{ element.label }} ({{ element.code }})</h6>
-                  <div class="card">
-                    <div class="card-body p-0">
-                      <ChartParameterVue :inCharge="incharge.label" :elementId="element.id" :filters="filters" />
+                  <template v-if="incharge.id != 'NONE' && element.id != 'NONE'">
+                    <h6>{{ element.label }} ({{ element.code }})</h6>
+                    <div class="card">
+                      <div class="card-body p-0">
+                        <ChartParameterVue :inCharge="incharge.label" :elementId="element.id" :filters="filters" />
+                      </div>
                     </div>
-                  </div>
+                  </template>
                 </div>
               </div>
             </CAccordionBody>
