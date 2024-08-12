@@ -18,6 +18,8 @@ import SAMPLE_INGOT_HISORICALS_MOCK from './get/SAMPLE_INGOT_HISTORICALS.mock'
 import SAMPLE_INGOT_HISORICALS_EMPTY_MOCK from './get/SAMPLE_INGOT_HISTORICALS_EMPTY.mock'
 import MACHINES_DC_MOCK from './get/MACHINES_DC.mock'
 import RES_REQ_QUERY_SHIMADZU_MOCK from './get/RES_REQ_QUERY_SHIMADZU.mock'
+import ELEMENTS_MOCK from './get/ELEMENT.mock'
+import CHART_PARAMETER_MOCK from './get/CHART_PARAMETER.mock'
 
 // mock testing user accounts
 const users = [{
@@ -62,8 +64,16 @@ const MockService = {
 
         // IF GaugeID not passing
         mock.onGet('shimadzu/').reply(200, { data: SAMPLE_CODE_SUGGESTED_MOCK })
-
-        // FOR suggested from specific shimadzu
+        mock.onGet('element/').reply(200, { data: ELEMENTS_MOCK })
+        mock
+            .onGet('graph/ingot', {
+                startDate: 1722470400,
+                endDate: 1725148799,
+                inCharge: 'INTERNAL',
+                elementId: '9999bcbb-0e8a-4695-8f80-1000',
+            })
+            .reply(200, { data: CHART_PARAMETER_MOCK })
+            // FOR suggested from specific shimadzu
         mock
             .onGet('shimadzu', {
                 params: {

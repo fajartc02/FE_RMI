@@ -9,6 +9,8 @@ import SAMPLE_INGOTModule from './modules/SAMPLE_INGOT.module'
 import MACHINEModule from './modules/MACHINE.module'
 import LINEModule from './modules/LINE.module'
 import METAModule from './modules/META.module'
+import ELEMENTSModule from './modules/ELEMENTS.module'
+import GRAPHModule from './modules/GRAPH.module'
 
 export default createStore({
     state: {
@@ -39,5 +41,7 @@ export default createStore({
         SAMPLE_CODEModule,
         GAUGEModule,
         SAMPLE_INGOTModule,
+        ELEMENTSModule,
+        GRAPHModule,
     },
 })

@@ -42,10 +42,7 @@ export default {
   name: 'FilterComponent',
   data() {
     return {
-      form: {
-        take: 20,
-        page: 1
-      },
+      form: {},
       currentDate: moment().format('YYYY-MM-DD'),
     }
   },
@@ -84,7 +81,10 @@ export default {
           take: this.GET_META.take,
           page: this.GET_META.page,
         }
-
+        if (this.isDisabledPagination) {
+          delete this.form.page
+          delete this.form.take
+        }
 
         // }
         this.$emit('emit-filter', this.form)
@@ -101,6 +101,10 @@ export default {
           take: this.GET_META.take,
           page: this.GET_META.page,
         }
+        if (this.isDisabledPagination) {
+          delete this.form.page
+          delete this.form.take
+        }
         this.$emit('emit-filter', this.form)
       }
     },
@@ -110,6 +114,10 @@ export default {
           ...this.form,
           take: this.GET_META.take,
           page: this.GET_META.page,
+        }
+        if (this.isDisabledPagination) {
+          delete this.form.page
+          delete this.form.take
         }
         this.$emit('emit-filter', this.form)
       }
@@ -180,6 +188,10 @@ export default {
           disabled: false
         },
       ]
+    },
+    isDisabledPagination: {
+      type: Boolean,
+      default: false
     }
   },
   components: {

@@ -80,35 +80,35 @@ const CHART_PARAMETER_MOCK = {
                 name: 'parameter-label',
                 data: [{
                         x: new Date(1538778600000).getTime(),
-                        y: Math.random().getTime(),
+                        y: Math.random(),
                     },
                     {
                         x: new Date(1538782000000).getTime(),
-                        y: Math.random().getTime(),
+                        y: Math.random(),
                     },
                     {
                         x: new Date(1538784600000).getTime(),
-                        y: Math.random().getTime(),
+                        y: Math.random(),
                     },
                     {
                         x: new Date(1538787200000).getTime(),
-                        y: Math.random().getTime(),
+                        y: Math.random(),
                     },
                     {
                         x: new Date(1538789800000).getTime(),
-                        y: Math.random().getTime(),
+                        y: Math.random(),
                     },
                     {
                         x: new Date(1538792400000).getTime(),
-                        y: Math.random().getTime(),
+                        y: Math.random(),
                     },
                     {
                         x: new Date(1538795000000).getTime(),
-                        y: Math.random().getTime(),
+                        y: Math.random(),
                     },
                     {
                         x: new Date(1538797600000).getTime(),
-                        y: Math.random().getTime(),
+                        y: Math.random(),
                     },
                 ],
             },
@@ -188,7 +188,7 @@ const CHART_PARAMETER_MOCK = {
         units: 'mm',
         annotations: {
             points: [{
-                x: new Date(1538789800000).getTime().getTime(),
+                x: new Date(1538789800000).getTime(),
                 y: 0.2,
                 label: {
                     borderColor: '#FF4560',

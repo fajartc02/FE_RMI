@@ -110,7 +110,6 @@ export default {
   methods: {
     ...mapActions([ACTION_LINE, ACTION_MACHINE, ACTION_SAMPLE_INGOT_HISTORICAL, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, ACTION_RESET_QR_SAMPLE, ACT_SAMP_INGOT_VEN_HIS_DET]),
     async onChangeFilter(filter) {
-      console.log(filter);
       this.isLineSelected = false
       if (filter.lineId) {
         this.isLineChanges = filter.lineId
