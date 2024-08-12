@@ -72,7 +72,7 @@ const MockService = {
                 inCharge: 'INTERNAL',
                 elementId: '9999bcbb-0e8a-4695-8f80-1000',
             })
-            .reply(200, { data: CHART_PARAMETER_MOCK })
+            .reply(200, { CHART_PARAMETER_MOCK })
             // FOR suggested from specific shimadzu
         mock
             .onGet('shimadzu', {

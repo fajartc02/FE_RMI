@@ -114,9 +114,9 @@ export default {
       }
     },
     GET_GRAPH() {
-      console.log(this.GET_GRAPH.data);
-      if (this.GET_GRAPH.data) {
-        this.series = this.GET_GRAPH.data.series
+      console.log(this.GET_GRAPH);
+      if (this.GET_GRAPH) {
+        this.series = this.GET_GRAPH.series
         this.chartOptions = {
           chart: {
             type: 'area',
@@ -155,10 +155,10 @@ export default {
               },
             },
             title: {
-              text: this.GET_GRAPH.data.units
+              text: this.GET_GRAPH.units
             },
           },
-          annotations: this.GET_GRAPH.data.annotations,
+          annotations: this.GET_GRAPH.annotations,
           xaxis: {
             type: 'datetime',
           },
