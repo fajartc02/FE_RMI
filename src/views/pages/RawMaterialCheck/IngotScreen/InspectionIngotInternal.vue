@@ -1,4 +1,43 @@
 <template>
+  <CModal scrollable size="xl" :visible="modalShowJudg" backdrop="static" @close="() => { modalShowJudg = false }">
+    <CModalHeader>
+      <CModalTitle>Result Abnormal Parameter</CModalTitle>
+    </CModalHeader>
+    <CModalBody v-if="elementOutOfRanged.length > 0">
+      <template v-for="(data, idx) in elementOutOfRanged" :key="data">
+        <h6>Sample Code: {{ data.lotNo }}</h6>
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Element</th>
+              <th>Min</th>
+              <th>Max</th>
+              <th>Value</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(element, i) in data.elements" :key="element">
+              <td>{{ i + 1 }}</td>
+              <td>{{ element.name }}</td>
+              <td>{{ element.min }}</td>
+              <td>{{ element.max }}</td>
+              <td>{{ element.value }}</td>
+              <td class="text-danger">NG</td>
+            </tr>
+          </tbody>
+        </table>
+      </template>
+    </CModalBody>
+    <CModalFooter class="d-flex justify-content-center align-items-center">
+      <a :href="report">
+        <CButton color="warning">Download PDF</CButton>
+      </a>
+      <CButton color="success" @click="() => { $router.push('/inspection/ingot/historical'); modalShowJudg = false }">OK
+      </CButton>
+    </CModalFooter>
+  </CModal>
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
@@ -81,6 +120,7 @@ export default {
         header: null,
         values: null
       },
+      report: null,
       selectedValidSampleCode: null,
       selectedGaugeId: null,
       containerInput: [],
@@ -93,6 +133,8 @@ export default {
       isSubmited: false,
       isCodeNotValid: false,
       sampleCodeSuggested: [],
+      elementOutOfRanged: [],
+      modalShowJudg: false,
     }
   },
   watch: {
@@ -164,15 +206,30 @@ export default {
     },
     async submitCheckSampleIngot() {
       try {
-        this.isSubmited = true
         this.input.sampleCode = this.prevSampleCode ? this.prevSampleCode : this.GET_QR_SAMPLE.headers.sampleId
-        console.log(this.input);
-
-        await this.$store.dispatch(ACTION_ADD_SAMPLE_CODE, this.input)
-        this.$swal('Success', 'Success add sample', 'success')
+        const response = await this.$store.dispatch(ACTION_ADD_SAMPLE_CODE, this.input)
+        this.isSubmited = true
+        let state = this.conditionJudgmentIngotCheck(response)
+        if (state) {
+          this.$router.push('/inspection/ingot/historical')
+          this.$swal('Success', 'Add sample success, Pengecekan tidak ada abnormal', 'success')
+        }
       } catch (error) {
         this.$swal('Success', 'Error add sample code', 'success')
         alert(JSON.stringify(error))
+      }
+    },
+    conditionJudgmentIngotCheck({ data }) {
+      try {
+        if (data) {
+          this.elementOutOfRanged = data.values
+          this.report = data.report
+          this.modalShowJudg = true
+          return false
+        }
+        return true
+      } catch (error) {
+        this.$swal('Error', 'Internal Server Error', 'error')
       }
     }
   },
