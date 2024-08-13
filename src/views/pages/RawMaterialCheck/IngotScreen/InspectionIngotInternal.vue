@@ -206,7 +206,8 @@ export default {
     },
     async submitCheckSampleIngot() {
       try {
-        this.input.sampleCode = this.prevSampleCode ? this.prevSampleCode : this.GET_QR_SAMPLE.headers.sampleId
+        this.input.sampleCode = this.prevSampleCode ? this.prevSampleCode : this.GET_QR_SAMPLE.tableInternalVendor?.id
+
         const response = await this.$store.dispatch(ACTION_ADD_SAMPLE_CODE, this.input)
         this.isSubmited = true
         let state = this.conditionJudgmentIngotCheck(response)
