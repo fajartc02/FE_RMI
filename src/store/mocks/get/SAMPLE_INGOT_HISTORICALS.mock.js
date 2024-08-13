@@ -10,7 +10,7 @@ const SAMPLE_INGOT_HISORICALS_MOCK = {
             deliveryScheduleDate: '13/09/24',
             alloyName: 'AC2C',
             alloyCondition: '1 Recycle',
-            companyName: 'PT. Toyota Motor Manufacturing Indonesia lorem ipsum dolojabjidnkjsandisaildnsjdbjkbdkuhasbdihjkasbhkudabshkjdbkhusabdjknasbdkjhsbdjbldijhasbhldjkalkjdsalkjdlkasjdhlksahbdlksahdlksalkfnljksdnksandklmsandlkasn',
+            companyName: 'PT. Toyota Motor Manufacturing Indonesia lorem ipsum ',
             customerCode: 'T50300',
             deliveryTo: 'PT. Toyota Motor Manufacturing Indonesia',
             orderQty: 2000,

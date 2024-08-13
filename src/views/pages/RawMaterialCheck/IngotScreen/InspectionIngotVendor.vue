@@ -34,7 +34,7 @@
       <a :href="report">
         <CButton color="warning">Download PDF</CButton>
       </a>
-      <CButton color="success" @click="() => { $router.push('/inspection/ingot/internal'); modalShowJudg = false }">OK
+      <CButton color="success" @click="() => { $router.push('/inspection/ingot/historical'); modalShowJudg = false }">OK
       </CButton>
     </CModalFooter>
   </CModal>

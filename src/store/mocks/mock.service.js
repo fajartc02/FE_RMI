@@ -125,7 +125,10 @@ const MockService = {
             .onGet('shimadzu/5afbfaa9-5154-11ef-aae2-0242ac120002')
             .reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
         mock.onGet('gauge/').reply(200, { data: gauges })
-
+            // shimadzu/9999bcbb-0e8a-4695-8f80-0000
+        mock
+            .onGet('shimadzu/9999bcbb-0e8a-4695-8f80-0000')
+            .reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
         mock
             .onGet('machine/', {
                 params: { lineId: '4e53b6be-9593-456e-905e-b4f071490cdd' },
