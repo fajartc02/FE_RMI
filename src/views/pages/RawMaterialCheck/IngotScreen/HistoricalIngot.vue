@@ -1,7 +1,14 @@
 <template>
   <CModal class="w-100" scrollable size="xl" :visible="modalShow" backdrop="static" @close="dismissModal">
     <CModalHeader>
-      <CModalTitle>Details Ingot Check</CModalTitle>
+      <div class="row align-items-center">
+        <CModalTitle class="col-auto">Details Ingot Check</CModalTitle>
+        <CModalTitle class="col-auto">
+          <a :href="'#'">
+            <CButton color="warning">Download Report</CButton>
+          </a>
+        </CModalTitle>
+      </div>
     </CModalHeader>
     <CModalBody>
       <!-- v-if="!IS_LOADING" -->

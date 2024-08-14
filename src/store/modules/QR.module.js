@@ -29,7 +29,7 @@ const mutations = {
 const actions = {
     async ACTION_QR_SAMPLE({ commit }, QR_SAMPLEData = null) {
         try {
-            await ApiService.setHeader()
+            ApiService.setHeader()
             if (QR_SAMPLEData) {
                 const { data } = await ApiService.post('sample-ingot', QR_SAMPLEData)
                 commit(SET_QR_SAMPLE, data.data)

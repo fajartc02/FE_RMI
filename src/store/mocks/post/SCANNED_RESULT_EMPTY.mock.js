@@ -190,6 +190,7 @@ const SCANNED_RESULT_EMPTY_MOCK = {
     },
     tableInternalVendor: null,
     sampleCodeSuggested: SAMPLE_CODE_SUGGESTED_MOCK,
+    reportLink: null,
 }
 
 export default SCANNED_RESULT_EMPTY_MOCK

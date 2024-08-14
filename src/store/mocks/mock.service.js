@@ -175,8 +175,8 @@ const MockService = {
         mock.onPut('/sample-ingot/1').reply((data) => {
             console.log('MOCKS')
             console.log(data.data)
-            return [201, { data: OK_INGOT_CHECK_VENDOR }]
-                // return [201, { data: NG_INGOT_CHECK_VENDOR }]
+                // return [201, { data: OK_INGOT_CHECK_VENDOR }]
+            return [201, { data: NG_INGOT_CHECK_VENDOR }]
         })
 
         mock.onGet('sample-ingot/historical').reply(200, {

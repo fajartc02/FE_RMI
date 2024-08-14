@@ -31,7 +31,7 @@
       </template>
     </CModalBody>
     <CModalFooter class="d-flex justify-content-center align-items-center">
-      <a :href="report">
+      <a :href="reportLink">
         <CButton color="warning">Download PDF</CButton>
       </a>
       <CButton color="success" @click="() => { $router.push('/inspection/ingot/historical'); modalShowJudg = false }">OK
@@ -120,7 +120,7 @@ export default {
         header: null,
         values: null
       },
-      report: null,
+      reportLink: null,
       selectedValidSampleCode: null,
       selectedGaugeId: null,
       containerInput: [],
@@ -224,7 +224,7 @@ export default {
       try {
         if (data) {
           this.elementOutOfRanged = data.values
-          this.report = data.report
+          this.reportLink = data.reportLink
           this.modalShowJudg = true
           return false
         }
