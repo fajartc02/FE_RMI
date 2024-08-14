@@ -32,6 +32,7 @@
 <script>
 
 import FN_CASE_CONVERTER from '@/functions/FN_CASE_CONVERTER';
+import { ACTION_LOADING } from '@/store/modules/LOADING.module';
 import { GET_META } from '@/store/modules/META.module';
 import Treeselect from '@zanmato/vue3-treeselect'
 import "@zanmato/vue3-treeselect/dist/vue3-treeselect.min.css";
@@ -91,11 +92,14 @@ export default {
         // }
         if (!this.timeOutDelayFetch) {
           this.$emit('emit-filter', this.form)
+        } else {
+          this.$store.dispatch(ACTION_LOADING, true)
+          console.log('CHANGES FIELDS INPUT!');
+          this.timeOutDelayFetch = setTimeout(() => {
+            this.$emit('emit-filter', this.form)
+            this.$store.dispatch(ACTION_LOADING, false)
+          }, 2000)
         }
-        console.log('CHANGES FIELDS INPUT!');
-        this.timeOutDelayFetch = setTimeout(() => {
-          this.$emit('emit-filter', this.form)
-        }, 2000)
 
         // } else {
         //   this.$emit('emit-filter', this.form)
