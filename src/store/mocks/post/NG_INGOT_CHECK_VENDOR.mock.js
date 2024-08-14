@@ -7,6 +7,12 @@ const NG_INGOT_CHECK_VENDOR = {
                 elementValue: 0,
                 max: 1,
                 min: 0,
+                adjustmentFormula: {
+                    avg: 11.25, // average per element batas atas & bawah
+                    budomari: 75, // per element constant
+                    weightMolten: 3000, // per element constant
+                    result: 22, // result calculation
+                },
             },
             {
                 elementId: 2,
@@ -14,9 +20,14 @@ const NG_INGOT_CHECK_VENDOR = {
                 elementValue: 0,
                 max: 1,
                 min: 0,
+                adjustmentFormula: {
+                    budomari: 75,
+                    weightMolten: 3000,
+                    result: 22,
+                },
             },
         ],
-        report: 'link-disini',
+        reportLink: 'link-disini',
     },
     code: 0,
 }
