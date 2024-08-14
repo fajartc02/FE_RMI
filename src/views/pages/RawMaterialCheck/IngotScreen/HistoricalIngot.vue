@@ -73,7 +73,8 @@ export default {
         InputModel('Line', 'treeselect', 'Select Line', null, [], null, false, 'lineId'),
         InputModel('Machine', 'treeselect', 'Select Machine', null, [], null, true, 'machineId'),
         InputModel('In Charge', 'option', 'Select Incharge', null, [{ id: 'NONE', label: 'All' }, { id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false),
-        InputModel('Status', 'option', 'Select Status', null, [{ id: 'NONE', label: 'All' }, { id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false)
+        InputModel('Status', 'option', 'Select Status', null, [{ id: 'NONE', label: 'All' }, { id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false),
+        InputModel('Sample Code', 'text', 'AC2C-XXXX-XXXX', null, null, null, false, 'sampleCode'),
       ],
       isLineChanges: false,
       selectedIncharge: null,

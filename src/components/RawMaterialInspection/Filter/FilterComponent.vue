@@ -44,6 +44,7 @@ export default {
     return {
       form: {},
       currentDate: moment().format('YYYY-MM-DD'),
+      timeOutDelayFetch: null
     }
   },
   computed: {
@@ -59,6 +60,7 @@ export default {
           take: 20,
           page: 1
         }
+        clearTimeout(this.timeOutDelayFetch);
         for (let i = 0; i < this.fieldsInput.length; i++) {
           const input = this.fieldsInput[i]
           const isValidDate = moment(input.value, 'YYYY-MM-DD', true).isValid();
@@ -87,7 +89,14 @@ export default {
         }
 
         // }
-        this.$emit('emit-filter', this.form)
+        if (!this.timeOutDelayFetch) {
+          this.$emit('emit-filter', this.form)
+        }
+        console.log('CHANGES FIELDS INPUT!');
+        this.timeOutDelayFetch = setTimeout(() => {
+          this.$emit('emit-filter', this.form)
+        }, 2000)
+
         // } else {
         //   this.$emit('emit-filter', this.form)
         // }
@@ -196,7 +205,7 @@ export default {
   },
   components: {
     Treeselect
-  }
+  },
 }
 </script>
 <style>
