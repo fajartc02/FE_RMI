@@ -72,7 +72,7 @@ const CHART_PARAMETER_MOCK = {
             ],
         },
         {
-            name: 'parameter-label',
+            name: 'AC2C-DAII-240709-9334',
             data: [{
                     x: new Date(1538778600000).getTime(),
                     y: Math.random(),
@@ -195,6 +195,16 @@ const CHART_PARAMETER_MOCK = {
             },
         }, ],
     },
+    sampleCodes: [
+        'AC2C-DAII-240709-0001',
+        'AC2C-DAII-240709-0002',
+        'AC2C-DAII-240709-0003',
+        'AC2C-DAII-240709-0003',
+        'AC2C-DAII-240709-0004',
+        'AC2C-DAII-240709-0005',
+        'AC2C-DAII-240709-0006',
+        'AC2C-DAII-240709-0007',
+    ],
 }
 
 export default CHART_PARAMETER_MOCK

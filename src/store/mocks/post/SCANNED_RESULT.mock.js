@@ -8,6 +8,7 @@ const SCANNED_RESULT_MOCK = {
         materialName: 'AC2C',
     },
     tablePureVendor: {
+        id: 1,
         cols: [
             'Product Date',
             'Lot No',
@@ -189,6 +190,7 @@ const SCANNED_RESULT_MOCK = {
         },
     },
     tableInternalVendor: {
+        id: 1,
         cols: [
             'Product Date',
             'Lot No',

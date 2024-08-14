@@ -8,6 +8,7 @@ const SCANNED_RESULT_EMPTY_MOCK = {
         materialName: 'AC2C',
     },
     tablePureVendor: {
+        id: 1,
         cols: [
             'Product Date',
             'Lot No',

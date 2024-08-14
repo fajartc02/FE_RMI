@@ -5,6 +5,7 @@
 </template>
 <script>
 import { ACTION_GRAPH, GET_GRAPH } from '@/store/modules/GRAPH.module';
+import moment from 'moment';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
@@ -75,7 +76,9 @@ export default {
         tooltip: {
           shared: false,
           y: {
-            formatter: function (val) {
+            formatter: function (val, opts) {
+              console.log('opts');
+              console.log(opts);
               return (val).toFixed(2)
             }
           }
@@ -145,18 +148,51 @@ export default {
               },
               annotations: data.annotations,
               xaxis: {
-                type: 'datetime',
+                type: 'datetime'
               },
               legend: {
                 show: false
               },
               tooltip: {
+                custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+                  console.log('seriesIndex, dataPointIndex');
+                  console.log(seriesIndex, dataPointIndex);
+                  return `<div class="card">
+    <div class="card-header">
+      <b>${moment(w.globals.seriesX[seriesIndex][dataPointIndex]).format('YYYY-MM-DD HH:mm:ss')}</b>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-auto">
+          ${data.sampleCodes[dataPointIndex]}
+        </div>
+        <div class="col-auto">:</div>
+        <div class="col-auto">
+          <b>${series[seriesIndex][dataPointIndex].toFixed(2)}</b>
+        </div>
+        <div class="col-auto">${data.units}</div></div>
+      </div>
+    </div>
+  </div>`
+                  // return '<div class="card">' +
+                  //   '<span>' + series[seriesIndex][dataPointIndex] + '</span>' +
+                  //   '</div>'
+                },
                 shared: false,
                 y: {
-                  formatter: function (val) {
+                  formatter: function (val, opts) {
+                    console.log('opts, Y');
+                    console.log(opts);
                     return (val).toFixed(2)
                   }
-                }
+                },
+                // z: {
+                //   formatter: function (val, opts) {
+                //     console.log('opts, Z');
+                //     console.log(opts);
+                //     return (val).toFixed(2)
+                //   }
+                // }
               }
             }
           }
