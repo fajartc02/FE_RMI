@@ -6,7 +6,7 @@
     <CModalBody v-if="elementOutOfRanged.length > 0">
       <template v-for="(data, idx) in elementOutOfRanged" :key="data">
         <h6>Sample Code: {{ data.lotNo }}</h6>
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped text-center">
           <thead>
             <tr>
               <th>No</th>
@@ -15,6 +15,8 @@
               <th>Max</th>
               <th>Value</th>
               <th>Status</th>
+              <th>Adjustment</th>
+              <th>Result</th>
             </tr>
           </thead>
           <tbody>
@@ -25,16 +27,48 @@
               <td>{{ element.max }}</td>
               <td>{{ element.value }}</td>
               <td class="text-danger">NG</td>
+              <td class="text-center">
+                <div class="row">
+                  <div class="col-4 text-center">
+                    {{ element.adjustmentFormula.avg }}
+                  </div>
+                  <div class="col-4 text-center">
+                    X
+                  </div>
+                  <div class="col-4 text-center">
+                    {{ element.adjustmentFormula.weightMolten }}
+                  </div>
+                </div>
+                <div class="row d-flex justify-content-center align-items-center">
+                  <div class="col-12 text-center">
+                    <hr class="m-1">
+                    {{ element.adjustmentFormula.budomari }}
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="row">
+                  <div class="col-5 text-center">
+                    <input class="form-control" type="number" min="0"
+                      v-model="element.adjustmentFormula.adjustmentValue">
+                  </div>
+                  <div class="col-2 text-center">
+                    <h6>Kg</h6>
+                  </div>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
       </template>
+      <label class="form-label">Notes</label>
+      <textarea class="form-control" cols="30" rows="3" v-model="notes"></textarea>
     </CModalBody>
     <CModalFooter class="d-flex justify-content-center align-items-center">
       <a :href="reportLink">
         <CButton color="warning">Download PDF</CButton>
       </a>
-      <CButton color="success" @click="() => { $router.push('/inspection/ingot/historical'); modalShowJudg = false }">OK
+      <CButton color="success" @click="submitAbnormalSample()">Save Adjustment
       </CButton>
     </CModalFooter>
   </CModal>
@@ -100,7 +134,7 @@ import TableIngotInternal from '@/components/RawMaterialInspection/TableIngotInt
 
 import { IS_LOADING, } from '@/store/modules/LOADING.module';
 import { mapGetters } from 'vuex';
-import { ACTION_ADD_SAMPLE_CODE, GET_SAMPLE_CODE, GET_SAMPLE_CODE_SUGGESTED_TREESELECT, ACTION_SAMPLE_CODE_SUGGESTED } from '@/store/modules/SAMPLE_CODE.module';
+import { ACTION_ADD_SAMPLE_CODE, GET_SAMPLE_CODE, GET_SAMPLE_CODE_SUGGESTED_TREESELECT, ACTION_SAMPLE_CODE_SUGGESTED, ACTION_ADD_SAMPLE_ABNORMAL } from '@/store/modules/SAMPLE_CODE.module';
 
 import HeaderIngotCheckInternal from '@/components/RawMaterialInspection/HeaderIngotCheckInternal.vue';
 import { ACTION_RESET_SAMPLE_INGOT, ACTION_SAMPLE_INGOT, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL } from '@/store/modules/SAMPLE_INGOT.module';
@@ -135,6 +169,7 @@ export default {
       sampleCodeSuggested: [],
       elementOutOfRanged: [],
       modalShowJudg: false,
+      notes: null
     }
   },
   watch: {
@@ -149,7 +184,7 @@ export default {
               this.isCodeNotValid = true
               await this.$store.dispatch(ACTION_SAMPLE_CODE_SUGGESTED, {
                 gaugeId: this.selectedGaugeId,
-                incharge: 'INTERNAL'
+                inCharge: 'INTERNAL'
               })
               this.selectedValidSampleCode = null
               await this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
@@ -179,12 +214,14 @@ export default {
   methods: {
     onChangeBtnResample(isBtnChange) {
       if (isBtnChange) {
+        this.selectedValidSampleCode = null
         this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
         this.isCodeNotValid = false
         $toast.clear()
       }
     },
     onChangeGaugeId(gaugeId) {
+      this.selectedValidSampleCode = null
       this.selectedGaugeId = gaugeId
     },
     onChangeContainerInput(data) {
@@ -210,14 +247,15 @@ export default {
 
         const response = await this.$store.dispatch(ACTION_ADD_SAMPLE_CODE, this.input)
         this.isSubmited = true
+        console.log(response);
+
         let state = this.conditionJudgmentIngotCheck(response)
         if (state) {
           this.$router.push('/inspection/ingot/historical')
           this.$swal('Success', 'Add sample success, Pengecekan tidak ada abnormal', 'success')
         }
       } catch (error) {
-        this.$swal('Success', 'Error add sample code', 'success')
-        alert(JSON.stringify(error))
+        this.$swal('Error', 'Error add sample code', 'error')
       }
     },
     conditionJudgmentIngotCheck({ data }) {
@@ -229,6 +267,32 @@ export default {
           return false
         }
         return true
+      } catch (error) {
+        this.$swal('Error', 'Internal Server Error', 'error')
+      }
+    },
+    async submitAbnormalSample() {
+      try {
+        this.input.sampleCode = this.prevSampleCode ? this.prevSampleCode : this.GET_QR_SAMPLE.tableInternalVendor?.id
+        // this.input.values = this.elementOutOfRanged
+        let mapAdjValues = this.elementOutOfRanged[0].elements.map(item => {
+          return {
+            id: item.elementId,
+            adjustmentValue: item.adjustmentFormula.adjustmentValue
+          }
+        })
+        console.log(this.elementOutOfRanged[0]);
+        let abnormalObj = {
+          elements: mapAdjValues,
+          notes: this.notes,
+          sampleCode: this.input.sampleCode
+        }
+        this.input.elements = mapAdjValues
+        this.input.notes = this.notes
+        const response = await this.$store.dispatch(ACTION_ADD_SAMPLE_ABNORMAL, abnormalObj)
+        this.$router.push('/inspection/ingot/historical')
+        this.modalShowJudg = false
+
       } catch (error) {
         this.$swal('Error', 'Internal Server Error', 'error')
       }

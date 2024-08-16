@@ -1,6 +1,13 @@
-import { defineComponent, watch, h, onMounted, ref, resolveComponent} from 'vue'
+import {
+  defineComponent,
+  watch,
+  h,
+  onMounted,
+  ref,
+  resolveComponent,
+} from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
-import utils from "@/utils/CommonUtils";
+import utils from '@/utils/CommonUtils'
 
 import {
   CBadge,
@@ -10,7 +17,6 @@ import {
   CNavTitle,
 } from '@coreui/vue'
 // import nav from '@/_nav.js'
-
 
 const normalizePath = (path) =>
   decodeURI(path)
@@ -44,179 +50,216 @@ const isActiveItem = (route, item) => {
   return false
 }
 
-
 const AppSidebarNav = defineComponent({
   name: 'AppSidebarNav',
-  props: [ 'nav' ],
-  watch:{
-      'nav'(){
-          this.$emit('update:nav',this.props.nav);
-      },
+  props: ['nav'],
+  watch: {
+    nav() {
+      this.$emit('update:nav', this.props.nav)
+    },
   },
   data(props) {
-      return {
-          props: props
-      }
+    return {
+      props: props,
+    }
   },
   components: {
     CNavItem,
     CNavGroup,
     CNavTitle,
   },
-  created(){
-  },
+  created() {},
   setup(props) {
     const route = useRoute()
     const firstRender = ref(true)
 
-    onMounted( async() => {
+    onMounted(async () => {
       firstRender.value = false
     })
     var listBreadcrumbsNav = ''
     const getParentNode = (el, attribute) => {
       while (el && el.parentNode) {
-        el = el.parentNode;
-        if(el.tagName == 'HTML' ){
-          return null;
+        el = el.parentNode
+        if (el.tagName == 'HTML') {
+          return null
         }
         if (el && el.getAttribute(attribute) != undefined) {
-          return el;
+          return el
         }
       }
-      
-      return null;
+
+      return null
     }
     const getBreadCrumbs = (el) => {
-      let currBreadcrumbsNav = getParentNode(el,'breadcrumbs');
-      if(currBreadcrumbsNav!=null){
-        listBreadcrumbsNav = currBreadcrumbsNav.getAttribute('breadcrumbs') + (listBreadcrumbsNav==''?'':',') + listBreadcrumbsNav;
-        getBreadCrumbs(currBreadcrumbsNav);
-      }else{
-
+      let currBreadcrumbsNav = getParentNode(el, 'breadcrumbs')
+      if (currBreadcrumbsNav != null) {
+        listBreadcrumbsNav =
+          currBreadcrumbsNav.getAttribute('breadcrumbs') +
+          (listBreadcrumbsNav == '' ? '' : ',') +
+          listBreadcrumbsNav
+        getBreadCrumbs(currBreadcrumbsNav)
+      } else {
       }
-      return listBreadcrumbsNav;
+      return listBreadcrumbsNav
     }
     const renderItem = (item) => {
-      if(item){
-      if (item.items) {
-        return h(
-          CNavGroup,
-          {
-            ...(firstRender.value && {
-              visible: item.items.some((child) => isActiveItem(route, child)),
-            }),
-            onClick: async (e) => {  
-              e.preventDefault(); 
-              e.stopPropagation();
-              await e.target.parentNode.classList.add("breadcrumbsNav");
-              await e.target.parentNode.setAttribute('breadcrumbs',
-              JSON.stringify({"active":false,"name":item.name,"path":""}));
-            }
-          },
-          {
-            togglerContent: () => [
-              h(resolveComponent('CIcon'), {
-                customClassName: 'nav-icon',
-                name: item.icon,
-              }),
-              item.name,
-            ],
-            default: () => item.items.map((child) => renderItem(child)),
-          },
-        )
-      }
-
-      return item.to
-        ? h(
-            RouterLink,
+      if (item) {
+        if (item.items) {
+          return h(
+            CNavGroup,
             {
-              to: item.to,
-              custom: true,
+              ...(firstRender.value && {
+                visible: item.items.some((child) => isActiveItem(route, child)),
+              }),
+              onClick: async (e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                await e.target.parentNode.classList.add('breadcrumbsNav')
+                await e.target.parentNode.setAttribute(
+                  'breadcrumbs',
+                  JSON.stringify({ active: false, name: item.name, path: '' }),
+                )
+              },
             },
             {
-              default: (props) =>
-                h(
-                  resolveComponent(item.component),
-                  {
-                    active: props.isActive,
-                    href: props.href,
-                    onClick: async(e) => { 
-                      e.preventDefault(); 
-                      e.stopPropagation();
-                      await e.target.parentNode.classList.add("breadcrumbsNav");
-                      await e.target.parentNode.setAttribute('breadcrumbs',
-                      JSON.stringify({"active":false,"name":item.name,"path":""/*"#"+item.to*/}))
-                      listBreadcrumbsNav = '';  
-                      getBreadCrumbs(e.target);
-                      localStorage.breadcrumbs=JSON.stringify(JSON.parse('['+
-                        (item.name==='Home'?'':'{"name":"Home","path":"#/dc/dashboard"},')+
-                        listBreadcrumbsNav+']'));
+              togglerContent: () => [
+                h(resolveComponent('CIcon'), {
+                  customClassName: 'nav-icon',
+                  name: item.icon,
+                }),
+                item.name,
+              ],
+              default: () => item.items.map((child) => renderItem(child)),
+            },
+          )
+        }
+
+        return item.to
+          ? h(
+              RouterLink,
+              {
+                to: item.to,
+                custom: true,
+              },
+              {
+                default: (props) =>
+                  h(
+                    resolveComponent(item.component),
+                    {
+                      active: props.isActive,
+                      href: props.href,
+                      onClick: async (e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        await e.target.parentNode.classList.add(
+                          'breadcrumbsNav',
+                        )
+                        await e.target.parentNode.setAttribute(
+                          'breadcrumbs',
+                          JSON.stringify({
+                            active: false,
+                            name: item.name,
+                            path: '' /*"#"+item.to*/,
+                          }),
+                        )
+                        listBreadcrumbsNav = ''
+                        getBreadCrumbs(e.target)
+                        localStorage.breadcrumbs = JSON.stringify(
+                          JSON.parse(
+                            '[' +
+                              (item.name === 'Home'
+                                ? ''
+                                : '{"name":"Home","path":"#/"},') +
+                              listBreadcrumbsNav +
+                              ']',
+                          ),
+                        )
                         // console.log(listBreadcrumbsNav);
                         // console.log(localStorage.breadcrumbs);
-                      
-                      try{
-                      document.getElementById("breadcrumbsChangeValue").click();
-                      }catch(e){
-                        console.log(e);
-                      }
-                      let href = props.href;
-                      if(href.indexOf('http://')>=0){
-                        window.open(href.substring(href.indexOf('http://'),href.length)
-                        +'?id_token='+localStorage.id_token,'_blank')
-                      }else if(href.indexOf('https://')>=0){
-                        window.open(href.substring(href.indexOf('https://'),href.length)
-                        +'?id_token='+localStorage.id_token,'_blank')
-                      }else{
-                        await props.navigate();
-                      }
-                      let appName = '';
-                      if(item.applicationId){
-                        
-                        let responseAppAuthorized = await utils.dcQueryApi('/api/application/view','POST','id=' + item.applicationId );
-                        if(responseAppAuthorized.status===200){
-                          appName = responseAppAuthorized.data.name;
+
+                        try {
+                          document
+                            .getElementById('breadcrumbsChangeValue')
+                            .click()
+                        } catch (e) {
+                          console.log(e)
                         }
-                        try{
-                        document.getElementById('headerLabel1').innerHTML  = process.env.VUE_APP_HEADER_LABEL+' - '+appName;
-                        document.getElementById('headerLabel2').innerHTML  = process.env.VUE_APP_HEADER_LABEL+' - '+appName;
-                        }catch(e){
-                          console.log(e);
+                        let href = props.href
+                        if (href.indexOf('http://') >= 0) {
+                          window.open(
+                            href.substring(
+                              href.indexOf('http://'),
+                              href.length,
+                            ) +
+                              '?id_token=' +
+                              localStorage.id_token,
+                            '_blank',
+                          )
+                        } else if (href.indexOf('https://') >= 0) {
+                          window.open(
+                            href.substring(
+                              href.indexOf('https://'),
+                              href.length,
+                            ) +
+                              '?id_token=' +
+                              localStorage.id_token,
+                            '_blank',
+                          )
+                        } else {
+                          await props.navigate()
                         }
-                      } 
+                        let appName = ''
+                        if (item.applicationId) {
+                          let responseAppAuthorized = await utils.dcQueryApi(
+                            '/api/application/view',
+                            'POST',
+                            'id=' + item.applicationId,
+                          )
+                          if (responseAppAuthorized.status === 200) {
+                            appName = responseAppAuthorized.data.name
+                          }
+                          try {
+                            document.getElementById('headerLabel1').innerHTML =
+                              process.env.VUE_APP_HEADER_LABEL + ' - ' + appName
+                            document.getElementById('headerLabel2').innerHTML =
+                              process.env.VUE_APP_HEADER_LABEL + ' - ' + appName
+                          } catch (e) {
+                            console.log(e)
+                          }
+                        }
+                      },
                     },
-                  },
-                  {
-                    default: () => [
-                      item.icon &&
-                        h(resolveComponent('CIcon'), {
-                          customClassName: 'nav-icon',
-                          name: item.icon,
-                        }),
-                      item.name,
-                      item.badge &&
-                        h(
-                          CBadge,
-                          {
-                            class: 'ms-auto',
-                            color: item.badge.color,
-                          },
-                          {
-                            default: () => item.badge.text,
-                          },
-                        ),
-                    ],
-                  },
-                ),
-            },
-          )
-        : h(
-            resolveComponent(item.component),
-            {
-            },
-            {
-              default: () => item.name,
-            },
-          )
+                    {
+                      default: () => [
+                        item.icon &&
+                          h(resolveComponent('CIcon'), {
+                            customClassName: 'nav-icon',
+                            name: item.icon,
+                          }),
+                        item.name,
+                        item.badge &&
+                          h(
+                            CBadge,
+                            {
+                              class: 'ms-auto',
+                              color: item.badge.color,
+                            },
+                            {
+                              default: () => item.badge.text,
+                            },
+                          ),
+                      ],
+                    },
+                  ),
+              },
+            )
+          : h(
+              resolveComponent(item.component),
+              {},
+              {
+                default: () => item.name,
+              },
+            )
       }
     }
 
@@ -225,7 +268,10 @@ const AppSidebarNav = defineComponent({
         CSidebarNav,
         {},
         {
-          default: () => JSON.parse(JSON.stringify(props.nav)).map((item) => renderItem(item)),
+          default: () =>
+            JSON.parse(JSON.stringify(props.nav)).map((item) =>
+              renderItem(item),
+            ),
         },
       )
   },

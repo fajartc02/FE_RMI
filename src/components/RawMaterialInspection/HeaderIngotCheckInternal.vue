@@ -4,10 +4,10 @@
     <template v-for="(btn, i) in btnOpts" :key="btn">
       <button v-if="btn.isActive" class="btn btn-primary m-1" @click="changeBtnSample(i)">{{
         btn.label
-      }}</button>
+        }}</button>
       <button v-else class="btn btn-outline-primary m-1" @click="changeBtnSample(i)">{{
         btn.label
-      }}</button>
+        }}</button>
     </template>
   </div>
   <template v-if="isBtnActive">
@@ -18,7 +18,7 @@
           <template v-for="gauge in gaugeOpts" :key="gauge.id">
             <button v-if="gauge.isSelected" class="btn btn-primary m-1" @click="changeGaugeSelected(gauge.id)">{{
               gauge.name
-              }}</button>
+            }}</button>
             <button v-else class="btn btn-outline-primary m-1" @click="changeGaugeSelected(gauge.id)">{{
               gauge.name }}</button>
           </template>
@@ -51,7 +51,7 @@ export default {
     return {
       filter: {
         sampleCode: null,
-        incharge: 'INTERNAL'
+        inCharge: 'INTERNAL'
       },
       filterGauge: {
         materialCategory: 'INGOT',
@@ -59,7 +59,7 @@ export default {
       },
       queryGetSuggested: {
         gaugeId: null,
-        incharge: 'INTERNAL'
+        inCharge: 'INTERNAL'
       },
       sampleCodeSuggested: [],
       btnOpts: [
@@ -169,7 +169,7 @@ export default {
         await this.$store.dispatch(ACTION_LOADING, true)
         await this.$store.dispatch(ACTION_SAMPLE_CODE_SUGGESTED, {
           gaugeId: this.selectedGaugeId,
-          incharge: 'INTERNAL'
+          inCharge: 'INTERNAL'
         })
         await this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
         await this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)

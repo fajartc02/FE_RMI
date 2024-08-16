@@ -7,7 +7,7 @@
       <template v-for="(data, idx) in elementOutOfRanged" :key="data">
         <h6>Sample Code: {{ data.lotNo }}</h6>
         <table class="table table-bordered table-striped">
-          <thead>
+          <thead class="text-center">
             <tr>
               <th>No</th>
               <th>Element</th>
@@ -15,9 +15,11 @@
               <th>Max</th>
               <th>Value</th>
               <th>Status</th>
+              <!-- <th>Adjustment</th>
+              <th>Result</th> -->
             </tr>
           </thead>
-          <tbody>
+          <tbody class="text-center">
             <tr v-for="(element, i) in data.elements" :key="element">
               <td>{{ i + 1 }}</td>
               <td>{{ element.name }}</td>
@@ -25,6 +27,35 @@
               <td>{{ element.max }}</td>
               <td>{{ element.value }}</td>
               <td class="text-danger">NG</td>
+              <!-- <td class="text-center">
+                <div class="row">
+                  <div class="col-4 text-center">
+                    {{ element.adjustmentFormula.avg }}
+                  </div>
+                  <div class="col-4 text-center">
+                    X
+                  </div>
+                  <div class="col-4 text-center">
+                    {{ element.adjustmentFormula.weightMolten }}
+                  </div>
+                </div>
+                <div class="row d-flex justify-content-center align-items-center">
+                  <div class="col-12 text-center">
+                    <hr class="m-1">
+                    {{ element.adjustmentFormula.budomari }}
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="row">
+                  <div class="col-5 text-center">
+                    <input class="form-control" type="number" min="0" v-model="element.adjustmentFormula.result">
+                  </div>
+                  <div class="col-2 text-center">
+                    <h6>Kg</h6>
+                  </div>
+                </div>
+              </td> -->
             </tr>
           </tbody>
         </table>
@@ -283,7 +314,6 @@ export default {
         }
       } catch (error) {
         console.log(error);
-
         this.$swal('Error', 'Internal Server Error', 'error')
       }
     },

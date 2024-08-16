@@ -99,6 +99,27 @@ export default {
             },
           ],
         },
+        {
+          component: 'CNavItem',
+          to: '/inspection/ingot',
+          name: 'Sand Check',
+          icon: 'cilNotes',
+          parentId: 'GROUP-ROOT',
+          items: [
+            {
+              component: 'CNavItem',
+              to: '/inspection/sand/internal',
+              name: 'Internal',
+              parentId: 'ROOT',
+            },
+            {
+              component: 'CNavItem',
+              to: '/inspection/sand/historical',
+              name: 'Historical Data',
+              parentId: 'ROOT',
+            },
+          ],
+        },
       ],
     }
   },
