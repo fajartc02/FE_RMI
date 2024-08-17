@@ -20,6 +20,8 @@ import MACHINES_DC_MOCK from './get/MACHINES_DC.mock'
 import RES_REQ_QUERY_SHIMADZU_MOCK from './get/RES_REQ_QUERY_SHIMADZU.mock'
 import ELEMENTS_MOCK from './get/ELEMENT.mock'
 import CHART_PARAMETER_MOCK from './get/CHART_PARAMETER.mock'
+import SHIFT_MOCK from './get/SHIFT.mock'
+import MACHINES_SAND_MOCK from './get/MACHINES_SAND.mock'
 
 // mock testing user accounts
 const users = [
@@ -64,6 +66,27 @@ const MockService = {
       return [401, { errors: ['Invalid authentication'] }]
     })
 
+    mock
+      .onGet('machine/', {
+        params: { lineId: '4e53b6be-9593-456e-905e-b4f071490cdd' },
+      })
+      .reply(200, { data: MACHINES_MOCK })
+
+    mock
+      .onGet('machine/', {
+        params: { lineId: '9fe67a31-8715-4961-a9ff-930ff7ef416a' },
+      })
+      .reply(200, { data: MACHINES_DC_MOCK })
+
+    mock
+      .onGet('machine/', {
+        params: { materialCategory: 'SAND' },
+      })
+      .reply(200, { data: MACHINES_SAND_MOCK })
+
+    mock.onGet('line').reply(200, { data: LINES_MOCK })
+    mock.onGet('shift/').reply(200, { data: SHIFT_MOCK })
+
     // IF GaugeID not passing
     mock.onGet('shimadzu/').reply(200, { data: SAMPLE_CODE_SUGGESTED_MOCK })
     mock.onGet('element/').reply(200, { data: ELEMENTS_MOCK })
@@ -101,14 +124,6 @@ const MockService = {
     mock
       .onGet('shimadzu', {
         params: {
-          gaugeId: '9999bcbb-0e8a-4695-8f80-caaf0a057dff',
-          inCharge: 'INTERNAL',
-        },
-      })
-      .reply(200, { data: SAMPLE_CODE_SUGGESTED_PARAMS_MOCK })
-    mock
-      .onGet('shimadzu', {
-        params: {
           gaugeId: '8de4e9ca-f854-4380-9aa0-8f1d6d440202',
           inCharge: 'INTERNAL',
         },
@@ -131,19 +146,6 @@ const MockService = {
     mock
       .onGet('shimadzu/9999bcbb-0e8a-4695-8f80-0000')
       .reply(200, { data: SAMPLE_INGOT_INTERNAL_MOCK })
-    mock
-      .onGet('machine/', {
-        params: { lineId: '4e53b6be-9593-456e-905e-b4f071490cdd' },
-      })
-      .reply(200, { data: MACHINES_MOCK })
-
-    mock
-      .onGet('machine/', {
-        params: { lineId: '9fe67a31-8715-4961-a9ff-930ff7ef416a' },
-      })
-      .reply(200, { data: MACHINES_DC_MOCK })
-
-    mock.onGet('line').reply(200, { data: LINES_MOCK })
 
     // mock
     //     .onGet('sample-ingot/', {

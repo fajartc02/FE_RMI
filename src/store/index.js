@@ -11,37 +11,39 @@ import LINEModule from './modules/LINE.module'
 import METAModule from './modules/META.module'
 import ELEMENTSModule from './modules/ELEMENTS.module'
 import GRAPHModule from './modules/GRAPH.module'
+import SHIFTModule from './modules/SHIFT.module'
 
 export default createStore({
-    state: {
-        sidebarVisible: '',
-        sidebarUnfoldable: false,
+  state: {
+    sidebarVisible: '',
+    sidebarUnfoldable: false,
+  },
+  mutations: {
+    toggleSidebar(state) {
+      state.sidebarVisible = !state.sidebarVisible
     },
-    mutations: {
-        toggleSidebar(state) {
-            state.sidebarVisible = !state.sidebarVisible
-        },
-        toggleUnfoldable(state) {
-            state.sidebarUnfoldable = !state.sidebarUnfoldable
-        },
-        updateSidebarVisible(state, payload) {
-            state.sidebarVisible = payload.value
-        },
+    toggleUnfoldable(state) {
+      state.sidebarUnfoldable = !state.sidebarUnfoldable
     },
-    actions: {},
-    modules: {
-        METAModule,
-        AUTHModule,
-        LOADINGModule,
+    updateSidebarVisible(state, payload) {
+      state.sidebarVisible = payload.value
+    },
+  },
+  actions: {},
+  modules: {
+    METAModule,
+    AUTHModule,
+    LOADINGModule,
 
-        MACHINEModule,
-        LINEModule,
+    MACHINEModule,
+    LINEModule,
+    SHIFTModule,
 
-        QRModule,
-        SAMPLE_CODEModule,
-        GAUGEModule,
-        SAMPLE_INGOTModule,
-        ELEMENTSModule,
-        GRAPHModule,
-    },
+    QRModule,
+    SAMPLE_CODEModule,
+    GAUGEModule,
+    SAMPLE_INGOTModule,
+    ELEMENTSModule,
+    GRAPHModule,
+  },
 })
