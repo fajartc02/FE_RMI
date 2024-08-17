@@ -22,6 +22,7 @@ import ELEMENTS_MOCK from './get/ELEMENT.mock'
 import CHART_PARAMETER_MOCK from './get/CHART_PARAMETER.mock'
 import SHIFT_MOCK from './get/SHIFT.mock'
 import MACHINES_SAND_MOCK from './get/MACHINES_SAND.mock'
+import ELEMENT_SAND_MOCK from './get/ELEMENT_SAND.mock'
 
 // mock testing user accounts
 const users = [
@@ -89,7 +90,13 @@ const MockService = {
 
     // IF GaugeID not passing
     mock.onGet('shimadzu/').reply(200, { data: SAMPLE_CODE_SUGGESTED_MOCK })
-    mock.onGet('element/').reply(200, { data: ELEMENTS_MOCK })
+    mock
+      .onGet('element', {
+        params: { type: 'SAND' },
+      })
+      .reply(200, { data: ELEMENT_SAND_MOCK })
+    mock.onGet('element').reply(200, { data: ELEMENTS_MOCK })
+
     mock
       .onGet('graph/ingot', {
         startDate: 1722470400,
