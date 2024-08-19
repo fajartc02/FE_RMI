@@ -278,15 +278,16 @@ export default {
         // this.input.values = this.elementOutOfRanged
         let mapAdjValues = this.elementOutOfRanged[0].elements.map(item => {
           console.log(item);
-
-          return {
-            id: item.id,
-            adjustmentValue: item?.adjustmentFormula?.adjustmentValue
+          if (item?.adjustmentFormula?.adjustmentValue) {
+            return {
+              id: item.id,
+              adjustmentValue: item?.adjustmentFormula?.adjustmentValue
+            }
           }
         })
 
         let abnormalObj = {
-          elements: mapAdjValues,
+          elements: await mapAdjValues.filter(item => item),
           notes: this.notes,
           sampleCode: this.input.sampleCode
         }
