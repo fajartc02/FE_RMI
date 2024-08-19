@@ -49,7 +49,7 @@
               <td>
                 <div class="row">
                   <div class="col-5 text-center">
-                    <input class="form-control" type="number" min="0"
+                    <input v-if="element.adjustmentFormula?.adjustmentValue" class="form-control" type="number" min="0"
                       v-model="element.adjustmentFormula.adjustmentValue">
                   </div>
                   <div class="col-2 text-center">
@@ -273,12 +273,14 @@ export default {
     },
     async submitAbnormalSample() {
       try {
-        this.input.sampleCode = this.prevSampleCode ? this.prevSampleCode : this.GET_QR_SAMPLE.tableInternalVendor?.id
+        this.input.sampleCode = this.prevSampleCode ? this.prevSampleCode : this.GET_QR_SAMPLE?.tableInternalVendor?.id
         // this.input.values = this.elementOutOfRanged
         let mapAdjValues = this.elementOutOfRanged[0].elements.map(item => {
+          console.log(item);
+
           return {
             id: item.id,
-            adjustmentValue: item.adjustmentFormula.adjustmentValue
+            adjustmentValue: item?.adjustmentFormula?.adjustmentValue
           }
         })
 
