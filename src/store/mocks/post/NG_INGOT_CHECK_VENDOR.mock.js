@@ -23,12 +23,13 @@ const NG_INGOT_CHECK_VENDOR = {
                     value: 0,
                     max: 1,
                     min: 0,
-                    adjustmentFormula: {
-                        avg: 11.25, // average per element batas atas & bawah
-                        budomari: 75, // per element constant
-                        weightMolten: 3000, // per element constant
-                        adjustmentValue: 22, // adjustmentValue calculation
-                    },
+                    adjustmentFormula: null,
+                    // adjustmentFormula: {
+                    //     avg: 11.25, // average per element batas atas & bawah
+                    //     budomari: 75, // per element constant
+                    //     weightMolten: 3000, // per element constant
+                    //     adjustmentValue: 22, // adjustmentValue calculation
+                    // },
                 },
             ],
         }, ],

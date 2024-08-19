@@ -28,7 +28,7 @@
               <td>{{ element.value }}</td>
               <td class="text-danger">NG</td>
               <td class="text-center">
-                <div class="row">
+                <div v-if="element.adjustmentFormula?.adjustmentValue" class="row">
                   <div class="col-4 text-center">
                     {{ element.adjustmentFormula.avg }}
                   </div>
@@ -39,7 +39,8 @@
                     {{ element.adjustmentFormula.weightMolten }}
                   </div>
                 </div>
-                <div class="row d-flex justify-content-center align-items-center">
+                <div v-if="element.adjustmentFormula?.adjustmentValue"
+                  class="row d-flex justify-content-center align-items-center">
                   <div class="col-12 text-center">
                     <hr class="m-1">
                     {{ element.adjustmentFormula.budomari }}
@@ -47,9 +48,9 @@
                 </div>
               </td>
               <td>
-                <div class="row">
+                <div v-if="element.adjustmentFormula?.adjustmentValue" class="row">
                   <div class="col-5 text-center">
-                    <input v-if="element.adjustmentFormula?.adjustmentValue" class="form-control" type="number" min="0"
+                    <input class="form-control" type="number" min="0"
                       v-model="element.adjustmentFormula.adjustmentValue">
                   </div>
                   <div class="col-2 text-center">
