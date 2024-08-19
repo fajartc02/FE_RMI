@@ -47,7 +47,7 @@
                         <td v-for="daytime in DAYTIME_CONSTANT" :key="daytime.idx">{{ daytime.name
                           }}</td>
                         <td style="width: 200px;">
-                          <treeselect v-model="data.headers.pic" :options="sampleCodeSuggested" :clearable="true"
+                          <treeselect v-model="data.headers.pic" :options="[]" :clearable="true"
                             placeholder="Pilih PIC" />
                         </td>
                       </tr>
@@ -112,13 +112,13 @@
                           <input class="form-control" type="number" min="0" v-model="element.value">
                         </td>
                         <td colspan="2" style="width: 200px">
-                          <input class="form-control" type="number" min="0" v-model="element.valuePercent">
+                          {{ calcPercentIdx(element.value, 1) }}
                         </td>
                         <td>
                           {{ element.percentIdx }}
                         </td>
                         <td>
-                          {{ element.value ? element.value * element.percentIdx : 0 }}
+                          {{ element.value ? multiplePercentIdx(element.value, element.percentIdx) : 0 }}
                         </td>
                       </tr>
                       <tr>
@@ -132,9 +132,23 @@
                         </td>
                         <th>Total</th>
                         <th>
-                          <input class="form-control" type="number" disabled v-model="sumOfElementValue">
+                          {{ sumOfElementValue }}
                         </th>
                       </tr>
+                      <tr>
+                        <td class="bg-dark" rowspan="2" colspan="3"></td>
+                        <th colspan="2">Total % X Index</th>
+                        <th>GFN</th>
+                        <th rowspan="2">
+                          {{ calcGfn(sumOfElementValue) }}
+                        </th>
+                      </tr>
+                      <tr>
+                        <th colspan="2">100</th>
+                        <th>90.0 (± 10)</th>
+                      </tr>
+
+                      <!-- Start -->
                     </tbody>
                   </table>
                 </div>
@@ -184,6 +198,7 @@ export default {
         },
         elements: [],
       },
+      elementsOnInput: [],
       DAY_CONSTANT: DAY_CONSTANT,
       DAYTIME_CONSTANT: DAYTIME_CONSTANT,
       shiftData: [],
@@ -205,7 +220,7 @@ export default {
     },
     GET_ELEMENT_INPUT: function () {
       if (this.GET_ELEMENT_INPUT.length > 0) {
-        this.data.elements = this.GET_ELEMENT_INPUT.map((element) => {
+        this.elementsOnInput = this.GET_ELEMENT_INPUT.map((element) => {
           return {
             ...element,
             value: null,
@@ -213,6 +228,16 @@ export default {
           }
         })
       }
+    },
+    'elementsOnInput': {
+      handler: function () {
+        this.data.elements.forEach((element) => {
+          if (element.value) {
+            element.value = parseFloat(element.value)
+          }
+        })
+      },
+      deep: true
     }
   },
   computed: {
@@ -229,11 +254,11 @@ export default {
     sumOfElementValue() {
       let sum = 0
       this.data.elements.forEach((element) => {
-        let sumEachParam = element.value ? element.value * element.percentIdx : 0
+        let sumEachParam = element.value ? this.multiplePercentIdx(element.value, element.percentIdx) : 0
 
         sum += sumEachParam
       })
-      return sum
+      return sum.toFixed(0)
     }
   },
   methods: {
@@ -242,6 +267,15 @@ export default {
       this.DAY_CONSTANT.forEach((day) => {
         day.isActive = day.idx === dayIdx ? true : false
       })
+    },
+    calcPercentIdx(value, precision) {
+      return (value * 2).toFixed(precision)
+    },
+    multiplePercentIdx(value, percentIdx, precision = 0) {
+      return +((value * 2).toFixed(1) * percentIdx).toFixed(precision)
+    },
+    calcGfn(value) {
+      return (value / 100).toFixed(1)
     },
     selectedShift(shiftId) {
       this.shiftData.forEach((shift) => {

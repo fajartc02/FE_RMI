@@ -277,16 +277,17 @@ export default {
         // this.input.values = this.elementOutOfRanged
         let mapAdjValues = this.elementOutOfRanged[0].elements.map(item => {
           return {
-            id: item.elementId,
+            id: item.id,
             adjustmentValue: item.adjustmentFormula.adjustmentValue
           }
         })
-        console.log(this.elementOutOfRanged[0]);
+
         let abnormalObj = {
           elements: mapAdjValues,
           notes: this.notes,
           sampleCode: this.input.sampleCode
         }
+
         this.input.elements = mapAdjValues
         this.input.notes = this.notes
         const response = await this.$store.dispatch(ACTION_ADD_SAMPLE_ABNORMAL, abnormalObj)
