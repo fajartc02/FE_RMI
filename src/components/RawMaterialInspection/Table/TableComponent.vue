@@ -14,7 +14,7 @@
       <CTableRow v-for="(item, index) in dataTable.data" :key="index">
         <template v-for="(value, key, idxChild) in item" :key="idxChild">
           <CTableDataCell v-if="key != 'id'"
-            :class="`${value === 'OK' ? 'text-success' : value === 'NG' ? 'text-danger' : value.includes('RECHECK') ? 'text-warning' : ''}`">
+            :class="`${value === 'OK' ? 'text-success' : value === 'NG' ? 'text-danger' : `${value}`.includes('REVISION') ? 'text-warning' : ''}`">
             {{ value }}
           </CTableDataCell>
         </template>
