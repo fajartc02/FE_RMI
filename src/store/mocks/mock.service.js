@@ -95,7 +95,9 @@ const MockService = {
         params: { type: 'SAND' },
       })
       .reply(200, { data: ELEMENT_SAND_MOCK })
-    mock.onGet('element').reply(200, { data: ELEMENTS_MOCK })
+
+    mock.onGet('element/').reply(200, { data: ELEMENTS_MOCK })
+    // mock.onGet('element').reply(200, { data: ELEMENTS_MOCK })
 
     mock
       .onGet('graph/ingot', {
@@ -105,6 +107,7 @@ const MockService = {
         elementId: '9999bcbb-0e8a-4695-8f80-1000',
       })
       .reply(200, { data: CHART_PARAMETER_MOCK })
+
     // FOR suggested from specific shimadzu
     mock
       .onGet('shimadzu', {
@@ -113,6 +116,7 @@ const MockService = {
           take: 1,
           page: 1,
           orderDirection: 'DESC',
+          inCharge: 'INTERNAL',
         },
       })
       .reply(200, { data: RES_REQ_QUERY_SHIMADZU_MOCK.data })
@@ -124,6 +128,7 @@ const MockService = {
           take: 1,
           page: 1,
           orderDirection: 'DESC',
+          inCharge: 'INTERNAL',
         },
       })
       .reply(200, { data: RES_REQ_QUERY_SHIMADZU_MOCK })
