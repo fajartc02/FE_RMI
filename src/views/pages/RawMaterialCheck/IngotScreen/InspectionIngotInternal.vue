@@ -99,14 +99,14 @@
         <div v-if="!IS_LOADING" class="card my-2" style="z-index: 1;">
           <div class="card-body overflow-auto p-2">
             <h6>Sample Ingot Internal</h6>
-            <h5 v-if="GET_QR_SAMPLE.tableInternalVendor || GET_SAMPLE_CODE">Sample Code: {{
-              GET_QR_SAMPLE.headers?.sampleCode }}</h5>
+            <h5 v-if="GET_QR_SAMPLE?.tableInternalVendor || GET_SAMPLE_CODE">Sample Code: {{
+              GET_QR_SAMPLE?.headers?.sampleCode }}</h5>
             <TableIngotInternal @emit-sample-code="onChangeSampleCode" @emit-container-input="onChangeContainerInput"
               :message="'Data not available'" />
 
           </div>
 
-          <div v-if="GET_QR_SAMPLE.tableInternalVendor || GET_SAMPLE_CODE"
+          <div v-if="GET_QR_SAMPLE?.tableInternalVendor || GET_SAMPLE_CODE"
             class="card-footer d-flex justify-content-evenly">
             <CButton v-if="isKmoldTamagoFill && !isSubmited" style="width: 250px;" color="success"
               @click="submitCheckSampleIngot">
@@ -176,8 +176,8 @@ export default {
   watch: {
     GET_QR_SAMPLE: {
       handler() {
-        if (this.GET_QR_SAMPLE.headers) {
-          $toast.success('Sample Code: ' + this.GET_QR_SAMPLE.headers.sampleCode + ' (klik di sini apabila tidak sesuai!)', {
+        if (this.GET_QR_SAMPLE) {
+          $toast.success('Sample Code: ' + this?.GET_QR_SAMPLE?.headers.sampleCode + ' (klik di sini apabila tidak sesuai!)', {
             type: 'info',
             position: 'top-right',
             duration: 10000,
@@ -244,7 +244,7 @@ export default {
     },
     async submitCheckSampleIngot() {
       try {
-        this.input.sampleCode = this.prevSampleCode ? this.prevSampleCode : this.GET_QR_SAMPLE.tableInternalVendor?.id
+        this.input.sampleCode = this.prevSampleCode ? this.prevSampleCode : this?.GET_QR_SAMPLE?.tableInternalVendor?.id
 
         const response = await this.$store.dispatch(ACTION_ADD_SAMPLE_CODE, this.input)
         this.isSubmited = true
@@ -274,7 +274,7 @@ export default {
     },
     async submitAbnormalSample() {
       try {
-        this.input.sampleCode = this.prevSampleCode ? this.prevSampleCode : this.GET_QR_SAMPLE?.tableInternalVendor?.id
+        this.input.sampleCode = this.prevSampleCode ? this.prevSampleCode : this?.GET_QR_SAMPLE?.tableInternalVendor?.id
         // this.input.values = this.elementOutOfRanged
         let mapAdjValues = this.elementOutOfRanged[0].elements.map(item => {
           console.log(item);
