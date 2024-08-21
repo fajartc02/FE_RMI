@@ -176,7 +176,7 @@ export default {
   watch: {
     GET_QR_SAMPLE: {
       handler() {
-        if (this.GET_QR_SAMPLE) {
+        if (this?.GET_QR_SAMPLE?.headers) {
           $toast.success('Sample Code: ' + this?.GET_QR_SAMPLE?.headers.sampleCode + ' (klik di sini apabila tidak sesuai!)', {
             type: 'info',
             position: 'top-right',
