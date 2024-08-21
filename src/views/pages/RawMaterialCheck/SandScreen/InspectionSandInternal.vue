@@ -104,7 +104,7 @@
                     </thead>
                     <tbody>
                       <!-- this.data.values -->
-                      <tr v-for="(element) in data.elements" :key="element.id">
+                      <tr v-for="(element) in elementsOnInput" :key="element.id">
                         <td>
                           {{ element.description }}
                         </td>
@@ -112,13 +112,13 @@
                           <input class="form-control" type="number" min="0" v-model="element.value">
                         </td>
                         <td colspan="2" style="width: 200px">
-                          {{ calcPercentIdx(element.value, 1) }}
+                          {{ calcelementIndex(element.value, 1) }}
                         </td>
                         <td>
-                          {{ element.percentIdx }}
+                          {{ element.elementIndex }}
                         </td>
                         <td>
-                          {{ element.value ? multiplePercentIdx(element.value, element.percentIdx) : 0 }}
+                          {{ element.value ? multipleelementIndex(element.value, element.elementIndex) : 0 }}
                         </td>
                       </tr>
                       <tr>
@@ -150,6 +150,29 @@
 
                       <!-- Start -->
                     </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card my-2">
+            <div class="card-body p-1">
+              <div class="row">
+                <div class="col-12 col-lg-12">
+                  <table class="table table-bordered table-striped text-center">
+                    <thead>
+                      <tr>
+                        <th colspan="6">Data Natrium</th>
+                      </tr>
+                      <tr>
+                        <th>ITEM</th>
+                        <th>PH 1</th>
+                        <th>Volume</th>
+                        <th>PH 2</th>
+                        <th>Soda</th>
+                        <th>Binder</th>
+                      </tr>
+                    </thead>
                   </table>
                 </div>
               </div>
@@ -195,8 +218,11 @@ export default {
           pic: null,
           machineId: null,
           time: moment().format('HH:mm'),
+          totalGfn: 0,
+          totalPercIndex: 0,
         },
         elements: [],
+        natriumElement: []
       },
       elementsOnInput: [],
       DAY_CONSTANT: DAY_CONSTANT,
@@ -231,14 +257,27 @@ export default {
     },
     'elementsOnInput': {
       handler: function () {
-        this.data.elements.forEach((element) => {
-          if (element.value) {
+        this.data.elements = this.elementsOnInput.map((element) => {
+          if (element.value || element.value === 0) {
             element.value = parseFloat(element.value)
+            element.percentIndex = this.multipleelementIndex(element.value, element.elementIndex)
+          }
+          return {
+            id: element.id,
+            percentValue: element.value * 2,
+            weightValue: element.value,
+            elementIndex: element.elementIndex,
+            percentIndex: element.percentIndex
           }
         })
       },
       deep: true
-    }
+    },
+    sumOfElementValue: function () {
+      this.data.headers.totalPercIndex = this.sumOfElementValue
+      this.data.headers.totalGfn = this.calcGfn(this.sumOfElementValue)
+    },
+
   },
   computed: {
     ...mapGetters([IS_LOADING, GET_SHIFT, GET_MACHINE, GET_ELEMENT_INPUT]),
@@ -253,26 +292,26 @@ export default {
     },
     sumOfElementValue() {
       let sum = 0
-      this.data.elements.forEach((element) => {
-        let sumEachParam = element.value ? this.multiplePercentIdx(element.value, element.percentIdx) : 0
-
+      this.elementsOnInput.forEach((element) => {
+        let sumEachParam = element.value ? this.multipleelementIndex(element.value, element.elementIndex) : 0
         sum += sumEachParam
       })
+
       return sum.toFixed(0)
     }
   },
   methods: {
     ...mapActions([ACTION_SHIFT, ACTION_MACHINE, ACTION_ELEMENT_QUERY]),
-    selectedDay(dayIdx) {
+    selectedDay(dayIndex) {
       this.DAY_CONSTANT.forEach((day) => {
-        day.isActive = day.idx === dayIdx ? true : false
+        day.isActive = day.idx === dayIndex ? true : false
       })
     },
-    calcPercentIdx(value, precision) {
+    calcelementIndex(value, precision) {
       return (value * 2).toFixed(precision)
     },
-    multiplePercentIdx(value, percentIdx, precision = 0) {
-      return +((value * 2).toFixed(1) * percentIdx).toFixed(precision)
+    multipleelementIndex(value, elementIndex, precision = 0) {
+      return +((value * 2).toFixed(1) * elementIndex).toFixed(precision)
     },
     calcGfn(value) {
       return (value / 100).toFixed(1)

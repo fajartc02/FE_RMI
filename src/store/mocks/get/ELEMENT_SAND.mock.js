@@ -4,7 +4,7 @@ const ELEMENT_SAND_MOCK = [
     name: 'Mesh 30',
     code: 'mesh30',
     description: '30',
-    percentIdx: 20,
+    elementIndex: 20,
     type: 'SAND',
   },
   {
@@ -12,7 +12,7 @@ const ELEMENT_SAND_MOCK = [
     name: 'Mesh 36',
     code: 'mesh36',
     description: '36',
-    percentIdx: 30,
+    elementIndex: 30,
     type: 'SAND',
   },
   {
@@ -20,7 +20,7 @@ const ELEMENT_SAND_MOCK = [
     name: 'Mesh 50',
     code: 'mesh50',
     description: '50',
-    percentIdx: 36,
+    elementIndex: 36,
     type: 'SAND',
   },
   {
@@ -28,7 +28,7 @@ const ELEMENT_SAND_MOCK = [
     name: 'Mesh 70',
     code: 'mesh70',
     description: '70',
-    percentIdx: 50,
+    elementIndex: 50,
     type: 'SAND',
   },
   {
@@ -36,7 +36,7 @@ const ELEMENT_SAND_MOCK = [
     name: 'Mesh 100',
     code: 'mesh100',
     description: '100',
-    percentIdx: 70,
+    elementIndex: 70,
     type: 'SAND',
   },
   {
@@ -44,7 +44,7 @@ const ELEMENT_SAND_MOCK = [
     name: 'Mesh 166',
     code: 'mesh166',
     description: '166',
-    percentIdx: 100,
+    elementIndex: 100,
     type: 'SAND',
   },
   {
@@ -52,7 +52,7 @@ const ELEMENT_SAND_MOCK = [
     name: 'Mesh 200',
     code: 'mesh200',
     description: '200',
-    percentIdx: 166,
+    elementIndex: 166,
     type: 'SAND',
   },
   {
@@ -60,7 +60,7 @@ const ELEMENT_SAND_MOCK = [
     name: 'PAN',
     code: 'PAN',
     description: 'PAN',
-    percentIdx: 200,
+    elementIndex: 200,
     type: 'SAND',
   },
 ]
