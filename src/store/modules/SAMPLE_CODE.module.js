@@ -21,15 +21,19 @@ const state = {
 
 const getters = {
   GET_SAMPLE_CODE(state) {
-    return state.SAMPLE_CODE_DATA
+    return state.SAMPLE_CODE_DATA || {}
   },
   GET_SAMPLE_CODE_SUGGESTED(state) {
-    return state.SAMPLE_CODE_SUGGESTED
+    return state.SAMPLE_CODE_SUGGESTED || []
   },
   GET_SAMPLE_CODE_SUGGESTED_TREESELECT(state) {
-    return state.SAMPLE_CODE_SUGGESTED.map((item) => {
-      return { id: item.id, label: item.sampleCode }
-    })
+    if (state.SAMPLE_CODE_SUGGESTED) {
+      return state.SAMPLE_CODE_SUGGESTED.map((item) => {
+        return { id: item.id, label: item.sampleCode }
+      })
+    } else {
+      return []
+    }
   },
 }
 
