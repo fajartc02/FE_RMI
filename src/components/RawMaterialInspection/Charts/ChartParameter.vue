@@ -213,7 +213,6 @@ export default {
     },
     GET_GRAPH() {
       console.log(this.GET_GRAPH);
-
     }
   },
   props: {

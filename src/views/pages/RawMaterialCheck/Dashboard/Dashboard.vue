@@ -9,22 +9,32 @@
     <div class="row mt-2">
       <div v-for="(incharge, i) in incharges" :key="i" class="col-12 my-1">
         <CAccordion :active-item-key="1">
-          <CAccordionItem :item-key="1">
+          <CAccordionItem v-if="!this.filters?.inCharge || this.filters.inCharge == incharge.id" :item-key="1">
             <CAccordionHeader>
               Grafik {{ incharge.label }}
             </CAccordionHeader>
             <CAccordionBody class="p-1">
               <div class="row">
-                <div v-for="element in GET_ELEMENT" :key="element.id" class="col-12 col-lg-6 my-1">
-                  <template v-if="incharge.id != 'NONE' && element.id != 'NONE'">
-                    <h6>{{ element.label }} ({{ element.code }})</h6>
-                    <div class="card">
-                      <div class="card-body p-0">
-                        <ChartParameterVue :inCharge="incharge.label" :elementId="element.id" :filters="filters" />
+                <template v-for="element in GET_ELEMENT" :key="element.id">
+                  <template v-if="!this.filters?.elementId || this.filters?.elementId == element.id">
+                    <div v-if="incharge.id != 'NONE' && element.id != 'NONE'" class="col-12 col-lg-6 my-1">
+                      <h6 v-if="this.filters.elementId == element.id">{{ element.label }} ({{ element.code }})</h6>
+                      <h6 v-else-if="!this.filters?.elementId">{{ element.label }} ({{ element.code }})</h6>
+                      <div class="card" v-if="!this.filters?.elementId">
+                        <div class="card-body p-0">
+                          <ChartParameterVue :inCharge="incharge.label" :elementId="element.id" :filters="filters" />
+                        </div>
                       </div>
+                      <template v-else>
+                        <div v-if="this.filters.elementId == element.id" class="card">
+                          <div class="card-body p-0">
+                            <ChartParameterVue :inCharge="incharge.label" :elementId="element.id" :filters="filters" />
+                          </div>
+                        </div>
+                      </template>
                     </div>
                   </template>
-                </div>
+                </template>
               </div>
             </CAccordionBody>
           </CAccordionItem>
@@ -53,7 +63,7 @@ export default {
         InputModel('Line', 'treeselect', 'Select Line', 'NONE', [{ id: 'NONE', label: 'All' }], null, false, 'lineId'),
         InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', [{ id: 'NONE', label: 'All' }], null, true, 'machineId'),
         InputModel('Element', 'treeselect', 'Select Element', null, [], null, false, 'elementId'),
-        InputModel('In Charge', 'option', 'Select Incharge', null, [{ id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false),
+        InputModel('In Charge', 'option', 'Select Incharge', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false),
       ],
       isLineSelected: false,
       selectedLineId: null,
