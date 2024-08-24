@@ -1,0 +1,60 @@
+const SAMPLE_SAND_HISORICALS_MOCK = {
+    status: {
+        code: 0,
+        message: 'OK',
+    },
+    data: [{
+            no: 1,
+            id: 'c31c4192-c127-4ace-b805-bbb00987788a',
+            date: '2024-08-07',
+            time: '12:38:46',
+            line: 'LPDC',
+            machine: 'IKSX-0001',
+            shift: 'RED',
+            pic: 'JOHN DOE',
+        },
+        {
+            no: 2,
+            id: 'c31c4192-c127-4ace-b805-bbb00987788a',
+            date: '2024-08-07',
+            time: '12:38:46',
+            line: 'LPDC',
+            machine: 'IKSX-0001',
+            shift: 'RED',
+            pic: 'JOHN DOE',
+        },
+        {
+            no: 3,
+            id: 'c31c4192-c127-4ace-b805-bbb00987788a',
+            date: '2024-08-07',
+            time: '12:38:46',
+            line: 'LPDC',
+            machine: 'IKSX-0001',
+            shift: 'RED',
+            pic: 'JOHN DOE',
+        },
+        {
+            no: 4,
+            id: 'c31c4192-c127-4ace-b805-bbb00987788a',
+            date: '2024-08-07',
+            time: '12:38:46',
+            line: 'LPDC',
+            machine: 'IKSX-0001',
+            shift: 'RED',
+            pic: 'JOHN DOE',
+        },
+    ],
+    meta: {
+        pagination: {
+            // page: 1,
+            take: 20,
+            itemCount: 22,
+            pageCount: 2,
+            hasPreviousPage: false,
+            hasNextPage: false,
+        },
+        timestamp: '2024-08-07T12:38:46.696Z',
+    },
+}
+
+export default SAMPLE_SAND_HISORICALS_MOCK

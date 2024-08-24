@@ -1,37 +1,4 @@
 <template>
-  <CModal class="w-100" scrollable size="xl" :visible="modalShow" backdrop="static" @close="dismissModal">
-    <CModalHeader>
-      <div class="row align-items-center">
-        <CModalTitle class="col-auto">Details Ingot Check</CModalTitle>
-        <CModalTitle class="col-auto">
-          <a :href="'#'">
-            <CButton color="warning">Download Report</CButton>
-          </a>
-        </CModalTitle>
-      </div>
-    </CModalHeader>
-    <CModalBody>
-      <!-- v-if="!IS_LOADING" -->
-      <template v-if="GET_QR_SAMPLE.tableInternalVendor || GET_QR_SAMPLE.tablePureVendor">
-        <div class="card" style="height: 100%;">
-          <div v-if="GET_QR_SAMPLE.tablePureVendor" class="card-body p-2" style="height: 100%;">
-            <h6>Sample Ingot (Vendor)</h6>
-            <TableVendorIngot class="overflow-auto" :isInputTamagoKmold="false" />
-          </div>
-          <div v-if="GET_QR_SAMPLE.tableInternalVendor" class="card-body p-2 mb-4 overflow-auto" style="z-index: 3;">
-            <h6>Sample Ingot (Internal)</h6>
-            <TableVendorIngotInternal class="overflow-auto" style="height: 100%;" @emit-sample-code="onChangeSampleCode"
-              :isInputTamagoKmold="false" />
-          </div>
-        </div>
-      </template>
-      <template v-else>
-        <div class="card" style="height: 100%;">
-          <data-not-found :message="'Data not available'" />
-        </div>
-      </template>
-    </CModalBody>
-  </CModal>
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
@@ -41,7 +8,7 @@
     <div class="row mt-1">
       <div class="col-12">
         <div class="card p-2 overflow-auto mb-2">
-          <TableComponentVue :dataTable="GET_SAMPLE_INGOT_HISTORICAL" @emit-data="onDataSelected" />
+          <TableComponentVue :dataTable="GET_SAMPLE_SAND" @emit-data="onDataSelected" />
         </div>
         <PaginationComponent />
       </div>
@@ -61,10 +28,9 @@ import PaginationComponent from '@/components/RawMaterialInspection/Pagination/P
 import InputModel from '@/components/RawMaterialInspection/Filter/InputModel.js'
 import { ACTION_LINE, GET_LINE_TREESELECT } from '@/store/modules/LINE.module';
 import { ACTION_MACHINE, GET_MACHINE_TREESELECT } from '@/store/modules/MACHINE.module';
+import { GET_SAMPLE_SAND, ACTION_SAMPLE_SAND } from '@/store/modules/SAMPLE_SAND.module'
 
 import { mapActions, mapGetters } from 'vuex';
-import { ACTION_SAMPLE_INGOT_HISTORICAL, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, GET_SAMPLE_INGOT_HISTORICAL, ACT_SAMP_INGOT_VEN_HIS_DET } from '@/store/modules/SAMPLE_INGOT.module';
-import { ACTION_RESET_QR_SAMPLE, GET_QR_SAMPLE } from '@/store/modules/QR.module';
 import { GET_META } from '@/store/modules/META.module';
 import moment from 'moment'
 
@@ -79,12 +45,9 @@ export default {
         InputModel('End Date', 'date', 'input date', moment().hour(0).minute(0).second(0).format('YYYY-MM-DD'), 3, false),
         InputModel('Line', 'treeselect', 'Select Line', null, [], null, false, 'lineId'),
         InputModel('Machine', 'treeselect', 'Select Machine', null, [], null, true, 'machineId'),
-        InputModel('In Charge', 'option', 'Select Incharge', null, [{ id: 'NONE', label: 'All' }, { id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false),
-        InputModel('Status', 'option', 'Select Status', null, [{ id: 'NONE', label: 'All' }, { id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false),
-        InputModel('Sample Code', 'text', 'AC2C-XXXX-XXXX', null, null, null, false, 'sampleCode'),
+        InputModel('Status', 'option', 'Select Status', null, [{ id: 'NONE', label: 'All' }, { id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false)
       ],
       isLineChanges: false,
-      selectedIncharge: null,
       isLineSelected: false
     }
   },
@@ -112,11 +75,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([GET_MACHINE_TREESELECT, GET_LINE_TREESELECT, GET_SAMPLE_INGOT_HISTORICAL, GET_QR_SAMPLE, GET_META]),
-
+    ...mapGetters([GET_MACHINE_TREESELECT, GET_LINE_TREESELECT, GET_META, GET_SAMPLE_SAND]),
   },
   methods: {
-    ...mapActions([ACTION_LINE, ACTION_MACHINE, ACTION_SAMPLE_INGOT_HISTORICAL, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, ACTION_RESET_QR_SAMPLE, ACT_SAMP_INGOT_VEN_HIS_DET]),
+    ...mapActions([ACTION_LINE, ACTION_MACHINE, ACTION_SAMPLE_SAND]),
     async onChangeFilter(filter) {
       this.isLineSelected = false
       if (filter.lineId) {
@@ -125,7 +87,7 @@ export default {
       }
       try {
         this.selectedIncharge = filter.inCharge
-        await this.ACTION_SAMPLE_INGOT_HISTORICAL(filter)
+        await this.ACTION_SAMPLE_SAND(filter)
       } catch (error) {
         console.log(error);
         this.$swal('Error', 'Internal Server Error', 'error')
@@ -134,16 +96,7 @@ export default {
     async onDataSelected(data) {
       this.modalShow = true
       try {
-        /// Vendor
-        /// GET: /sample-ingot/{sampleId}
-        /// Internal
-        /// GET: /shimadzu/{sampleId}
-
-        if (`${this.selectedIncharge ? this.selectedIncharge : data.inCharge}`.toUpperCase() == 'INTERNAL') {
-          await this.ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL(data.id)
-        } else if (`${this.selectedIncharge ? this.selectedIncharge : data.inCharge}`.toUpperCase() == 'VENDOR') {
-          await this.ACT_SAMP_INGOT_VEN_HIS_DET(data.id)
-        }
+        // SAnd
       } catch (error) {
         console.log(error);
         this.$swal('Error', 'Internal Server Error', 'error')
