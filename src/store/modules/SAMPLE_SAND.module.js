@@ -8,6 +8,7 @@ export const GET_SAMPLE_SAND = 'GET_SAMPLE_SAND'
 export const SET_SAMPLE_SAND = 'SET_SAMPLE_SAND'
 
 export const ACTION_SAMPLE_SAND = 'ACTION_SAMPLE_SAND'
+export const ACTION_SAMPLE_SAND_HISTORICAL = 'ACTION_SAMPLE_SAND_HISTORICAL'
 
 const state = {
   SAMPLE_SAND_DATA: [],
@@ -26,13 +27,27 @@ const mutations = {
 }
 
 const actions = {
-  async ACTION_SAMPLE_SAND({ commit, dispatch }, params) {
+  async ACTION_SAMPLE_SAND({ commit, dispatch }, payload) {
+    try {
+      ApiService.setHeader()
+      dispatch(ACTION_LOADING, true)
+      await ApiService.post('sample-sand', payload)
+      dispatch(ACTION_LOADING, false)
+      return true
+    } catch (error) {
+      dispatch(ACTION_LOADING, false)
+      console.error(error)
+      return error
+    }
+  },
+  async ACTION_SAMPLE_SAND_HISTORICAL({ commit, dispatch }, params) {
     try {
       ApiService.setHeader()
       dispatch(ACTION_LOADING, true)
       const { data } = await ApiService.query('sample-sand/historical', params)
-      commit(SET_SAMPLE_SAND, data?.data || [])
       dispatch(ACTION_LOADING, false)
+      commit(SET_SAMPLE_SAND, data.data || [])
+      return true
     } catch (error) {
       dispatch(ACTION_LOADING, false)
       console.error(error)

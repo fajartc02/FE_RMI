@@ -6,7 +6,8 @@ const ELEMENT_SAND_MOCK = {
             description: '30',
             elementIndex: 20,
             min: 0,
-            max: 0.1,
+            max: 10,
+            warningLimit: 0.1,
             unit: '%',
         },
         {
@@ -17,6 +18,7 @@ const ELEMENT_SAND_MOCK = {
             elementIndex: 30,
             min: 0,
             max: 10,
+            warningLimit: 0.1,
             unit: '%',
         },
         {
@@ -27,6 +29,7 @@ const ELEMENT_SAND_MOCK = {
             elementIndex: 36,
             min: 0,
             max: 10,
+            warningLimit: 0.1,
             unit: '%',
         },
         {
@@ -37,6 +40,7 @@ const ELEMENT_SAND_MOCK = {
             elementIndex: 50,
             min: 0,
             max: 10,
+            warningLimit: 0.1,
             unit: '%',
         },
         {
@@ -47,6 +51,7 @@ const ELEMENT_SAND_MOCK = {
             elementIndex: 70,
             min: 0,
             max: 10,
+            warningLimit: 0.1,
             unit: '%',
         },
         {
@@ -57,6 +62,7 @@ const ELEMENT_SAND_MOCK = {
             elementIndex: 100,
             min: 0,
             max: 10,
+            warningLimit: 0.1,
             unit: '%',
         },
         {
@@ -67,6 +73,7 @@ const ELEMENT_SAND_MOCK = {
             elementIndex: 166,
             min: 0,
             max: 10,
+            warningLimit: 0.1,
             unit: '%',
         },
         {
@@ -77,6 +84,7 @@ const ELEMENT_SAND_MOCK = {
             elementIndex: 200,
             min: 0,
             max: 10,
+            warningLimit: 0.1,
             unit: '%',
         },
     ],
@@ -88,6 +96,7 @@ const ELEMENT_SAND_MOCK = {
         elementIndex: null,
         min: 0,
         max: 10,
+        warningLimit: 0.1,
         unit: '%',
     },
     dustElement: {
@@ -98,6 +107,7 @@ const ELEMENT_SAND_MOCK = {
         elementIndex: null,
         min: 0,
         max: 10,
+        warningLimit: 0.1,
         unit: '%',
     },
     natriumElements: [{
@@ -108,6 +118,7 @@ const ELEMENT_SAND_MOCK = {
             elementIndex: null,
             min: 0,
             max: 10,
+            warningLimit: 0.1,
             unit: '%',
             elements: [{
                     id: '7b69f928-4c86-11ef-a93c-0242ac120001',
@@ -117,6 +128,7 @@ const ELEMENT_SAND_MOCK = {
                     elementIndex: null,
                     min: 0,
                     max: 10,
+                    warningLimit: 0.1,
                     unit: '%',
                 },
                 {
@@ -125,9 +137,9 @@ const ELEMENT_SAND_MOCK = {
                     code: 'Volume_TYPE_1',
                     description: 'Volume',
                     elementIndex: null,
-
                     min: 0,
                     max: 10,
+                    warningLimit: 0.1,
                     unit: '%',
                 },
                 {
@@ -138,6 +150,7 @@ const ELEMENT_SAND_MOCK = {
                     elementIndex: null,
                     min: 0,
                     max: 10,
+                    warningLimit: 0.1,
                     unit: '%',
                 },
                 {
@@ -148,6 +161,7 @@ const ELEMENT_SAND_MOCK = {
                     elementIndex: null,
                     min: 0,
                     max: 10,
+                    warningLimit: 0.1,
                     unit: '%',
                 },
                 {
@@ -158,6 +172,7 @@ const ELEMENT_SAND_MOCK = {
                     elementIndex: null,
                     min: 0,
                     max: 10,
+                    warningLimit: 0.1,
                     unit: '%',
                 },
             ],
@@ -170,6 +185,7 @@ const ELEMENT_SAND_MOCK = {
             elementIndex: null,
             min: 0,
             max: 10,
+            warningLimit: 0.1,
             unit: '%',
             elements: [{
                     id: '7b69f928-4c86-11ef-a93c-0242ac120001',
@@ -179,6 +195,7 @@ const ELEMENT_SAND_MOCK = {
                     elementIndex: null,
                     min: 0,
                     max: 10,
+                    warningLimit: 0.1,
                     unit: '%',
                 },
                 {
@@ -189,6 +206,7 @@ const ELEMENT_SAND_MOCK = {
                     elementIndex: null,
                     min: 0,
                     max: 10,
+                    warningLimit: 0.1,
                     unit: '%',
                 },
                 {
@@ -199,6 +217,7 @@ const ELEMENT_SAND_MOCK = {
                     elementIndex: null,
                     min: 0,
                     max: 10,
+                    warningLimit: 0.1,
                     unit: '%',
                 },
                 {
@@ -209,6 +228,7 @@ const ELEMENT_SAND_MOCK = {
                     elementIndex: null,
                     min: 0,
                     max: 10,
+                    warningLimit: 0.1,
                     unit: '%',
                 },
                 {
@@ -219,6 +239,7 @@ const ELEMENT_SAND_MOCK = {
                     elementIndex: null,
                     min: 0,
                     max: 10,
+                    warningLimit: 0.1,
                     unit: '%',
                 },
             ],

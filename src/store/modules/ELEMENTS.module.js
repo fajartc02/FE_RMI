@@ -10,7 +10,7 @@ export const SET_ELEMENT_INPUT = 'SET_ELEMENT_INPUT'
 export const ACTION_ELEMENT_QUERY = 'ACTION_ELEMENT_QUERY'
 
 const state = {
-    ELEMENT_DATA: null,
+    ELEMENT_DATA: [],
 }
 
 const getters = {

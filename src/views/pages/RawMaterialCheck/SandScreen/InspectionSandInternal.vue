@@ -1,5 +1,47 @@
 <template>
   <div class="container-fluid">
+    <CModal scrollable size="xl" :visible="modalShowJudg" backdrop="static" @close="() => { modalShowJudg = false }">
+      <CModalHeader>
+        <CModalTitle>Result Abnormal Parameter</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <template v-if="elementsOutOfRange.length > 0">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th class="text-center">No</th>
+                <template v-for="(header, index) in Object.keys(elementsOutOfRange[0])" :key="index">
+                  <th class="text-center" v-if="CONSTANT_COLUMN_VIEW.includes(header)">
+                    {{ header }}
+                  </th>
+                </template>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(element, index) in elementsOutOfRange" :key="index">
+                <td class="text-center">{{ index + 1 }}</td>
+                <template v-for="(value, key) in element" :key="key">
+                  <td
+                    :class="`${key == 'name' ? 'text-left' : 'text-center'} ${key === 'value' ? element.textColor : ''}`"
+                    v-if="CONSTANT_COLUMN_VIEW.includes(key)">
+                    {{ key == 'warningLimit' ? `${value * 100}%` : value }}
+                  </td>
+                </template>
+              </tr>
+            </tbody>
+          </table>
+        </template>
+        <label class="form-label">Notes</label>
+        <textarea v-model="notes" class="form-control" cols="30" rows="3"></textarea>
+      </CModalBody>
+      <CModalFooter class="d-flex justify-content-center align-items-center">
+        <a :href="reportLink">
+          <CButton color="warning">Download PDF</CButton>
+        </a>
+        <CButton color="success" @click="submitAbnormalSample()">Save Adjustment
+        </CButton>
+      </CModalFooter>
+    </CModal>
     <div class="row">
       <div class="col-12">
         <HeaderComp title="Sand Inspection (Internal)" />
@@ -120,7 +162,7 @@
                           {{ element.elementIndex }}
                         </td>
                         <td>
-                          {{ element.value ? multipleelementIndex(element.value, element.elementIndex) : 0 }}
+                          {{ element.value ? multipleElementIndex(element.value, element.elementIndex) : 0 }}
                         </td>
                       </tr>
                       <tr>
@@ -149,8 +191,6 @@
                         <th colspan="2">100</th>
                         <th>90.0 (± 10)</th>
                       </tr>
-
-                      <!-- Start -->
                     </tbody>
                   </table>
                 </div>
@@ -198,7 +238,7 @@
       <div class="col-12 fixed-bottom">
         <div class="d-flex justify-content-evenly align-items-center p-4"
           style="background-color: rgba(255, 255, 255, 0.5);">
-          <button v-if="isInputValid" class="btn btn-success text-light" @click="submitSandCheck"
+          <button v-if="isInputValid && !isSubmitted" class="btn btn-success text-light" @click="submitSandCheck"
             style="font-size: large; width: 30%;">
             Submit
           </button>
@@ -228,6 +268,7 @@ const $toast = useToast();
 
 import Treeselect from '@zanmato/vue3-treeselect'
 import "@zanmato/vue3-treeselect/dist/vue3-treeselect.min.css";
+
 import moment from 'moment';
 import DAY_CONSTANT from '@/constants/DAY_CONSTANT'
 import DAYTIME_CONSTANT from '@/constants/DAYTIME_CONSTANT'
@@ -235,11 +276,15 @@ import { ACTION_SHIFT, GET_SHIFT } from '@/store/modules/SHIFT.module';
 import { ACTION_MACHINE, GET_MACHINE } from '@/store/modules/MACHINE.module';
 import { ACTION_ELEMENT_QUERY, GET_ELEMENT_INPUT } from '@/store/modules/ELEMENTS.module';
 import { isNumber } from 'highcharts';
+import STATUS_ELEMENT_CONSTANT from '@/constants/STATUS_ELEMENT_CONSTANT';
+import { ACTION_SAMPLE_SAND } from '@/store/modules/SAMPLE_SAND.module';
 
 export default {
   name: 'InspectionSandInternal',
   data() {
     return {
+      CONSTANT_COLUMN_VIEW: ['name', 'value', 'min', 'max', 'warningLimit'],
+      modalShowJudg: false,
       isSandCheck: false,
       data: {
         headers: {
@@ -262,6 +307,11 @@ export default {
       DAY_CONSTANT: DAY_CONSTANT,
       DAYTIME_CONSTANT: DAYTIME_CONSTANT,
       shiftData: [],
+      STATUS_ELEMENT_CONSTANT: STATUS_ELEMENT_CONSTANT,
+      elementsOutOfRange: [],
+      notes: null,
+      objPayload: null,
+      isSubmitted: false
     }
   },
   watch: {
@@ -311,12 +361,15 @@ export default {
         this.data.elements = this.meshElements.map((element) => {
           if (element.value || element.value === 0) {
             element.value = parseFloat(element.value)
-            element.percentIndex = this.multipleelementIndex(element.value, element.elementIndex)
+            element.percentIndex = this.multipleElementIndex(element.value, element.elementIndex)
           }
           return {
             id: element.id,
             percentValue: element.value * 2,
             value: element.value,
+            min: element.min,
+            max: element.max,
+            warningLimit: element.warningLimit,
             elementIndex: element.elementIndex,
             percentIndex: element.percentIndex
           }
@@ -356,7 +409,7 @@ export default {
     sumOfElementValue() {
       let sum = 0
       this.meshElements.forEach((element) => {
-        let sumEachParam = element.value ? this.multipleelementIndex(element.value, element.elementIndex) : 0
+        let sumEachParam = element.value ? this.multipleElementIndex(element.value, element.elementIndex) : 0
         sum += sumEachParam
       })
 
@@ -373,7 +426,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([ACTION_SHIFT, ACTION_MACHINE, ACTION_ELEMENT_QUERY]),
+    ...mapActions([ACTION_SHIFT, ACTION_MACHINE, ACTION_ELEMENT_QUERY, ACTION_SAMPLE_SAND]),
     selectedDay(dayIndex) {
       this.DAY_CONSTANT.forEach((day) => {
         day.isActive = day.idx === dayIndex ? true : false
@@ -398,7 +451,7 @@ export default {
     calcelementIndex(value, precision) {
       return (value * 2).toFixed(precision)
     },
-    multipleelementIndex(value, elementIndex, precision = 0) {
+    multipleElementIndex(value, elementIndex, precision = 0) {
       return +((value * 2).toFixed(1) * elementIndex).toFixed(precision)
     },
     calcGfn(value) {
@@ -446,7 +499,7 @@ export default {
           }
         })
     },
-    submitSandCheck() {
+    async submitSandCheck() {
       if (this.isInputValid) {
         const objPayload = {
           headers: { ...this.data.headers },
@@ -455,21 +508,30 @@ export default {
               meshElements: this.meshElements.map((element) => {
                 return {
                   id: element.id,
-                  percentValue: element.value * 2,
-                  value: element.value,
+                  name: element.name,
+                  percentValue: Number(element.value) * 2,
+                  value: Number(element.value),
+                  min: element.min,
+                  max: element.max,
+                  warningLimit: element.warningLimit,
                   elementIndex: element.elementIndex,
                   percentIndex: element.percentIndex
                 }
               }),
             },
             {
-              natriumElements: this.natriumElements.map((element) => {
+              natriumElements: this.natriumElements.map((elements) => {
                 return {
-                  id: element.id,
-                  elements: element.elements.map((item) => {
+                  elements: elements.elements.map((item) => {
                     return {
+                      parentId: elements.id,
+                      parentName: elements.name,
                       id: item.id,
-                      value: item.value,
+                      name: `${elements.name} - ${item.name}`,
+                      value: Number(item.value),
+                      min: item.min,
+                      max: item.max,
+                      warningLimit: item.warningLimit,
                     }
                   })
                 }
@@ -478,19 +540,165 @@ export default {
             {
               dustElement: {
                 id: this.dustElement.id,
-                value: this.dustElement.value
+                name: this.dustElement.name,
+                value: Number(this.dustElement.value),
+                min: this.dustElement.min,
+                max: this.dustElement.max,
+                warningLimit: this.dustElement.warningLimit,
               }
             },
             {
               gfnElement: {
                 id: this.gfnElement.id,
-                value: this.gfnElement.value
+                name: this.gfnElement.name,
+                value: Number(this.gfnElement.value),
+                min: this.gfnElement.min,
+                max: this.gfnElement.max,
+                warningLimit: this.gfnElement.warningLimit,
               }
             },
-          ]
+          ],
+          notes: null
         }
-        console.log(objPayload);
+        objPayload.elements[1].natriumElements = objPayload.elements[1].natriumElements.flat()
+        let checkStandardElements = await this.checkElementStandard(objPayload.elements)
+        const objPayloadFinal = {
+          headers: { ...this.data.headers },
+          elements: checkStandardElements.allElements
+        }
+        if (checkStandardElements.abnormalElements.length > 0) {
+          this.modalShowJudg = true;
+          this.elementsOutOfRange = checkStandardElements.abnormalElements;
+          this.objPayload = objPayload;
+          return;
+        }
+        await this.ACTION_SAMPLE_SAND(objPayloadFinal)
+      }
+    },
+    async checkElementStandard(elements) {
+      let containerElements = [];
+      let containerElementsAbnormal = [];
+      const meshElements = elements[0].meshElements
+      const natriumElements = elements[1].natriumElements
+      const dustElement = elements[2].dustElement
+      const gfnElement = elements[3].gfnElement
 
+      await meshElements.forEach((element, index) => {
+        const gap = element.max - element.min
+        const calcWarningLimitUpper = element.max - (gap * element.warningLimit)
+        const calcWarningLimitLower = element.min + (gap * element.warningLimit)
+        const isElementWarning =
+          (element.value >= calcWarningLimitUpper && element.value <= element.max)
+          || (element.value <= calcWarningLimitLower && element.value >= element.min)
+        if (isElementWarning) {
+          element.status = this.STATUS_ELEMENT_CONSTANT.WARNING.label
+          element.textColor = this.STATUS_ELEMENT_CONSTANT.WARNING.textColor
+          containerElements.push(element)
+          containerElementsAbnormal.push(element)
+        } else if (element.value > element.max || element.value < element.min) {
+          element.status = this.STATUS_ELEMENT_CONSTANT.NG.label
+          element.textColor = this.STATUS_ELEMENT_CONSTANT.NG.textColor
+          containerElements.push(element)
+          containerElementsAbnormal.push(element)
+        } else {
+          element.status = this.STATUS_ELEMENT_CONSTANT.OK.label
+          element.textColor = this.STATUS_ELEMENT_CONSTANT.OK.textColor
+          containerElements.push(element)
+        }
+      })
+
+      const dustGap = dustElement.max - dustElement.min
+      const calcDustWarningLimitUpper = dustElement.max - (dustGap * dustElement.warningLimit)
+      const calcDustWarningLimitLower = dustElement.min + (dustGap * dustElement.warningLimit)
+
+      const isElementDustWarning = (dustElement.value >= calcDustWarningLimitUpper && dustElement.value <= dustElement.max)
+        || (dustElement.value <= calcDustWarningLimitLower && dustElement.value >= dustElement.min)
+      console.log(
+        dustElement.max,
+        dustElement.min,
+        dustElement.value,
+        calcDustWarningLimitUpper,
+        calcDustWarningLimitLower,
+        isElementDustWarning
+      );
+      if (isElementDustWarning) {
+        dustElement.status = this.STATUS_ELEMENT_CONSTANT.WARNING.label
+        dustElement.textColor = this.STATUS_ELEMENT_CONSTANT.WARNING.textColor
+        containerElements.push(dustElement)
+        containerElementsAbnormal.push(dustElement)
+      } else if (dustElement.value > dustElement.max || dustElement.value < dustElement.min) {
+        dustElement.status = this.STATUS_ELEMENT_CONSTANT.NG.label
+        dustElement.textColor = this.STATUS_ELEMENT_CONSTANT.NG.textColor
+        containerElements.push(dustElement)
+        containerElementsAbnormal.push(dustElement)
+      } else {
+        dustElement.status = this.STATUS_ELEMENT_CONSTANT.OK.label
+        dustElement.textColor = this.STATUS_ELEMENT_CONSTANT.OK.textColor
+        containerElements.push(dustElement)
+      }
+      console.log('GFN');
+      console.log(gfnElement.value);
+
+      const gfnGap = gfnElement.max - gfnElement.min
+      const calcGfnWarningLimitUpper = gfnElement.max - (gfnGap * gfnElement.warningLimit)
+      const calcGfnWarningLimitLower = gfnElement.min + (gfnGap * gfnElement.warningLimit)
+      const isElementGfnWarning = (gfnElement.value >= calcGfnWarningLimitUpper && gfnElement.value <= gfnElement.max)
+        || (gfnElement.value <= calcGfnWarningLimitLower && gfnElement.value >= gfnElement.min)
+      if (isElementGfnWarning) {
+        gfnElement.status = this.STATUS_ELEMENT_CONSTANT.WARNING.label
+        gfnElement.textColor = this.STATUS_ELEMENT_CONSTANT.WARNING.textColor
+        containerElements.push(gfnElement)
+        containerElementsAbnormal.push(gfnElement)
+      } else if (gfnElement.value > gfnElement.max || gfnElement.value < gfnElement.min) {
+        gfnElement.status = this.STATUS_ELEMENT_CONSTANT.NG.label
+        gfnElement.textColor = this.STATUS_ELEMENT_CONSTANT.NG.textColor
+        containerElements.push(gfnElement)
+        containerElementsAbnormal.push(gfnElement)
+      } else {
+        gfnElement.status = this.STATUS_ELEMENT_CONSTANT.OK.label
+        gfnElement.textColor = this.STATUS_ELEMENT_CONSTANT.OK.textColor
+        containerElements.push(gfnElement)
+      }
+
+      await natriumElements.forEach((element, index) => {
+        element.elements.forEach((subElement, index) => {
+          const calcWarningLimitUpper = subElement.max - (subElement.max * subElement.warningLimit)
+          const calcWarningLimitLower = subElement.min + (subElement.min * subElement.warningLimit)
+          const isElementWarning =
+            (subElement.value >= calcWarningLimitUpper && subElement.value <= subElement.max)
+            || (subElement.value <= calcWarningLimitLower && subElement.value >= subElement.min)
+          if (isElementWarning) {
+            subElement.status = this.STATUS_ELEMENT_CONSTANT.WARNING.label
+            subElement.textColor = this.STATUS_ELEMENT_CONSTANT.WARNING.textColor
+            containerElements.push(subElement)
+            containerElementsAbnormal.push(subElement)
+          } else if (subElement.value > subElement.max || subElement.value < subElement.min) {
+            subElement.status = this.STATUS_ELEMENT_CONSTANT.NG.label
+            subElement.textColor = this.STATUS_ELEMENT_CONSTANT.NG.textColor
+            containerElements.push(subElement)
+            containerElementsAbnormal.push(subElement)
+          } else {
+            subElement.status = this.STATUS_ELEMENT_CONSTANT.OK.label
+            subElement.textColor = this.STATUS_ELEMENT_CONSTANT.OK.textColor
+            containerElements.push(subElement)
+          }
+        })
+      })
+
+      return {
+        allElements: containerElements,
+        abnormalElements: containerElementsAbnormal
+      }
+
+    },
+    async submitAbnormalSample() {
+      try {
+        this.objPayload.notes = this.notes
+        // sample-sand
+        await this.ACTION_SAMPLE_SAND(this.objPayload)
+        this.objPayload = null
+      } catch (error) {
+        this.$swal('Error', 'Internal Server Error', 'error')
       }
     }
   },
@@ -506,6 +714,10 @@ export default {
     this.checkDateInit()
     this.ACTION_ELEMENT_QUERY({ type: 'SAND' })
     this.isNightCondition()
+    if (this.$route.query.id) {
+      this.isSubmitted = true
+      this.isSandCheck = true
+    }
   }
 }
 </script>

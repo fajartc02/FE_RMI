@@ -12,6 +12,8 @@ const SAMPLE_SAND_HISORICALS_MOCK = {
             machine: 'IKSX-0001',
             shift: 'RED',
             pic: 'JOHN DOE',
+            status: 'OK',
+            notes: '',
         },
         {
             no: 2,
@@ -22,6 +24,8 @@ const SAMPLE_SAND_HISORICALS_MOCK = {
             machine: 'IKSX-0001',
             shift: 'RED',
             pic: 'JOHN DOE',
+            status: 'WARNING',
+            notes: 'nilai PH hampir mendekati batas atas',
         },
         {
             no: 3,
@@ -32,6 +36,8 @@ const SAMPLE_SAND_HISORICALS_MOCK = {
             machine: 'IKSX-0001',
             shift: 'RED',
             pic: 'JOHN DOE',
+            status: 'OK',
+            notes: '',
         },
         {
             no: 4,
@@ -42,6 +48,8 @@ const SAMPLE_SAND_HISORICALS_MOCK = {
             machine: 'IKSX-0001',
             shift: 'RED',
             pic: 'JOHN DOE',
+            status: 'NG',
+            notes: 'temuan pada GFN tidak standard',
         },
     ],
     meta: {
