@@ -1,7 +1,9 @@
 <template>
-  <div v-if="IS_LOADING" class="d-flex justify-content-center">
+  <div v-if="IS_LOADING" class="d-flex flex-column justify-content-center align-items-center h-100">
     <div class="spinner-border" role="status">
-      <span class="visually-hidden">Loading...</span>
+    </div>
+    <div class="row mt-3">
+      <strong>Loading ...</strong>
     </div>
   </div>
 </template>

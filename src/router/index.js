@@ -65,6 +65,24 @@ const routes = [
         component: () =>
           import('@/views/pages/RawMaterialCheck/SandScreen/HistoricalSand'),
       },
+      {
+        path: '/master/line',
+        name: 'MasterLine',
+        component: () =>
+          import('@/views/pages/RawMaterialCheck/Master/MasterLinePage.vue'),
+      },
+      {
+        path: '/master/mesin',
+        name: 'MasterMesin',
+        component: () =>
+          import('@/views/pages/RawMaterialCheck/Master/MasterMesinPage.vue'),
+      },
+      {
+        path: '/master/gauge',
+        name: 'MasterGauge',
+        component: () =>
+          import('@/views/pages/RawMaterialCheck/Master/MasterGaugePage.vue'),
+      },
     ],
   },
   {

@@ -120,6 +120,32 @@ export default {
             },
           ],
         },
+        {
+          component: 'CNavItem',
+          name: 'Master',
+          icon: 'cilNotes',
+          parentId: 'MST',
+          items: [
+            {
+              component: 'CNavItem',
+              to: '/master/line',
+              name: 'Line',
+              parentId: 'MST',
+            },
+            {
+              component: 'CNavItem',
+              to: '/master/mesin',
+              name: 'Mesin',
+              parentId: 'MST',
+            },
+            {
+              component: 'CNavItem',
+              to: '/master/gauge',
+              name: 'Gauge',
+              parentId: 'MST',
+            },
+          ],
+        },
       ],
     }
   },

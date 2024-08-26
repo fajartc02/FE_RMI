@@ -1,5 +1,5 @@
 import './set-public-path'
-import { h, createApp } from 'vue'
+import {h, createApp} from 'vue'
 import singleSpaVue from 'single-spa-vue'
 
 import App from './App.vue'
@@ -8,7 +8,7 @@ import store from './store'
 
 import CoreuiVue from '@coreui/vue'
 import CIcon from '@coreui/icons-vue'
-import { iconsSet as icons } from '@/assets/icons'
+import {iconsSet as icons} from '@/assets/icons'
 import VueSweetalert2 from 'vue-sweetalert2'
 import vSelect from 'vue-select'
 import './styles/sweetalert2.css'
@@ -20,39 +20,40 @@ import 'v-calendar/style.css'
 import ApiService from './store/services/api.service'
 import MockService from './store/mocks/mock.service'
 import VueApexCharts from 'vue3-apexcharts'
+import commonUtils from "@/utils/CommonUtils";
 
 if (process.env.VUE_APP_STANDALONE_SINGLE_SPA === 'true') {
-    require('@/components/StandAloneStyle.vue')
+  require('@/components/StandAloneStyle.vue')
 } else {
-    require('@/components/SingleSpaStyle.vue')
+  require('@/components/SingleSpaStyle.vue')
 }
 
 const vueLifecycles = singleSpaVue({
-    createApp,
-    appOptions: {
-        render() {
-            return h(App, {})
-        },
+  createApp,
+  appOptions: {
+    render() {
+      return h(App, {})
     },
-    handleInstance(app) {
-        ApiService.init()
-        if (process.env.VUE_APP_USE_MOCK_SERVICE === 'true') {
-            MockService.init()
-        }
+  },
+  handleInstance(app) {
+    ApiService.init()
+    if (commonUtils.isMock()) {
+      MockService.init()
+    }
 
-        app.use(router)
-        app.use(store)
-        app.use(CoreuiVue)
-        app.provide('icons', icons)
-        app.use(VueSweetalert2)
-        app.component('CIcon', CIcon)
-        app.component('v-select', vSelect)
-        app.use(HighchartsVue, {
-            highcharts: Highcharts,
-        })
-        app.use(VCalendar, {})
-        app.use(VueApexCharts)
-    },
+    app.use(router)
+    app.use(store)
+    app.use(CoreuiVue)
+    app.provide('icons', icons)
+    app.use(VueSweetalert2)
+    app.component('CIcon', CIcon)
+    app.component('v-select', vSelect)
+    app.use(HighchartsVue, {
+      highcharts: Highcharts,
+    })
+    app.use(VCalendar, {})
+    app.use(VueApexCharts)
+  },
 })
 
 export const bootstrap = vueLifecycles.bootstrap
