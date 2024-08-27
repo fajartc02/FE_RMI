@@ -8,6 +8,8 @@ export const ACTION_ELEMENT = 'ACTION_ELEMENT'
 export const GET_ELEMENT_INPUT = 'GET_ELEMENT_INPUT'
 export const SET_ELEMENT_INPUT = 'SET_ELEMENT_INPUT'
 export const ACTION_ELEMENT_QUERY = 'ACTION_ELEMENT_QUERY'
+export const ACTION_SAND_ELEMENT = 'ACTION_SAND_ELEMENT'
+export const ACTION_INGOT_ELEMENT = 'ACTION_INGOT_ELEMENT'
 
 const state = {
     ELEMENT_DATA: [],
@@ -62,6 +64,32 @@ const actions = {
             ApiService.setHeader()
             dispatch(ACTION_LOADING, true)
             const { data } = await ApiService.query('element', params)
+            dispatch(ACTION_LOADING, false)
+            commit(SET_ELEMENT_INPUT, data.data)
+        } catch (error) {
+            console.error(error)
+            dispatch(ACTION_LOADING, false)
+            return error
+        }
+    },
+    async ACTION_SAND_ELEMENT({ commit, dispatch }, params) {
+        try {
+            ApiService.setHeader()
+            dispatch(ACTION_LOADING, true)
+            const { data } = await ApiService.query('sand-element', params)
+            dispatch(ACTION_LOADING, false)
+            commit(SET_ELEMENT_INPUT, data.data)
+        } catch (error) {
+            console.error(error)
+            dispatch(ACTION_LOADING, false)
+            return error
+        }
+    },
+    async ACTION_INGOT_ELEMENT({ commit, dispatch }, params) {
+        try {
+            ApiService.setHeader()
+            dispatch(ACTION_LOADING, true)
+            const { data } = await ApiService.query('ingot-element', params)
             dispatch(ACTION_LOADING, false)
             commit(SET_ELEMENT_INPUT, data.data)
         } catch (error) {

@@ -274,10 +274,10 @@ import DAY_CONSTANT from '@/constants/DAY_CONSTANT'
 import DAYTIME_CONSTANT from '@/constants/DAYTIME_CONSTANT'
 import { ACTION_SHIFT, GET_SHIFT } from '@/store/modules/SHIFT.module';
 import { ACTION_MACHINE, GET_MACHINE } from '@/store/modules/MACHINE.module';
-import { ACTION_ELEMENT_QUERY, GET_ELEMENT_INPUT } from '@/store/modules/ELEMENTS.module';
+import { ACTION_SAND_ELEMENT, GET_ELEMENT_INPUT } from '@/store/modules/ELEMENTS.module';
 import { isNumber } from 'highcharts';
 import STATUS_ELEMENT_CONSTANT from '@/constants/STATUS_ELEMENT_CONSTANT';
-import { ACTION_SAMPLE_SAND } from '@/store/modules/SAMPLE_SAND.module';
+import { ACTION_SAMPLE_SAND, ACTION_SAMPLE_SAND_DETAIL } from '@/store/modules/SAMPLE_SAND.module';
 
 export default {
   name: 'InspectionSandInternal',
@@ -386,7 +386,7 @@ export default {
         this.ACTION_SHIFT()
         this.ACTION_MACHINE({ materialCategory: 'SAND' })
         this.checkDateInit()
-        this.ACTION_ELEMENT_QUERY({ type: 'SAND' })
+        this.ACTION_SAND_ELEMENT({ type: 'SAND' })
       }
     },
     'data.headers.time': function () {
@@ -426,7 +426,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([ACTION_SHIFT, ACTION_MACHINE, ACTION_ELEMENT_QUERY, ACTION_SAMPLE_SAND]),
+    ...mapActions([ACTION_SHIFT, ACTION_MACHINE, ACTION_SAND_ELEMENT, ACTION_SAMPLE_SAND, ACTION_SAMPLE_SAND_DETAIL]),
     selectedDay(dayIndex) {
       this.DAY_CONSTANT.forEach((day) => {
         day.isActive = day.idx === dayIndex ? true : false
@@ -636,8 +636,6 @@ export default {
         dustElement.textColor = this.STATUS_ELEMENT_CONSTANT.OK.textColor
         containerElements.push(dustElement)
       }
-      console.log('GFN');
-      console.log(gfnElement.value);
 
       const gfnGap = gfnElement.max - gfnElement.min
       const calcGfnWarningLimitUpper = gfnElement.max - (gfnGap * gfnElement.warningLimit)
@@ -700,6 +698,15 @@ export default {
       } catch (error) {
         this.$swal('Error', 'Internal Server Error', 'error')
       }
+    },
+    async getDetailSandCheck(id) {
+      try {
+        const response = await this.ACTION_SAMPLE_SAND_DETAIL(id)
+        console.log(response);
+
+      } catch (error) {
+        this.$swal('Error', 'Internal Server Error', 'error')
+      }
     }
   },
   components: {
@@ -712,11 +719,12 @@ export default {
     this.ACTION_SHIFT()
     this.ACTION_MACHINE({ materialCategory: 'SAND' })
     this.checkDateInit()
-    this.ACTION_ELEMENT_QUERY({ type: 'SAND' })
+    this.ACTION_SAND_ELEMENT({ type: 'SAND' })
     this.isNightCondition()
     if (this.$route.query.id) {
       this.isSubmitted = true
       this.isSandCheck = true
+      this.getDetailSandCheck(this.$route.query.id)
     }
   }
 }

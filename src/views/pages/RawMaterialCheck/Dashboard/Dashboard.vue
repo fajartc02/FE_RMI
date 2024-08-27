@@ -50,7 +50,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { ACTION_LINE, GET_LINE_TREESELECT } from '@/store/modules/LINE.module'
 import ChartParameterVue from '@/components/RawMaterialInspection/Charts/ChartParameter.vue'
 import moment from 'moment'
-import { ACTION_ELEMENT, GET_ELEMENT } from '@/store/modules/ELEMENTS.module'
+import { ACTION_INGOT_ELEMENT, GET_ELEMENT } from '@/store/modules/ELEMENTS.module'
 import { ACTION_MACHINE, GET_MACHINE_TREESELECT } from '@/store/modules/MACHINE.module'
 
 export default {
@@ -105,7 +105,7 @@ export default {
     ...mapGetters([GET_LINE_TREESELECT, GET_ELEMENT, GET_MACHINE_TREESELECT]),
   },
   methods: {
-    ...mapActions([ACTION_LINE, ACTION_ELEMENT, ACTION_MACHINE]),
+    ...mapActions([ACTION_LINE, ACTION_INGOT_ELEMENT, ACTION_MACHINE]),
     async getLines() {
       await this.ACTION_LINE()
     },
@@ -125,7 +125,7 @@ export default {
   },
   async mounted() {
     await this.getLines()
-    await this.ACTION_ELEMENT()
+    await this.ACTION_INGOT_ELEMENT()
   }
 }
 </script>

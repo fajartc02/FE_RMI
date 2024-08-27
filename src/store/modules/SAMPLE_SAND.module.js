@@ -9,6 +9,7 @@ export const SET_SAMPLE_SAND = 'SET_SAMPLE_SAND'
 
 export const ACTION_SAMPLE_SAND = 'ACTION_SAMPLE_SAND'
 export const ACTION_SAMPLE_SAND_HISTORICAL = 'ACTION_SAMPLE_SAND_HISTORICAL'
+export const ACTION_SAMPLE_SAND_DETAIL = 'ACTION_SAMPLE_SAND_DETAIL'
 
 const state = {
   SAMPLE_SAND_DATA: [],
@@ -51,6 +52,16 @@ const actions = {
     } catch (error) {
       dispatch(ACTION_LOADING, false)
       console.error(error)
+      return error
+    }
+  },
+  async ACTION_SAMPLE_SAND_DETAIL({ dispatch }, id) {
+    try {
+      ApiService.setHeader()
+      dispatch(ACTION_LOADING, true)
+      const { data } = await ApiService.get('sample-sand', id)
+      return data
+    } catch (error) {
       return error
     }
   },
