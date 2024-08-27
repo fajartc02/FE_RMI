@@ -1,7 +1,7 @@
-
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import router from '../router'
+import MockService from "@/store/mocks/mock.service";
 
 export default {
   // method
@@ -126,5 +126,9 @@ export default {
   async errorToken(path, msg) {
     await this.errorTokenSwalPassword(path, msg)
   },
-
+  isMock() {
+    return process.env.VUE_APP_USE_MOCK_SERVICE
+      && typeof process.env.VUE_APP_USE_MOCK_SERVICE === 'string'
+      && process.env.VUE_APP_USE_MOCK_SERVICE.trim() === 'true'
+  }
 }
