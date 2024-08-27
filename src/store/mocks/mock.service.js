@@ -26,6 +26,7 @@ import ELEMENT_SAND_MOCK from './get/ELEMENT_SAND.mock'
 import SAMPLE_SAND_HISTORICALS_MOCK from './get/SAMPLE_SAND_HISTORICALS.mock'
 import SAMPLE_TBL_LINE from '@/store/mocks/get/SAMPLE_TBL_LINE.mock'
 import SAMPLE_TBL_MACHINE from '@/store/mocks/get/SAMPLE_TBL_MACHINE.mock'
+import ELEMENT_SAND_DETAIL from './get/ELEMENT_SAND_DETAIL'
 
 // mock testing user accounts
 const users = [{
@@ -319,12 +320,14 @@ const MockService = {
                     take: 20,
                     page: 1,
                     startDate: 1722470400,
-                    endDate: 1724716799,
+                    endDate: 1724803199,
                 },
             })
             .reply(200, { data: SAMPLE_SAND_HISTORICALS_MOCK })
 
-        mock.onGet('sample-sand/1').reply(201, { data: SAMPLE_INGOT_INTERNAL_MOCK })
+        mock
+            .onGet('sample-sand/c31c4192-c127-4ace-b805-bbb00987788a')
+            .reply(200, { data: ELEMENT_SAND_DETAIL })
 
         mstLineMock(mock)
         mstMachineMock(mock)

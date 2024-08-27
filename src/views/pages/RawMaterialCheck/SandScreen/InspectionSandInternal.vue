@@ -150,7 +150,7 @@
                       <!-- this.data.values -->
                       <tr v-for="(element) in meshElements" :key="element.id">
                         <td>
-                          {{ element.description }}
+                          {{ element.description || element.name }}
                         </td>
                         <td colspan="2" style="width: 200px">
                           <input class="form-control" type="number" min="0" v-model="element.value">
@@ -230,6 +230,12 @@
               </div>
             </div>
           </div>
+          <div v-if="notes" class="card my-2 overflow-auto" style="z-index: 1;margin-bottom: 100px!important;">
+            <div class="card-body p-1">
+              <label class="form-label">Notes</label>
+              <textarea v-model="notes" class="form-control" cols="30" rows="3"></textarea>
+            </div>
+          </div>
         </template>
         <LoadingComponent v-else class="my-2" />
       </div>
@@ -242,13 +248,16 @@
             style="font-size: large; width: 30%;">
             Submit
           </button>
+          <button v-else-if="isSubmitted" class="btn btn-success" disabled style="width: 30%;font-size: large;">
+            Data Already Submitted
+          </button>
           <button v-else class="btn btn-danger" disabled style="width: 30%;font-size: large;">
             Please Fill all input
           </button>
-          <button class="btn btn-warning text-dark" @click="resetInput" style="font-size: large;width: 30%;">
+          <button v-if="!isSubmitted" class="btn btn-warning text-dark" @click="resetInput"
+            style="font-size: large;width: 30%;">
             Cancel
           </button>
-
         </div>
       </div>
     </div>
@@ -386,7 +395,7 @@ export default {
         this.ACTION_SHIFT()
         this.ACTION_MACHINE({ materialCategory: 'SAND' })
         this.checkDateInit()
-        this.ACTION_SAND_ELEMENT({ type: 'SAND' })
+        this.ACTION_SAND_ELEMENT()
       }
     },
     'data.headers.time': function () {
@@ -572,6 +581,8 @@ export default {
           this.objPayload = objPayload;
           return;
         }
+        console.log(objPayloadFinal);
+
         await this.ACTION_SAMPLE_SAND(objPayloadFinal)
       }
     },
@@ -613,14 +624,7 @@ export default {
 
       const isElementDustWarning = (dustElement.value >= calcDustWarningLimitUpper && dustElement.value <= dustElement.max)
         || (dustElement.value <= calcDustWarningLimitLower && dustElement.value >= dustElement.min)
-      console.log(
-        dustElement.max,
-        dustElement.min,
-        dustElement.value,
-        calcDustWarningLimitUpper,
-        calcDustWarningLimitLower,
-        isElementDustWarning
-      );
+
       if (isElementDustWarning) {
         dustElement.status = this.STATUS_ELEMENT_CONSTANT.WARNING.label
         dustElement.textColor = this.STATUS_ELEMENT_CONSTANT.WARNING.textColor
@@ -692,7 +696,6 @@ export default {
     async submitAbnormalSample() {
       try {
         this.objPayload.notes = this.notes
-        // sample-sand
         await this.ACTION_SAMPLE_SAND(this.objPayload)
         this.objPayload = null
       } catch (error) {
@@ -702,8 +705,14 @@ export default {
     async getDetailSandCheck(id) {
       try {
         const response = await this.ACTION_SAMPLE_SAND_DETAIL(id)
-        console.log(response);
 
+        this.data.headers = response.data.headers
+        this.meshElements = response.data.elements[0].meshElements
+        this.natriumElements = response.data.elements[1].natriumElements
+        this.dustElement = response.data.elements[2].dustElement
+        this.gfnElement = response.data.elements[3].gfnElement
+        this.selectedShift(this.data.headers.shiftId)
+        this.notes = response.data.notes
       } catch (error) {
         this.$swal('Error', 'Internal Server Error', 'error')
       }
@@ -719,12 +728,13 @@ export default {
     this.ACTION_SHIFT()
     this.ACTION_MACHINE({ materialCategory: 'SAND' })
     this.checkDateInit()
-    this.ACTION_SAND_ELEMENT({ type: 'SAND' })
     this.isNightCondition()
     if (this.$route.query.id) {
       this.isSubmitted = true
       this.isSandCheck = true
       this.getDetailSandCheck(this.$route.query.id)
+    } else {
+      this.ACTION_SAND_ELEMENT()
     }
   }
 }
