@@ -1,7 +1,7 @@
 <template>
-  <div id="mst-mesin">
+  <div id="mst-shift">
     <div class="container-fluid">
-      <TableAddComponent @on-click="onAdd" tag="Gauge"/>
+      <TableAddComponent @on-click="onAdd" tag="Shift"/>
       <div class="row">
         <div class="col-12">
           <FilterComponentVue :fieldsInput="filters" @emit-filter="onChangeFilter"/>
@@ -16,45 +16,34 @@
         </div>
       </div>
     </div>
-    <ModalFormMstGaugeComponent :loaded-data="selectedRow" :visible="visibleForm" @on-close="visibleForm = false"/>
+    <ModalFormMstShiftComponent :loaded-data="selectedRow" :visible="visibleForm" @on-close="visibleForm = false"/>
   </div>
 </template>
+
 <script>
-import ModalFormMstGaugeComponent
-  from "@/views/pages/RawMaterialCheck/Master/components/ModalFormMstGaugeComponent.vue";
 import TableComponentVue from "@/components/RawMaterialInspection/Table/TableComponent.vue";
 import PaginationComponent from "@/components/RawMaterialInspection/Pagination/PaginationComponent.vue";
 import FilterComponentVue from "@/components/RawMaterialInspection/Filter/FilterComponent.vue";
 import InputModel from "@/components/RawMaterialInspection/Filter/InputModel";
 import TableAddComponent from "@/components/RawMaterialInspection/Table/TableAddComponent.vue";
-import {ACTION_LINE, GET_LINE_TREESELECT} from "@/store/modules/LINE.module";
-import {GET_TBL_GAUGE, ACTION_TBL_GAUGE} from "@/store/modules/GAUGE.module";
-import {mapActions, mapGetters} from "vuex";
+import ModalFormMstShiftComponent
+  from "@/views/pages/RawMaterialCheck/Master/components/ModalFormMstShiftComponent.vue";
+import {mapActions, mapGetters} from 'vuex';
+import {GET_TBL_SHIFT, ACTION_TBL_SHIFT} from "@/store/modules/SHIFT.module";
 
 export default {
-  name: "MasterGaugePage",
+  name: "MasterShiftPage",
   components: {
-    FilterComponentVue,
-    PaginationComponent,
-    TableComponentVue,
+    ModalFormMstShiftComponent,
     TableAddComponent,
-    ModalFormMstGaugeComponent,
+    FilterComponentVue,
+    PaginationComponent, TableComponentVue,
   },
   data() {
     return {
       selectedRow: null,
       visibleForm: false,
       filters: [
-        InputModel(
-          'Line',
-          'treeselect',
-          'Select Line',
-          null,
-          GET_LINE_TREESELECT,
-          null,
-          false,
-          'lineId'
-        ),
         InputModel(
           'Name',
           'text',
@@ -69,17 +58,16 @@ export default {
     }
   },
   mounted() {
-    this.ACTION_TBL_GAUGE();
-    this.ACTION_LINE();
+    this.ACTION_TBL_SHIFT()
   },
   computed: {
-    ...mapGetters([GET_TBL_GAUGE, GET_LINE_TREESELECT]),
+    ...mapGetters([GET_TBL_SHIFT]),
     dataTbl() {
-      return this.GET_TBL_GAUGE;
+      return this.GET_TBL_SHIFT
     }
   },
   methods: {
-    ...mapActions([ACTION_LINE, ACTION_TBL_GAUGE]),
+    ...mapActions([ACTION_TBL_SHIFT]),
     async onChangeFilter(filter) {
 
     },

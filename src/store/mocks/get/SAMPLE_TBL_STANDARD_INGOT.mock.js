@@ -1,0 +1,60 @@
+const SAMPLE_TBL_STANDARD_INGOT = {
+  status: {
+    code: 0,
+    message: 'OK',
+  },
+  data: [
+    {
+      id: '7b69f928-4c86-11ef-a93c-0242ac120000',
+      no: 1,
+      name: 'Mesh 30',
+      code: 'mesh30',
+      unit: '%',
+      description: '30',
+      min: 0,
+      max: 10,
+      warningLimit: 0.1,
+      minLimit: 0.1,
+      maxLimit: 0.1,
+    },
+    {
+      id: '7b69f928-4c86-11ef-a93c',
+      no: 2,
+      name: 'Mesh 36',
+      code: 'mesh36',
+      unit: '%',
+      description: '36',
+      min: 0,
+      max: 10,
+      warningLimit: 0.1,
+      minLimit: 0.1,
+      maxLimit: 0.1,
+    },
+    {
+      id: '7b69f928-11ef-a93c-0242ac120001',
+      no: 3,
+      name: 'Mesh 50',
+      code: 'mesh50',
+      unit: '%',
+      description: '50',
+      min: 0,
+      max: 10,
+      warningLimit: 0.1,
+      minLimit: 0.1,
+      maxLimit: 0.1,
+    },
+  ],
+  meta: {
+    pagination: {
+      // page: 1,
+      take: 20,
+      itemCount: 22,
+      pageCount: 2,
+      hasPreviousPage: false,
+      hasNextPage: false,
+    },
+    timestamp: '2024-08-07T12:38:46.696Z',
+  },
+}
+
+export default SAMPLE_TBL_STANDARD_INGOT

@@ -83,6 +83,42 @@ const routes = [
         component: () =>
           import('@/views/pages/RawMaterialCheck/Master/MasterGaugePage.vue'),
       },
+      {
+        path: '/master/element-standard/ingot',
+        name: 'MasterElementStandardIngot',
+        component: () =>
+          import('@/views/pages/RawMaterialCheck/Master/MasterGaugePage.vue'),
+      },
+      {
+        path: '/master/element-standard/sand',
+        name: 'MasterElementStandardSand',
+        component: () =>
+          import('@/views/pages/RawMaterialCheck/Master/MasterGaugePage.vue'),
+      },
+      {
+        path: '/master/shift',
+        name: 'MasterShift',
+        component: () =>
+          import('@/views/pages/RawMaterialCheck/Master/MasterShiftPage.vue'),
+      },
+      {
+        path: '/master/user',
+        name: 'MasterUser',
+        component: () =>
+          import('@/views/pages/RawMaterialCheck/Master/MasterUserPage.vue'),
+      },
+      {
+        path: '/master/system',
+        name: 'MasterSystem',
+        component: () =>
+          import('@/views/pages/RawMaterialCheck/Master/MasterSystemPage.vue'),
+      },
+      {
+        path: '/master/vendor',
+        name: 'MasterVendor',
+        component: () =>
+          import('@/views/pages/RawMaterialCheck/Master/MasterVendorPage.vue'),
+      },
     ],
   },
   {
