@@ -1,5 +1,5 @@
 <template>
-  <div v-if="IS_LOADING" class="d-flex flex-column justify-content-center align-items-center h-100">
+  <div v-if="IS_LOADING" class="d-flex flex-column justify-content-center align-items-center h-100 card" >
     <div class="spinner-border" role="status">
     </div>
     <div class="row mt-3">

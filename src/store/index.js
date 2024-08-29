@@ -13,6 +13,11 @@ import ELEMENTSModule from './modules/ELEMENTS.module'
 import GRAPHModule from './modules/GRAPH.module'
 import SHIFTModule from './modules/SHIFT.module'
 import SAMPLE_SANDModule from './modules/SAMPLE_SAND.module'
+import STANDARD_INGOTModule from "./modules/STANDARD_INGOT.module";
+import STANDARD_SANDModule from "./modules/STANDARD_SAND.module";
+import SYSTEMModule from "./modules/SYSTEM.module";
+import USERModule from "./modules/USER.module";
+import VENDORModule from "./modules/VENDOR.module";
 
 export default createStore({
     state: {
@@ -47,5 +52,10 @@ export default createStore({
         ELEMENTSModule,
         GRAPHModule,
         SAMPLE_SANDModule,
+        STANDARD_INGOTModule,
+        STANDARD_SANDModule,
+        SYSTEMModule,
+        USERModule,
+        VENDORModule
     },
 })
