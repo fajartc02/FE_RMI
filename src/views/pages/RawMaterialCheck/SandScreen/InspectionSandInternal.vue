@@ -387,8 +387,8 @@ export default {
       deep: true
     },
     sumOfElementValue: function () {
-      this.data.headers.totalPercIndex = this.sumOfElementValue
-      this.data.headers.totalGfn = this.calcGfn(this.sumOfElementValue)
+      this.data.headers.totalPercIndex = Number(this.sumOfElementValue)
+      this.data.headers.totalGfn = Number(this.calcGfn(this.sumOfElementValue))
     },
     isSandCheck: function () {
       if (this.isSandCheck) {
