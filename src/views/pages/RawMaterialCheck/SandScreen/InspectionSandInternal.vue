@@ -63,7 +63,7 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <template v-if="!IS_LOADING && isSandCheck">
+        <template v-if="!IS_LOADING && isSandCheck && isFormReady">
           <div class="card my-2 overflow-auto" style="z-index: 1;">
             <div class="card-body p-1">
               <div class="row">
@@ -320,7 +320,8 @@ export default {
       elementsOutOfRange: [],
       notes: null,
       objPayload: null,
-      isSubmitted: false
+      isSubmitted: false,
+      isFormReady: false
     }
   },
   watch: {
@@ -363,6 +364,9 @@ export default {
             })
           }
         })
+        this.isFormReady = true
+      } else {
+        this.isFormReady = false
       }
     },
     'meshElements': {
