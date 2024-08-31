@@ -209,17 +209,17 @@
                       <template v-for="(element) in natriumElements" :key="element.id">
                         <tr>
                           <th style="width: 100px">ITEM</th>
-                          <th v-for="subElement in element.elements" :key="subElement.id">{{ subElement.name }}<small
+                          <th v-for="subElement in element?.elements" :key="subElement.id">{{ subElement.name }}<small
                               class="text-danger">*</small></th>
                         </tr>
                         <tr>
                           <th>Standard</th>
-                          <th v-for="subElement in element.elements" :key="subElement.id">{{ subElement.min }} ~ {{
+                          <th v-for="subElement in element?.elements" :key="subElement.id">{{ subElement.min }} ~ {{
                             subElement.max }}</th>
                         </tr>
                         <tr>
                           <th>{{ element.name }}</th>
-                          <th v-for="subElement in element.elements" :key="subElement.id">
+                          <th v-for="subElement in element?.elements" :key="subElement.id">
                             <input type="number" class="form-control" v-model="subElement.value">
                           </th>
                         </tr>
@@ -356,7 +356,7 @@ export default {
         this.natriumElements = this.GET_ELEMENT_INPUT.natriumElements.map(item => {
           return {
             ...item,
-            elements: item.elements.map(element => {
+            elements: item?.elements?.map(element => {
               return {
                 ...element,
                 value: null
@@ -433,7 +433,7 @@ export default {
         this.data.headers.shiftId &&
         this.data.headers.machineId &&
         this.meshElements.filter(element => isNumber(element.value)).length == this.meshElements.length &&
-        this.natriumElements.filter(element => element.elements.filter(item => isNumber(item.value)).length == element.elements.length).length == this.natriumElements.length &&
+        this.natriumElements.filter(element => element?.elements?.filter(item => isNumber(item.value)).length == element?.elements?.length).length == this.natriumElements.length &&
         isNumber(this.dustElement.value) &&
         isNumber(this.gfnElement.value)
     },
@@ -535,7 +535,7 @@ export default {
             {
               natriumElements: this.natriumElements.map((elements) => {
                 return {
-                  elements: elements.elements.map((item) => {
+                  elements: elements?.elements?.map((item) => {
                     return {
                       parentId: elements.id,
                       parentName: elements.name,
@@ -667,7 +667,7 @@ export default {
       }
 
       await natriumElements.forEach((element, index) => {
-        element.elements.forEach((subElement, index) => {
+        element?.elements?.forEach((subElement, index) => {
           const calcWarningLimitUpper = subElement.max - (subElement.max * subElement.warningLimit)
           const calcWarningLimitLower = subElement.min + (subElement.min * subElement.warningLimit)
           const isElementWarning =
