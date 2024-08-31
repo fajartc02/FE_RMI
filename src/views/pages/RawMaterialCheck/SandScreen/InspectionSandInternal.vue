@@ -286,7 +286,7 @@ import { ACTION_MACHINE, GET_MACHINE } from '@/store/modules/MACHINE.module';
 import { ACTION_SAND_ELEMENT, GET_ELEMENT_INPUT } from '@/store/modules/ELEMENTS.module';
 import { isNumber } from 'highcharts';
 import STATUS_ELEMENT_CONSTANT from '@/constants/STATUS_ELEMENT_CONSTANT';
-import { ACTION_SAMPLE_SAND, ACTION_SAMPLE_SAND_DETAIL } from '@/store/modules/SAMPLE_SAND.module';
+import { ACTION_SAMPLE_SAND, ACTION_SAMPLE_SAND_DETAIL, ADD_SAMPLE_SAND } from '@/store/modules/SAMPLE_SAND.module';
 
 export default {
   name: 'InspectionSandInternal',
@@ -439,7 +439,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([ACTION_SHIFT, ACTION_MACHINE, ACTION_SAND_ELEMENT, ACTION_SAMPLE_SAND, ACTION_SAMPLE_SAND_DETAIL]),
+    ...mapActions([ACTION_SHIFT, ACTION_MACHINE, ACTION_SAND_ELEMENT, ACTION_SAMPLE_SAND, ACTION_SAMPLE_SAND_DETAIL, ADD_SAMPLE_SAND]),
     selectedDay(dayIndex) {
       this.DAY_CONSTANT.forEach((day) => {
         day.isActive = day.idx === dayIndex ? true : false
@@ -585,9 +585,16 @@ export default {
           this.objPayload = objPayload;
           return;
         }
-        console.log(objPayloadFinal);
 
-        await this.ACTION_SAMPLE_SAND(objPayloadFinal)
+        // console.log(objPayloadFinal);
+
+        const response = await this.ACTION_SAMPLE_SAND(objPayloadFinal)
+        if (response) {
+          this.$swal('Success', 'Add sample success, Pengecekan tidak ada abnormal', 'success')
+          this.$router.push('/inspection/sand/historical')
+        } else {
+          this.$swal('Error', 'Internal Server Error', 'error')
+        }
       }
     },
     async checkElementStandard(elements) {
@@ -700,8 +707,15 @@ export default {
     async submitAbnormalSample() {
       try {
         this.objPayload.notes = this.notes
-        await this.ACTION_SAMPLE_SAND(this.objPayload)
+        const response = await this.ACTION_SAMPLE_SAND(this.objPayload)
+
         this.objPayload = null
+        if (response) {
+          this.$swal('Success', 'Add sample success, Pengecekan dengan abnormal', 'success')
+          this.$router.push('/inspection/sand/historical')
+        } else {
+          this.$swal('Error', 'Internal Server Error', 'error')
+        }
       } catch (error) {
         this.$swal('Error', 'Internal Server Error', 'error')
       }
