@@ -50,6 +50,8 @@ const actions = {
       dispatch(ACTION_LOADING, true)
       const { data } = await ApiService.query('sample-sand/historical', params)
       dispatch(ACTION_LOADING, false)
+      console.log('ACTION_SAMPLE_SAND_HISTORICAL', 'data', data)
+
       commit(SET_SAMPLE_SAND, data.data || [])
       return true
     } catch (error) {

@@ -8,7 +8,7 @@
     <div class="row mt-1">
       <div class="col-12">
         <div class="card p-2 overflow-auto mb-2">
-          <TableComponentVue :dataTable="dataSample" @emit-data="onDataSelected" />
+          <TableComponentVue :dataTable="GET_SAMPLE_SAND" @emit-data="onDataSelected" />
         </div>
         <PaginationComponent />
       </div>
@@ -47,8 +47,7 @@ export default {
         InputModel('Status', 'option', 'Select Status', null, [{ id: 'NONE', label: 'All' }, { id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false)
       ],
       isLineChanges: false,
-      isLineSelected: false,
-      dataSample: []
+      isLineSelected: false
     }
   },
   watch: {
@@ -78,9 +77,6 @@ export default {
         this.filters.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', [], null, true, 'machineId'))
       }
     },
-    GET_SAMPLE_SAND: function () {
-      this.dataSample = this.GET_SAMPLE_SAND
-    }
   },
   computed: {
     ...mapGetters([GET_MACHINE_TREESELECT, GET_LINE_TREESELECT, GET_META, GET_SAMPLE_SAND, GET_SHIFT_TREESELECT]),
