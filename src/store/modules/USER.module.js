@@ -46,7 +46,7 @@ const actions = {
       const fetch = async () => {
         ApiService.setHeader()
         console.log('ACTION_TBL_USER', 'filter', filter);
-        const {data} = await ApiService.query('user/list', filter)
+        const {data} = await ApiService.query('user', filter)
         console.log('ACTION_TBL_USER', 'data', data);
         const pagination = data.meta.pagination
         pagination ? dispatch(ACTION_SET_META, pagination) : null
@@ -62,17 +62,16 @@ const actions = {
         await fetch();
       }
 
-
     } catch (error) {
       dispatch(ACTION_LOADING, false)
       console.error('ACTION_TBL_USER', 'ERROR', error)
+      throw error;
     }
   },
   async ACTION_ADD_USER({commit, dispatch, state}, params) {
     try {
       ApiService.setHeader();
-      dispatch(ACTION_LOADING, true);
-      const {data} = await ApiService.query('user/add', params);
+      const {data} = await ApiService.post('user', params);
       console.log('ACTION_ADD_USER', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -87,15 +86,13 @@ const actions = {
 
     } catch (e) {
       console.error('ACTION_ADD_USER', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false);
+      throw e;
     }
   },
   async ACTION_EDIT_USER({commit, dispatch}, USERData) {
     try {
       ApiService.setHeader()
-      dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('user/edit', USERData)
+      const {data} = await ApiService.put(`user/${USERData.id}`, USERData)
       console.log('ACTION_EDIT_USER', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -111,15 +108,13 @@ const actions = {
 
     } catch (e) {
       console.error('ACTION_EDIT_USER', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false)
+      throw e;
     }
   },
   async ACTION_REMOVE_USER({commit, dispatch}, USERData) {
     try {
       ApiService.setHeader()
-      dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('user/delete', USERData)
+      const {data} = await ApiService.delete(`user/${USERData.id}`)
       console.log('ACTION_REMOVE_USER', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -131,10 +126,9 @@ const actions = {
       } else {
         dispatch(ACTION_TBL_USER);
       }
-    } catch (error) {
+    } catch (e) {
       console.error('ACTION_REMOVE_USER', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false)
+      throw e;
     }
   },
 }

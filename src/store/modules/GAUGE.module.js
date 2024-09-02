@@ -73,7 +73,7 @@ const actions = {
       const fetch = async () => {
         ApiService.setHeader()
         console.log('ACTION_TBL_GAUGE', 'filter', filter);
-        const {data} = await ApiService.query('gauge/list', filter)
+        const {data} = await ApiService.query('gauge', filter)
         console.log('ACTION_TBL_GAUGE', 'data', data);
         const pagination = data.meta.pagination
         pagination ? dispatch(ACTION_SET_META, pagination) : null
@@ -99,8 +99,7 @@ const actions = {
   async ACTION_ADD_GAUGE({commit, dispatch, state}, params) {
     try {
       ApiService.setHeader();
-      dispatch(ACTION_LOADING, true);
-      const {data} = await ApiService.query('gauge/add', params);
+      const {data} = await ApiService.post('gauge', params);
       console.log('ACTION_ADD_GAUGE', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -115,15 +114,13 @@ const actions = {
 
     } catch (e) {
       console.error('ACTION_ADD_GAUGE', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false);
+      throw e;
     }
   },
   async ACTION_EDIT_GAUGE({commit, dispatch}, GAUGEData) {
     try {
       ApiService.setHeader()
-      dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('gauge/edit', GAUGEData)
+      const {data} = await ApiService.put(`gauge/${GAUGEData.id}`, GAUGEData)
       console.log('ACTION_EDIT_GAUGE', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -139,16 +136,14 @@ const actions = {
 
     } catch (e) {
       console.error('ACTION_EDIT_GAUGE', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false)
+      throw e;
     }
   },
   async ACTION_REMOVE_GAUGE({commit, dispatch}, GAUGEData) {
     try {
       ApiService.setHeader()
-      dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('GAUGE/delete', GAUGEData)
-      console.log('on delete GAUGE', data);
+      const {data} = await ApiService.delete(`gauge/${GAUGEData.id}`)
+      console.log('ACTION_REMOVE_GAUGE', data);
 
       if (commonUtils.isMock()) {
         const cloneTbl = structuredClone(state.TBL_GAUGE_DATA);
@@ -159,10 +154,9 @@ const actions = {
       } else {
         dispatch(ACTION_TBL_GAUGE);
       }
-    } catch (error) {
-      console.error(error)
-    } finally {
-      dispatch(ACTION_LOADING, false)
+    } catch (e) {
+      console.error('ACTION_REMOVE_GAUGE', 'ERROR', e);
+      throw e;
     }
   },
 }

@@ -146,6 +146,18 @@ export default {
             },
             {
               component: 'CNavItem',
+              to: '/master/element/ingot',
+              name: 'Ingot',
+              parentId: 'MST',
+            },
+            {
+              component: 'CNavItem',
+              to: '/master/element/sand',
+              name: 'Sand',
+              parentId: 'MST',
+            },
+            {
+              component: 'CNavItem',
               to: '/master/element-standard/ingot',
               name: 'Standard Ingot',
               parentId: 'MST',

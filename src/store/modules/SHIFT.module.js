@@ -73,7 +73,7 @@ const actions = {
       const fetch = async () => {
         ApiService.setHeader()
         console.log('ACTION_TBL_SHIFT', 'filter', filter);
-        const {data} = await ApiService.query('shift/list', filter)
+        const {data} = await ApiService.query('shift', filter)
         console.log('ACTION_TBL_SHIFT', 'data', data);
         const pagination = data.meta.pagination
         pagination ? dispatch(ACTION_SET_META, pagination) : null
@@ -99,8 +99,7 @@ const actions = {
   async ACTION_ADD_SHIFT({commit, dispatch, state}, params) {
     try {
       ApiService.setHeader();
-      dispatch(ACTION_LOADING, true);
-      const {data} = await ApiService.query('shift/add', params);
+      const {data} = await ApiService.post('shift', params);
       console.log('ACTION_ADD_SHIFT', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -115,15 +114,13 @@ const actions = {
 
     } catch (e) {
       console.error('ACTION_ADD_SHIFT', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false);
+      throw e;
     }
   },
   async ACTION_EDIT_SHIFT({commit, dispatch}, SHIFTData) {
     try {
       ApiService.setHeader()
-      dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('shift/edit', SHIFTData)
+      const {data} = await ApiService.put(`shift/${SHIFTData.id}`, SHIFTData)
       console.log('ACTION_EDIT_SHIFT', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -139,16 +136,15 @@ const actions = {
 
     } catch (e) {
       console.error('ACTION_EDIT_SHIFT', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false)
+      throw e;
     }
   },
   async ACTION_REMOVE_SHIFT({commit, dispatch}, SHIFTData) {
     try {
       ApiService.setHeader()
       dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('shift/delete', SHIFTData)
-      console.log('on delete SHIFT', data);
+      const {data} = await ApiService.delete(`shift/${SHIFTData.id}`)
+      console.log('ACTION_REMOVE_SHIFT', data);
 
       if (commonUtils.isMock()) {
         const cloneTbl = structuredClone(state.TBL_SHIFT_DATA);
@@ -159,10 +155,9 @@ const actions = {
       } else {
         dispatch(ACTION_TBL_SHIFT);
       }
-    } catch (error) {
-      console.error(error)
-    } finally {
-      dispatch(ACTION_LOADING, false)
+    } catch (e) {
+      console.error('ACTION_REMOVE_SHIFT', 'ERROR', e);
+      throw e;
     }
   },
 }

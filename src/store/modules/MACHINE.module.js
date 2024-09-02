@@ -9,7 +9,9 @@ export const SET_MACHINE = 'SET_MACHINE'
 export const SET_TBL_MACHINE = 'SET_TBL_MACHINE'
 export const ACTION_MACHINE = 'ACTION_MACHINE'
 export const ACTION_TBL_MACHINE = 'ACTION_TBL_MACHINE'
-
+export const ACTION_ADD_MACHINE = "ACTION_ADD_MACHINE";
+export const ACTION_EDIT_MACHINE = "ACTION_EDIT_MACHINE";
+export const ACTION_REMOVE_MACHINE = "ACTION_REMOVE_MACHINE";
 export const GET_MACHINE_TREESELECT = 'GET_MACHINE_TREESELECT'
 
 const state = {
@@ -71,7 +73,7 @@ const actions = {
       const fetch = async () => {
         ApiService.setHeader()
         console.log('ACTION_TBL_MACHINE', 'filter', filter);
-        const {data} = await ApiService.query('machine/list', filter)
+        const {data} = await ApiService.query('machine', filter)
         console.log('ACTION_TBL_MACHINE', 'data', data);
         const pagination = data.meta.pagination
         pagination ? dispatch(ACTION_SET_META, pagination) : null
@@ -96,8 +98,7 @@ const actions = {
   async ACTION_ADD_MACHINE({commit, dispatch, state}, params) {
     try {
       ApiService.setHeader()
-      dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('machine/add', params);
+      const {data} = await ApiService.post(`machine`, params);
       console.log('ACTION_ADD_MACHINE', data);
 
       if (commonUtils.isMock()) {
@@ -111,15 +112,13 @@ const actions = {
       }
     } catch (e) {
       console.error('ACTION_ADD_MACHINE', 'error', e)
-    } finally {
-      dispatch(ACTION_LOADING, false)
+      throw e;
     }
   },
   async ACTION_EDIT_MACHINE({commit, dispatch, state}, machineData) {
     try {
       ApiService.setHeader()
-      dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('machine/edit', machineData);
+      const {data} = await ApiService.put(`machine/${machineData.id}`, machineData);
       console.log('ACTION_EDIT_MACHINE', data);
 
       if (commonUtils.isMock()) {
@@ -134,14 +133,12 @@ const actions = {
       }
     } catch (e) {
       console.error('ACTION_EDIT_MACHINE', 'error', e)
-    } finally {
-      dispatch(ACTION_LOADING, false)
+      return e;
     }
   },
   async ACTION_REMOVE_MACHINE({commit, dispatch, state}, machineData) {
     try {
       ApiService.setHeader()
-      dispatch(ACTION_LOADING, true)
       const {data} = await ApiService.query('machine/delete', machineData);
       console.log('ACTION_REMOVE_MACHINE', data);
 
@@ -156,8 +153,7 @@ const actions = {
       }
     } catch (e) {
       console.error('ACTION_REMOVE_MACHINE', 'error', e)
-    } finally {
-      dispatch(ACTION_LOADING, false)
+      return e;
     }
   },
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="position-relative">
-    <CTable v-if="dataTable.data" class="text-center" striped bordered hover>
+    <CTable v-if="dataTable?.data" class="text-center" striped bordered hover>
       <CTableHead>
         <CTableRow>
           <template v-for="(label, index) in Object.keys(dataTable.data[0])">
@@ -25,7 +25,7 @@
         </CTableRow>
       </CTableBody>
     </CTable>
-    <DataNotFound v-else-if="!includeLoading && !IS_LOADING"/>
+    <DataNotFound v-else-if="includeLoading || !IS_LOADING"/>
     <div v-if="includeLoading && IS_LOADING" style="height: 5rem;">
       <div class="position-absolute top-10 bottom-0 left-0 right-0 w-100 h-100">
         <LoadingComponent/>

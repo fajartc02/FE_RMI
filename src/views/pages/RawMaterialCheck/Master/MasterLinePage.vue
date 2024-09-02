@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <ModalFormMstLineComponent :line-data="selectedRow" :visible="visibleForm" @on-close="visibleForm = false"/>
+    <ModalFormMstLineComponent :line-data="selectedRow" :visible="visibleForm" @on-close="onClose"/>
   </div>
 </template>
 
@@ -58,7 +58,11 @@ export default {
     }
   },
   mounted() {
-    this.ACTION_TBL_LINE()
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this.ACTION_TBL_LINE()
+      }, 300)
+    })
   },
   computed: {
     ...mapGetters([GET_TBL_LINE]),
@@ -78,6 +82,12 @@ export default {
     onAdd() {
       this.selectedRow = null;
       this.visibleForm = true;
+    },
+    onClose(hasAction) {
+      this.visibleForm = false
+      if (hasAction === true) {
+        //this.ACTION_TBL_LINE()
+      }
     }
   }
 }

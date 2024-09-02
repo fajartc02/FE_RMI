@@ -33,22 +33,28 @@ const getters = {
     return state.LINE_DATA
   },
   GET_LINE_SELECT(state) {
-    state.LINE_DATA.unshift({id: '', name: 'Select Line'})
-    return state.LINE_DATA.map((line) => {
+    const data =  [...state.LINE_DATA.map((line) => {
       return {
         id: line.id,
         label: line.name,
       }
-    })
+    })];
+
+    data.unshift({id: '', name: 'Select Line'});
+
+    return data;
   },
   GET_LINE_TREESELECT(state) {
-    state.LINE_DATA.push({id: 'NONE', name: 'All'})
-    return state.LINE_DATA.map((line) => {
+    const data = [...state.LINE_DATA.map((line) => {
       return {
         id: line.id,
         label: line.name,
       }
-    })
+    })];
+
+    data.unshift({id: 'NONE', name: 'All'});
+
+    return data;
   },
   GET_TBL_LINE: state => (state.TBL_LINE_DATA),
 }
@@ -83,7 +89,7 @@ const actions = {
       const fetch = async () => {
         ApiService.setHeader()
         console.log('ACTION_TBL_LINE', 'filter', filter);
-        const {data} = await ApiService.query('line/list', filter)
+        const {data} = await ApiService.query('line', filter)
         console.log('ACTION_TBL_LINE', 'data', data);
         const pagination = data.meta.pagination
         pagination ? dispatch(ACTION_SET_META, pagination) : null
@@ -109,8 +115,7 @@ const actions = {
   async ACTION_ADD_LINE({commit, dispatch, state}, params) {
     try {
       ApiService.setHeader();
-      dispatch(ACTION_LOADING, true);
-      const {data} = await ApiService.query('line/add', params);
+      const {data} = await ApiService.post('line', params);
       console.log('on add line', data);
 
       if (commonUtils.isMock()) {
@@ -125,15 +130,13 @@ const actions = {
 
     } catch (e) {
       console.error('ACTION_ADD_LINE', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false);
+      throw e;
     }
   },
   async ACTION_EDIT_LINE({commit, dispatch}, lineData) {
     try {
       ApiService.setHeader()
-      dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('line/edit', lineData)
+      const {data} = await ApiService.put(`line/${lineData.id}`, lineData)
       console.log('on edit line', data);
 
       if (commonUtils.isMock()) {
@@ -149,15 +152,13 @@ const actions = {
 
     } catch (e) {
       console.error('ACTION_EDIT_LINE', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false)
+      throw e;
     }
   },
   async ACTION_REMOVE_LINE({commit, dispatch}, lineData) {
     try {
       ApiService.setHeader()
-      dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('line/delete', lineData)
+      const {data} = await ApiService.delete(`line/${lineData.id}`)
       console.log('on delete line', data);
 
       if (commonUtils.isMock()) {
@@ -169,10 +170,9 @@ const actions = {
       } else {
         dispatch(ACTION_TBL_LINE);
       }
-    } catch (error) {
-      console.error(error)
-    } finally {
-      dispatch(ACTION_LOADING, false)
+    } catch (e) {
+      console.error('ACTION_REMOVE_LINE', 'ERROR', e);
+      throw e;
     }
   },
 }

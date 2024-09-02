@@ -5,7 +5,13 @@
       <CFormInput
         v-model="form.firstName"
         type="text"
-        label="Name"
+        label="Firstname"
+        class="mb-3"
+      />
+      <CFormInput
+        v-model="form.lastName"
+        type="text"
+        label="Lastname"
         class="mb-3"
       />
       <CFormInput
@@ -74,6 +80,18 @@ import CommonFooterActionComponent
   from "@/views/pages/RawMaterialCheck/Master/components/CommonModalFooterActionComponent.vue";
 import CommonModalHeaderComponent
   from "@/views/pages/RawMaterialCheck/Master/components/CommonModalHeaderComponent.vue";
+import {performHttpRequest} from "@/utils/RequestUtils";
+import {mapActions} from "vuex";
+
+const defaultArgs = {
+  id: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  confirmationPassword: '',
+  isActive: false,
+};
 
 export default {
   name: "ModalFormMstUserComponent",
@@ -88,14 +106,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      form: {
-        id: '',
-        firstName: '',
-        email: '',
-        password: '',
-        confirmationPassword: '',
-        isActive: false,
-      },
+      form: defaultArgs,
     }
   },
   computed: {
@@ -111,38 +122,45 @@ export default {
     }
   },
   watch: {
-    loadedData(newValue, oldValue) {
-      if (oldValue !== newValue) {
-        this.form = {
-          ...newValue,
-          password: ''
+    visible(newValue) {
+      if (newValue) {
+        if (this.hasLoadedData) {
+          this.form = {
+            ...this.loadedData,
+            password: ''
+          };
+        } else {
+          this.form = {
+            ...defaultArgs
+          };
         }
       }
     }
   },
   methods: {
+    ...mapActions([ACTION_ADD_USER, ACTION_EDIT_USER, ACTION_REMOVE_USER]),
     submit() {
-      this.isLoading = true;
-      if (this.hasLoadedLine) {
-        this.edit();
-      } else {
-        this.save();
-      }
-      this.isLoading = false;
-    },
-    save() {
-
-    },
-    edit() {
-
+      performHttpRequest(async () => {
+        this.isLoading = true;
+        if (this.hasLoadedData) {
+          await this.ACTION_EDIT_USER(this.form);
+        } else {
+          await this.ACTION_ADD_USER(this.form);
+        }
+        this.isLoading = false;
+        this.closeModal();
+      });
     },
     remove() {
-
+      performHttpRequest(async () => {
+        this.isLoading = true;
+        await this.ACTION_REMOVE_USER(this.form);
+        this.isLoading = false;
+        this.closeModal();
+      });
     },
     closeModal() {
-      if (!this.isLoading) {
-        this.$emit('on-close', true)
-      }
+      this.$emit('on-close', true)
     }
   }
 }

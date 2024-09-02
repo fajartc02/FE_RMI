@@ -1,7 +1,7 @@
 <template>
   <CModal class="w-100" scrollable size="md" :visible="visible" backdrop="static" @close="closeModal">
     <CModalHeader>
-      <CModalTitle>{{title}}</CModalTitle>
+      <CModalTitle>{{ title }}</CModalTitle>
     </CModalHeader>
     <CModalBody>
       <CFormInput
@@ -24,7 +24,7 @@
       />
     </CModalBody>
     <CModalFooter class="d-flex justify-content-center align-items-center">
-      <CButton color="secondary" @click="closeModal">
+      <CButton color="secondary" @click="closeModal()">
         Close
       </CButton>
       <CButton v-if="hasLoadedLine" color="secondary" @click="remove">
@@ -45,6 +45,16 @@ import {
   ACTION_EDIT_LINE,
   ACTION_REMOVE_LINE
 } from '@/store/modules/LINE.module'
+import {mapActions} from "vuex";
+import {performHttpRequest} from "@/utils/RequestUtils";
+
+const defaultArgs = {
+  id: '',
+  name: '',
+  code: '',
+  description: ''
+}
+
 export default {
   name: "ModalFormMstLineComponent",
   props: {
@@ -54,12 +64,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      form: {
-        id: '',
-        name: '',
-        code: '',
-        description: ''
-      },
+      form: defaultArgs,
     }
   },
   computed: {
@@ -75,37 +80,47 @@ export default {
     }
   },
   watch: {
-    lineData(newValue, oldValue) {
-      if(oldValue !== newValue) {
-        this.form = {
-          ...newValue
+    visible(newValue) {
+      if (newValue) {
+        if (this.lineData) {
+          this.form = {
+            ...this.lineData
+          }
+        } else {
+          this.form = {
+            ...defaultArgs
+          }
         }
       }
-    }
+    },
   },
   methods: {
+    ...
+      mapActions([ACTION_ADD_LINE, ACTION_EDIT_LINE, ACTION_REMOVE_LINE]),
     submit() {
-      this.isLoading = true;
-      if (this.hasLoadedLine) {
-        this.edit();
-      } else {
-        this.save();
-      }
-      this.isLoading = false;
-    },
-    save() {
-
-    },
-    edit() {
-
-    },
-    remove(){
-
-    },
+      performHttpRequest(async () => {
+        this.isLoading = true;
+        if (this.hasLoadedLine) {
+          await this.ACTION_EDIT_LINE(this.form)
+        } else {
+          await this.ACTION_ADD_LINE(this.form);
+        }
+        this.isLoading = false;
+        this.closeModal()
+      })
+    }
+    ,
+    remove() {
+      performHttpRequest(async () => {
+        this.isLoading = true;
+        await this.ACTION_REMOVE_LINE(this.lineData);
+        this.closeModal();
+        this.isLoading = false;
+      })
+    }
+    ,
     closeModal() {
-      if (!this.isLoading) {
-        this.$emit('on-close', true)
-      }
+      this.$emit('on-close', true)
     }
   }
 }

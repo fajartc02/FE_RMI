@@ -1,33 +1,27 @@
 <template>
   <CModal class="w-100" scrollable size="md" :visible="visible" backdrop="static" @close="closeModal">
     <CommonModalHeaderComponent :title="title"/>
-    <CModalBody>
-      <CFormInput
-        v-model="form.type"
-        type="text"
-        label="Name"
-        class="mb-3"
-      />
-      <CFormInput
-        v-model="form.value"
-        type="text"
-        label="Value"
-        class="mb-3"
-      />
-      <CFormInput
-        v-model="form.code"
-        type="text"
-        label="Code"
-        class="mb-3"
-        disabled
-      />
-      <CFormInput
-        v-model="form.description"
-        type="text"
-        label="Description"
-        class="mb-3"
-      />
-    </CModalBody>
+    <CommonMstFormComponent
+      v-model:name="form.name"
+      v-model:code="form.code"
+      v-model:description="form.description"
+    >
+      <template #default>
+        <CFormInput
+          v-model="form.unit"
+          type="text"
+          label="Unit"
+          class="mb-3"
+        />
+        <CFormInput
+          v-model="form.elementIndex"
+          type="text"
+          label="Element Index"
+          class="mb-3"
+          @keypress="$event.key.match(/^[\d]$/) ? '' : $event.preventDefault()"
+        />
+      </template>
+    </CommonMstFormComponent>
     <CommonFooterActionComponent
       :submit-title="title"
       :has-loaded-data="hasLoadedData"
@@ -39,31 +33,34 @@
 </template>
 
 <script>
-import {
-  ACTION_ADD_SYSTEM,
-  ACTION_EDIT_SYSTEM,
-  ACTION_REMOVE_SYSTEM
-} from '@/store/modules/SYSTEM.module'
+import CommonMstFormComponent from "@/views/pages/RawMaterialCheck/Master/components/CommonModalBodyFormComponent.vue";
 import CommonFooterActionComponent
   from "@/views/pages/RawMaterialCheck/Master/components/CommonModalFooterActionComponent.vue";
 import CommonModalHeaderComponent
   from "@/views/pages/RawMaterialCheck/Master/components/CommonModalHeaderComponent.vue";
+import {
+  ACTION_ADD_SAND,
+  ACTION_EDIT_SAND,
+  ACTION_REMOVE_SAND
+} from '@/store/modules/SAND.module'
 import {performHttpRequest} from "@/utils/RequestUtils";
 import {mapActions} from "vuex";
 
 const defaultArgs = {
   id: '',
-  type: '',
-  value: '',
+  name: '',
   code: '',
-  description: ''
+  description: '',
+  unit: '',
+  elementIndex: ''
 };
 
 export default {
-  name: "ModalFormMstSystemComponent",
+  name: "ModalFormMstSandComponent",
   components: {
     CommonModalHeaderComponent,
     CommonFooterActionComponent,
+    CommonMstFormComponent
   },
   props: {
     loadedData: Object,
@@ -78,14 +75,14 @@ export default {
   computed: {
     title() {
       if (this.hasLoadedData) {
-        return "Edit System";
+        return "Edit Sand";
       }
 
-      return "Add System";
+      return "Add Sand";
     },
     hasLoadedData() {
       return this.loadedData && this.loadedData.id;
-    }
+    },
   },
   watch: {
     visible(newValue) {
@@ -93,36 +90,41 @@ export default {
         if (this.hasLoadedData) {
           this.form = {
             ...this.loadedData
-          };
+          }
         } else {
           this.form = {
             ...defaultArgs
-          };
+          }
         }
       }
-    }
+    },
   },
   methods: {
-    ...mapActions([ACTION_ADD_SYSTEM, ACTION_EDIT_SYSTEM, ACTION_REMOVE_SYSTEM]),
+    ...mapActions({
+      ACTION_ADD_SAND,
+      ACTION_EDIT_SAND,
+      ACTION_REMOVE_SAND
+    }),
     submit() {
       performHttpRequest(async () => {
         this.isLoading = true;
         if (this.hasLoadedData) {
-          await this.ACTION_EDIT_SYSTEM(this.form);
+          await this.ACTION_EDIT_SAND(this.form)
         } else {
-          await this.ACTION_ADD_SYSTEM(this.form);
+          await this.ACTION_ADD_SAND(this.form)
         }
+
         this.isLoading = false;
-        this.closeModal();
-      });
+        this.closeModal()
+      })
     },
     remove() {
       performHttpRequest(async () => {
         this.isLoading = true;
-        await this.ACTION_REMOVE_SYSTEM(this.form);
+        await this.ACTION_REMOVE_SAND(this.form)
         this.isLoading = false;
-        this.closeModal();
-      });
+        this.closeModal()
+      })
     },
     closeModal() {
       this.$emit('on-close', true)
@@ -130,3 +132,4 @@ export default {
   }
 }
 </script>
+
