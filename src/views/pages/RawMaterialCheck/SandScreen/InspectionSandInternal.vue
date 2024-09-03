@@ -64,7 +64,7 @@
     <div class="row">
       <div class="col-12">
         <template v-if="!IS_LOADING && isSandCheck && isFormReady">
-          <div class="card my-2 overflow-auto" style="z-index: 1;">
+          <div class="card my-2 overflow-auto" style="z-index: 1;" v-if="isHeaderNotEmpty">
             <div class="card-body p-1">
               <div class="row">
                 <div class="col-12 col-lg-12">
@@ -132,7 +132,7 @@
               </div>
             </div>
           </div>
-          <div class="card my-2 overflow-auto" style="z-index: 1;">
+          <div class="card my-2 overflow-auto" style="z-index: 1;"  v-if="isElementNotEmpty">
             <div class="card-body p-1">
               <div class="row">
                 <div class="col-12 col-lg-12">
@@ -197,7 +197,7 @@
               </div>
             </div>
           </div>
-          <div class="card my-2 overflow-auto" style="z-index: 1;">
+          <div class="card my-2 overflow-auto" style="z-index: 1;" v-if="isElementNotEmpty">
             <div class="card-body p-1">
               <div class="row">
                 <div class="col-12 col-lg-12">
@@ -318,6 +318,8 @@ export default {
       shiftData: [],
       STATUS_ELEMENT_CONSTANT: STATUS_ELEMENT_CONSTANT,
       elementsOutOfRange: [],
+      isHeaderNotEmpty: false,
+      isElementNotEmpty: false,
       notes: null,
       objPayload: null,
       isSubmitted: false,
@@ -434,8 +436,8 @@ export default {
         this.data.headers.machineId &&
         this.meshElements.filter(element => isNumber(element.value)).length == this.meshElements.length &&
         this.natriumElements.filter(element => element?.elements?.filter(item => isNumber(item.value)).length == element?.elements?.length).length == this.natriumElements.length &&
-        isNumber(this.dustElement.value) &&
-        isNumber(this.gfnElement.value)
+        isNumber(this.dustElement?.value ?? 0) &&
+        isNumber(this.gfnElement?.value ?? 0)
     },
   },
   methods: {
@@ -724,13 +726,15 @@ export default {
       try {
         const response = await this.ACTION_SAMPLE_SAND_DETAIL(id)
 
-        this.data.headers = response.data.headers
-        this.meshElements = response.data.elements[0].meshElements
-        this.natriumElements = response.data.elements[1].natriumElements
-        this.dustElement = response.data.elements[2].dustElement
-        this.gfnElement = response.data.elements[3].gfnElement
+        this.data.headers = response?.data?.headers ?? {}
+        this.meshElements = response?.data?.elements[0]?.meshElements ?? []
+        this.natriumElements = response?.data?.elements[1]?.natriumElements ?? []
+        this.dustElement = response?.data?.elements[2]?.dustElement ?? {}
+        this.gfnElement = response?.data?.elements[3]?.gfnElement ?? {}
         this.selectedShift(this.data.headers.shiftId)
-        this.notes = response.data.notes
+        this.notes = response?.data?.notes ?? null
+        this.isHeaderNotEmpty = response?.data?.headers != null
+        this.isElementNotEmpty = response?.data?.elements?.length !== 0
       } catch (error) {
         this.$swal('Error', 'Internal Server Error', 'error')
       }
