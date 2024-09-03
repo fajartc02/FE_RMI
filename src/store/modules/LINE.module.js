@@ -40,7 +40,7 @@ const getters = {
       }
     })];
 
-    data.unshift({id: '', name: 'Select Line'});
+    data.unshift({id: '', label: 'Select Line'});
 
     return data;
   },
@@ -85,13 +85,17 @@ const actions = {
   async ACTION_TBL_LINE({commit, dispatch}, filter) {
     try {
       dispatch(ACTION_LOADING, true)
+      //console.log('filter', filter);
 
       const fetch = async () => {
         ApiService.setHeader()
         console.log('ACTION_TBL_LINE', 'filter', filter);
         const {data} = await ApiService.query('line', filter)
         console.log('ACTION_TBL_LINE', 'data', data);
-        const pagination = data.meta.pagination
+        const pagination = data.meta.pagination;
+        if(pagination){
+
+        }
         pagination ? dispatch(ACTION_SET_META, pagination) : null
         dispatch(ACTION_LOADING, false)
         commit(SET_TBL_LINE, data)
@@ -114,6 +118,7 @@ const actions = {
   },
   async ACTION_ADD_LINE({commit, dispatch, state}, params) {
     try {
+      delete params.id;
       ApiService.setHeader();
       const {data} = await ApiService.post('line', params);
       console.log('on add line', data);

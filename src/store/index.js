@@ -20,6 +20,7 @@ import USERModule from "./modules/USER.module";
 import VENDORModule from "./modules/VENDOR.module";
 import SANDModule from "@/store/modules/SAND.module";
 import INGOTModule from "@/store/modules/INGOT.module";
+import MODALS from "@/store/modules/MODALS.module";
 
 export default createStore({
   state: {
@@ -60,6 +61,7 @@ export default createStore({
     USERModule,
     VENDORModule,
     SANDModule,
-    INGOTModule
+    INGOTModule,
+    MODALS
   },
 })

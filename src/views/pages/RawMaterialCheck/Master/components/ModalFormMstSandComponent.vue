@@ -30,6 +30,9 @@
       @on-delete="remove"
     />
   </CModal>
+  <ModalConfirm
+    title="Delete?"
+    @confirm="onConfirmDelete"/>
 </template>
 
 <script>
@@ -45,6 +48,7 @@ import {
 } from '@/store/modules/SAND.module'
 import {performHttpRequest} from "@/utils/RequestUtils";
 import {mapActions} from "vuex";
+import ModalConfirm from "@/components/RawMaterialInspection/ModalConfirm.vue";
 
 const defaultArgs = {
   id: '',
@@ -58,6 +62,7 @@ const defaultArgs = {
 export default {
   name: "ModalFormMstSandComponent",
   components: {
+    ModalConfirm,
     CommonModalHeaderComponent,
     CommonFooterActionComponent,
     CommonMstFormComponent
@@ -119,15 +124,18 @@ export default {
       })
     },
     remove() {
+      this.$store.dispatch('MODALS/open', 'DialogKonfirmasi');
+    },
+    closeModal() {
+      this.$emit('on-close', true)
+    },
+    onConfirmDelete() {
       performHttpRequest(async () => {
         this.isLoading = true;
         await this.ACTION_REMOVE_SAND(this.form)
         this.isLoading = false;
         this.closeModal()
-      })
-    },
-    closeModal() {
-      this.$emit('on-close', true)
+      });
     }
   }
 }

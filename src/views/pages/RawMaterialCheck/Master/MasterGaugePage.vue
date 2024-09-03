@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <ModalFormMstGaugeComponent :loaded-data="selectedRow" :visible="visibleForm" @on-close="visibleForm = false"/>
+    <ModalFormMstGaugeComponent :loaded-data="selectedRow" :visible="visibleForm" @on-close="onClose"/>
   </div>
 </template>
 <script>
@@ -27,9 +27,12 @@ import PaginationComponent from "@/components/RawMaterialInspection/Pagination/P
 import FilterComponentVue from "@/components/RawMaterialInspection/Filter/FilterComponent.vue";
 import InputModel from "@/components/RawMaterialInspection/Filter/InputModel";
 import TableAddComponent from "@/components/RawMaterialInspection/Table/TableAddComponent.vue";
+import {mapActions, mapGetters} from "vuex";
 import {ACTION_LINE, GET_LINE_TREESELECT} from "@/store/modules/LINE.module";
 import {GET_TBL_GAUGE, ACTION_TBL_GAUGE} from "@/store/modules/GAUGE.module";
-import {mapActions, mapGetters} from "vuex";
+import {
+  GET_META
+} from "@/store/modules/META.module";
 
 export default {
   name: "MasterGaugePage",
@@ -77,13 +80,26 @@ export default {
     })
   },
   computed: {
-    ...mapGetters([GET_TBL_GAUGE, GET_LINE_TREESELECT]),
+    ...mapGetters([GET_TBL_GAUGE, GET_LINE_TREESELECT, GET_META]),
     dataTbl() {
       return this.GET_TBL_GAUGE;
+    },
+    pagination() {
+      return {
+        page: this.GET_META.page,
+        take: this.GET_META.take
+      };
     }
   },
+  watch: {
+    GET_META(newValue, oldValue) {
+      if (newValue.page !== oldValue.page || newValue.take !== oldValue.take) {
+        this.ACTION_TBL_GAUGE(this.pagination);
+      }
+    },
+  },
   methods: {
-    ...mapActions([ACTION_LINE, ACTION_TBL_GAUGE]),
+    ...mapActions([ACTION_LINE, ACTION_TBL_GAUGE, GET_META]),
     async onChangeFilter(filter) {
 
     },
@@ -94,6 +110,11 @@ export default {
     onAdd() {
       this.selectedRow = null;
       this.visibleForm = true;
+    },
+    onClose() {
+      setTimeout(() => {
+        this.visibleForm = false;
+      }, 300)
     }
   }
 }

@@ -27,9 +27,12 @@ import PaginationComponent from "@/components/RawMaterialInspection/Pagination/P
 import FilterComponentVue from "@/components/RawMaterialInspection/Filter/FilterComponent.vue";
 import InputModel from "@/components/RawMaterialInspection/Filter/InputModel";
 import TableAddComponent from "@/components/RawMaterialInspection/Table/TableAddComponent.vue";
+import {mapActions, mapGetters} from "vuex";
 import {ACTION_LINE, GET_LINE_TREESELECT} from "@/store/modules/LINE.module";
 import {GET_TBL_MACHINE, ACTION_TBL_MACHINE} from "@/store/modules/MACHINE.module";
-import {mapActions, mapGetters} from "vuex";
+import {
+  GET_META
+} from "@/store/modules/META.module";
 
 export default {
   name: "MasterMesinPage",
@@ -77,15 +80,27 @@ export default {
     })
   },
   computed: {
-    ...mapGetters([GET_TBL_MACHINE, GET_LINE_TREESELECT]),
+    ...mapGetters([GET_TBL_MACHINE, GET_LINE_TREESELECT, GET_META]),
     dataTbl() {
       return this.GET_TBL_MACHINE;
+    },
+    pagination() {
+      return {
+        page: this.GET_META.page,
+        take: this.GET_META.take
+      };
     }
+  },
+  watch: {
+    GET_META(newValue, oldValue) {
+      if (newValue.page !== oldValue.page || newValue.take !== oldValue.take) {
+        this.ACTION_TBL_MACHINE(this.pagination);
+      }
+    },
   },
   methods: {
     ...mapActions([ACTION_LINE, ACTION_TBL_MACHINE]),
     async onChangeFilter(filter) {
-
     },
     onDataSelected(data) {
       this.selectedRow = data;
@@ -96,10 +111,9 @@ export default {
       this.visibleForm = true;
     },
     onClose(hasAction) {
-      this.visibleForm = false
-      if (hasAction === true) {
-        this.ACTION_TBL_MACHINE()
-      }
+      setTimeout(() => {
+        this.visibleForm = false
+      }, 300);
     }
   }
 }

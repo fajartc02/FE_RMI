@@ -97,6 +97,7 @@ const actions = {
   },
   async ACTION_ADD_MACHINE({commit, dispatch, state}, params) {
     try {
+      delete params.id;
       ApiService.setHeader()
       const {data} = await ApiService.post(`machine`, params);
       console.log('ACTION_ADD_MACHINE', data);
@@ -139,7 +140,7 @@ const actions = {
   async ACTION_REMOVE_MACHINE({commit, dispatch, state}, machineData) {
     try {
       ApiService.setHeader()
-      const {data} = await ApiService.query('machine/delete', machineData);
+      const {data} = await ApiService.delete(`machine/${machineData.id}`);
       console.log('ACTION_REMOVE_MACHINE', data);
 
       if (commonUtils.isMock()) {

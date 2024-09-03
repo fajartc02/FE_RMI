@@ -61,9 +61,9 @@ export default {
     };
   },
   watch: {
-    GET_META() {
+    /*GET_META() {
       this.meta = { ...this.GET_META };
-    },
+    },*/
   },
   computed: {
     ...mapGetters([GET_META]),

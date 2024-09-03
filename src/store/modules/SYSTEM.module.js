@@ -3,10 +3,15 @@ import {ACTION_LOADING} from './LOADING.module'
 import {ACTION_SET_META} from "@/store/modules/META.module";
 import commonUtils from "@/utils/CommonUtils";
 
+export const SYSTEM_TYPE = {
+  INCHARGE_TYPE: 'INCHARGE_TYPE',
+};
+
+export const GET_SYSTEM_SELECT = "GET_SYSTEM_SELECT";
 export const GET_TBL_SYSTEM = 'GET_TBL_SYSTEM';
-
+export const SET_SYSTEM = 'SET_SYSTEM';
 export const SET_TBL_SYSTEM = 'SET_TBL_SYSTEM';
-
+export const ACTION_SYSTEM = 'ACTION_SYSTEM';
 export const ACTION_TBL_SYSTEM = 'ACTION_TBL_SYSTEM';
 
 export const ACTION_ADD_SYSTEM = 'ACTION_ADD_SYSTEM';
@@ -29,19 +34,52 @@ const state = {
 }
 
 const getters = {
-  GET_TBL_SYSTEM: (state) => (state.TBL_SYSTEM_DATA)
+  GET_SYSTEM : (state) => (state.TBL_SYSTEM_DATA),
+  GET_SYSTEM_SELECT(state)  {
+    return [...(state.SYSTEM_DATA?.map((item) => {
+      return {
+        id: item.type,
+        label: item.value,
+      }
+    }) ?? [])];
+  }
 }
 
 const mutations = {
   SET_TBL_SYSTEM(state, payload) {
     state.TBL_SYSTEM_DATA = payload
   },
+  SET_SYSTEM(state, payload) {
+    state.SYSTEM_DATA = payload
+  },
 }
 
 const actions = {
+  async ACTION_SYSTEM({commit, dispatch}, params) {
+    try {
+      ApiService.setHeader()
+      const {data} = await ApiService.query('system', params)
+      commit(SET_SYSTEM, data.data)
+    } catch (error) {
+      console.error('ACTION_SYSTEM', 'ERROR', error);
+      if (params?.type?.toLowerCase() === 'material') {
+        commit(SET_SYSTEM, [
+          {
+            type: 'Sand001',
+            value: 'Sand'
+          },
+          {
+            type: 'Ingot001',
+            value: 'Ingot'
+          }
+        ]);
+      }
+      //throw error
+    }
+  },
   async ACTION_TBL_SYSTEM({commit, dispatch}, filter) {
     try {
-      dispatch(ACTION_LOADING, true)
+      dispatch(ACTION_LOADING, true);
 
       const fetch = async () => {
         ApiService.setHeader()
@@ -71,6 +109,7 @@ const actions = {
   },
   async ACTION_ADD_SYSTEM({commit, dispatch, state}, params) {
     try {
+      delete params.id;
       ApiService.setHeader();
       const {data} = await ApiService.post('system', params);
       console.log('ACTION_ADD_SYSTEM', 'data', data);

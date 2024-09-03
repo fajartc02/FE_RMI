@@ -12,7 +12,7 @@
         <ModalFormMstVendorComponent
           :loaded-data="selectedRow"
           :visible="visibleForm"
-          @on-close="visibleForm = false"/>
+          @on-close="onClose"/>
       </template>
     </CommonDataTableComponent>
   </div>
@@ -25,6 +25,9 @@ import CommonDataTableComponent from "@/views/pages/RawMaterialCheck/Master/comp
 import InputModel from "@/components/RawMaterialInspection/Filter/InputModel";
 import {mapActions, mapGetters} from 'vuex';
 import {GET_TBL_VENDOR, ACTION_TBL_VENDOR} from "@/store/modules/VENDOR.module";
+import {
+  GET_META
+} from "@/store/modules/META.module";
 
 export default {
   name: "MasterVendorPage",
@@ -58,10 +61,23 @@ export default {
     });
   },
   computed: {
-    ...mapGetters([GET_TBL_VENDOR]),
+    ...mapGetters([GET_TBL_VENDOR, GET_META]),
     dataTbl() {
       return this.GET_TBL_VENDOR
-    }
+    },
+    pagination() {
+      return {
+        page: this.GET_META.page,
+        take: this.GET_META.take
+      };
+    },
+  },
+  watch: {
+    GET_META(newValue, oldValue) {
+      if (newValue.page !== oldValue.page || newValue.take !== oldValue.take) {
+        this.ACTION_TBL_VENDOR(this.pagination);
+      }
+    },
   },
   methods: {
     ...mapActions([ACTION_TBL_VENDOR]),
@@ -75,6 +91,11 @@ export default {
     onAdd() {
       this.selectedRow = null;
       this.visibleForm = true;
+    },
+    onClose() {
+      setTimeout(() => {
+        this.visibleForm = false
+      }, 300);
     }
   }
 }

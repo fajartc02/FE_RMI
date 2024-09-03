@@ -46,7 +46,7 @@ const actions = {
       const fetch = async () => {
         ApiService.setHeader()
         console.log('ACTION_TBL_STANDARD_INGOT', 'filter', filter);
-        const {data} = await ApiService.query('element-standard/ingot/list', filter)
+        const {data} = await ApiService.query('ingot-standard', filter)
         console.log('ACTION_TBL_STANDARD_INGOT', 'data', data);
         const pagination = data.meta.pagination
         pagination ? dispatch(ACTION_SET_META, pagination) : null
@@ -71,9 +71,10 @@ const actions = {
   },
   async ACTION_ADD_STANDARD_INGOT({commit, dispatch, state}, params) {
     try {
+      delete params.id;
       ApiService.setHeader();
       dispatch(ACTION_LOADING, true);
-      const {data} = await ApiService.query('element-standard/ingot/add', params);
+      const {data} = await ApiService.post('ingot-standard', params);
       console.log('ACTION_ADD_STANDARD_INGOT', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -96,7 +97,7 @@ const actions = {
     try {
       ApiService.setHeader()
       dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('element-standard/ingot/edit', STANDARD_INGOTData)
+      const {data} = await ApiService.put(`ingot-standard/${STANDARD_INGOTData.id}`, STANDARD_INGOTData)
       console.log('ACTION_EDIT_STANDARD_INGOT', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -112,15 +113,14 @@ const actions = {
 
     } catch (e) {
       console.error('ACTION_EDIT_STANDARD_INGOT', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false)
+      throw e;
     }
   },
   async ACTION_REMOVE_STANDARD_INGOT({commit, dispatch}, STANDARD_INGOTData) {
     try {
       ApiService.setHeader()
       dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('element-standard/ingot/delete', STANDARD_INGOTData)
+      const {data} = await ApiService.delete(`ingot-standard/${STANDARD_INGOTData.id}`)
       console.log('ACTION_REMOVE_STANDARD_INGOT', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -132,10 +132,9 @@ const actions = {
       } else {
         dispatch(ACTION_TBL_STANDARD_INGOT);
       }
-    } catch (error) {
+    } catch (e) {
       console.error('ACTION_REMOVE_STANDARD_INGOT', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false)
+      throw e;
     }
   },
 }

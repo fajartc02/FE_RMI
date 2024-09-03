@@ -29,6 +29,9 @@
       @on-delete="remove"
     />
   </CModal>
+  <ModalConfirm
+    title="Delete?"
+    @confirm="onConfirmDelete"/>
 </template>
 
 <script>
@@ -44,6 +47,7 @@ import CommonModalHeaderComponent
 import CommonMstFormComponent from "@/views/pages/RawMaterialCheck/Master/components/CommonModalBodyFormComponent.vue";
 import {mapActions} from "vuex";
 import {performHttpRequest} from "@/utils/RequestUtils";
+import ModalConfirm from "@/components/RawMaterialInspection/ModalConfirm.vue";
 
 const defaultArgs = {
   id: '',
@@ -57,6 +61,7 @@ const defaultArgs = {
 export default {
   name: "ModalFormMstVendorComponent",
   components: {
+    ModalConfirm,
     CommonMstFormComponent,
     CommonModalHeaderComponent,
     CommonFooterActionComponent,
@@ -113,15 +118,18 @@ export default {
       });
     },
     remove() {
+      this.$store.dispatch('MODALS/open', 'DialogKonfirmasi');
+    },
+    closeModal() {
+      this.$emit('on-close', true)
+    },
+    onConfirmDelete() {
       performHttpRequest(async () => {
         this.isLoading = true;
         await this.ACTION_REMOVE_VENDOR(this.form)
         this.isLoading = false;
         this.closeModal();
       });
-    },
-    closeModal() {
-      this.$emit('on-close', true)
     }
   }
 }

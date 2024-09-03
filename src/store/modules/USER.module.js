@@ -70,6 +70,7 @@ const actions = {
   },
   async ACTION_ADD_USER({commit, dispatch, state}, params) {
     try {
+      delete params.id;
       ApiService.setHeader();
       const {data} = await ApiService.post('user', params);
       console.log('ACTION_ADD_USER', 'data', data);

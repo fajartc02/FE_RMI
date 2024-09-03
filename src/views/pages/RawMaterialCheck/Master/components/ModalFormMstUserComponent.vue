@@ -21,18 +21,20 @@
         class="mb-3"
       />
       <CFormInput
+        v-if="!hasLoadedData"
         v-model="form.password"
         type="password"
         label="Password"
         class="mb-3"
       />
       <CFormInput
+        v-if="!hasLoadedData"
         v-model="form.confirmationPassword"
         type="password"
         label="Confirmation Password"
         class="mb-3"
       />
-      <div class="d-flex flex-column">
+      <div v-if="false" class="d-flex flex-column">
         <label class="form-label mb-2">
           Status
         </label>
@@ -68,6 +70,9 @@
       @on-delete="remove"
     />
   </CModal>
+  <ModalConfirm
+    title="Delete?"
+    @confirm="onConfirmDelete"/>
 </template>
 
 <script>
@@ -82,6 +87,7 @@ import CommonModalHeaderComponent
   from "@/views/pages/RawMaterialCheck/Master/components/CommonModalHeaderComponent.vue";
 import {performHttpRequest} from "@/utils/RequestUtils";
 import {mapActions} from "vuex";
+import ModalConfirm from "@/components/RawMaterialInspection/ModalConfirm.vue";
 
 const defaultArgs = {
   id: '',
@@ -90,12 +96,13 @@ const defaultArgs = {
   email: '',
   password: '',
   confirmationPassword: '',
-  isActive: false,
+  isActive: true,
 };
 
 export default {
   name: "ModalFormMstUserComponent",
   components: {
+    ModalConfirm,
     CommonModalHeaderComponent,
     CommonFooterActionComponent,
   },
@@ -152,15 +159,18 @@ export default {
       });
     },
     remove() {
+      this.$store.dispatch('MODALS/open', 'DialogKonfirmasi');
+    },
+    closeModal() {
+      this.$emit('on-close', true)
+    },
+    onConfirmDelete() {
       performHttpRequest(async () => {
         this.isLoading = true;
         await this.ACTION_REMOVE_USER(this.form);
         this.isLoading = false;
         this.closeModal();
       });
-    },
-    closeModal() {
-      this.$emit('on-close', true)
     }
   }
 }

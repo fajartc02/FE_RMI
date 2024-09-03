@@ -46,7 +46,7 @@ const actions = {
       const fetch = async () => {
         ApiService.setHeader()
         console.log('ACTION_TBL_STANDARD_SAND', 'filter', filter);
-        const {data} = await ApiService.query('element-standard/sand/list', filter)
+        const {data} = await ApiService.query('sand-standard', filter)
         console.log('ACTION_TBL_STANDARD_SAND', 'data', data);
         const pagination = data.meta.pagination
         pagination ? dispatch(ACTION_SET_META, pagination) : null
@@ -63,16 +63,17 @@ const actions = {
       }
 
 
-    } catch (error) {
+    } catch (e) {
       dispatch(ACTION_LOADING, false)
-      console.error('ACTION_TBL_STANDARD_SAND', 'ERROR', error)
+      console.error('ACTION_TBL_STANDARD_SAND', 'ERROR', e)
+      throw e;
     }
   },
   async ACTION_ADD_STANDARD_SAND({commit, dispatch, state}, params) {
     try {
+      delete params.id;
       ApiService.setHeader();
-      dispatch(ACTION_LOADING, true);
-      const {data} = await ApiService.query('element-standard/sand/add', params);
+      const {data} = await ApiService.post('sand-standard', params);
       console.log('ACTION_ADD_STANDARD_SAND', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -87,15 +88,12 @@ const actions = {
 
     } catch (e) {
       console.error('ACTION_ADD_STANDARD_SAND', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false);
     }
   },
   async ACTION_EDIT_STANDARD_SAND({commit, dispatch}, STANDARD_SANDData) {
     try {
       ApiService.setHeader()
-      dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('element-standard/sand/edit', STANDARD_SANDData)
+      const {data} = await ApiService.put(`sand-standard/${STANDARD_SANDData.id}`, STANDARD_SANDData)
       console.log('ACTION_EDIT_STANDARD_SAND', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -111,15 +109,13 @@ const actions = {
 
     } catch (e) {
       console.error('ACTION_EDIT_STANDARD_SAND', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false)
+      throw e;
     }
   },
   async ACTION_REMOVE_STANDARD_SAND({commit, dispatch}, STANDARD_SANDData) {
     try {
       ApiService.setHeader()
-      dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('element-standard/sand/delete', STANDARD_SANDData)
+      const {data} = await ApiService.delete(`sand-standard/${STANDARD_SANDData.id}`)
       console.log('ACTION_REMOVE_STANDARD_SAND', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -131,10 +127,9 @@ const actions = {
       } else {
         dispatch(ACTION_TBL_STANDARD_SAND);
       }
-    } catch (error) {
+    } catch (e) {
       console.error('ACTION_REMOVE_STANDARD_SAND', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false)
+      throw e;
     }
   },
 }

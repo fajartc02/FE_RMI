@@ -12,7 +12,7 @@
         <ModalFormMstSystemComponent
           :loaded-data="selectedRow"
           :visible="visibleForm"
-          @on-close="visibleForm = false"/>
+          @on-close="onClose"/>
       </template>
     </CommonDataTableComponent>
   </div>
@@ -25,6 +25,7 @@ import ModalFormMstSystemComponent
 import InputModel from "@/components/RawMaterialInspection/Filter/InputModel";
 import {mapActions, mapGetters} from 'vuex';
 import {GET_TBL_SYSTEM, ACTION_TBL_SYSTEM} from "@/store/modules/SYSTEM.module";
+import {GET_META} from "@/store/modules/META.module";
 
 export default {
   name: "MasterSystemPage",
@@ -58,15 +59,27 @@ export default {
     });
   },
   computed: {
-    ...mapGetters([GET_TBL_SYSTEM]),
+    ...mapGetters([GET_TBL_SYSTEM, GET_META]),
     dataTbl() {
       return this.GET_TBL_SYSTEM
-    }
+    },
+    pagination() {
+      return {
+        page: this.GET_META.page,
+        take: this.GET_META.take
+      };
+    },
+  },
+  watch: {
+    GET_META(newValue, oldValue) {
+      if (newValue.page !== oldValue.page || newValue.take !== oldValue.take) {
+        this.ACTION_TBL_SYSTEM(this.pagination);
+      }
+    },
   },
   methods: {
     ...mapActions([ACTION_TBL_SYSTEM]),
     async onChangeFilter(filter) {
-
     },
     onDataSelected(data) {
       this.selectedRow = data;
@@ -75,6 +88,11 @@ export default {
     onAdd() {
       this.selectedRow = null;
       this.visibleForm = true;
+    },
+    onClose() {
+      setTimeout(() => {
+        this.visibleForm = false
+      }, 300);
     }
   }
 }
