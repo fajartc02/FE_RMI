@@ -15,7 +15,7 @@
         <CTableRow v-for="(item, index) in dataTable.data" :key="index">
           <template v-for="(value, key, idxChild) in item" :key="idxChild">
             <CTableDataCell v-if="key != 'id' && !key.toLowerCase().includes('id')"
-                            :class="`${value === 'OK' ? 'text-success' : value === 'NG' ? 'text-danger' : `${value}`.includes('REVISION') || `${value}`.includes('WARNING') ? 'text-warning' : ''}`">
+              :class="`${value === 'OK' ? 'text-success' : value === 'NG' ? 'text-danger' : `${value}`.includes('REVISION') || `${value}`.includes('WARNING') ? 'text-warning' : ''}`">
               {{ value }}
             </CTableDataCell>
           </template>
@@ -25,10 +25,10 @@
         </CTableRow>
       </CTableBody>
     </CTable>
-    <DataNotFound v-else-if="includeLoading || !IS_LOADING"/>
+    <DataNotFound v-else-if="includeLoading || !IS_LOADING" />
     <div v-if="includeLoading && IS_LOADING" style="height: 5rem;">
       <div class="position-absolute top-10 bottom-0 left-0 right-0 w-100 h-100">
-        <LoadingComponent/>
+        <LoadingComponent />
       </div>
     </div>
 
@@ -40,7 +40,7 @@ import FN_CASE_CONVERTER from '@/functions/FN_CASE_CONVERTER';
 import DataNotFound from '@/components/RawMaterialInspection/EmptyDataHandler/DataNotFound.vue';
 import LoadingComponent from "@/components/RawMaterialInspection/LoadingComponent.vue";
 import { IS_LOADING } from '@/store/modules/LOADING.module'
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: 'TableComponent',
@@ -51,7 +51,7 @@ export default {
     }
   },
   watch: {
-    IS_LOADING(newValue, oldValue){
+    IS_LOADING(newValue, oldValue) {
       console.log('IS_LOADING', newValue)
     }
   },
