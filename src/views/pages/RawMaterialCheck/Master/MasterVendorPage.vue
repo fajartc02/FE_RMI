@@ -51,7 +51,11 @@ export default {
     }
   },
   mounted() {
-    this.ACTION_TBL_VENDOR()
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this.ACTION_TBL_VENDOR();
+      }, 300);
+    });
   },
   computed: {
     ...mapGetters([GET_TBL_VENDOR]),

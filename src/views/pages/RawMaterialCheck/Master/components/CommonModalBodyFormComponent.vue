@@ -26,13 +26,6 @@
 </template>
 
 <script>
-
-const a = [
-  'update:name',
-  'update:code',
-  'update:description',
-]
-
 export default {
   name: "CommonMstFormComponent",
   props: {
@@ -40,11 +33,11 @@ export default {
     code: String,
     description: String,
   },
-  emits: [
+  /*emits: [
     'update:name',
     'update:code',
     'update:description',
-  ],
+  ],*/
 }
 </script>
 

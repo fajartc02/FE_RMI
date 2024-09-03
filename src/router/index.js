@@ -119,6 +119,18 @@ const routes = [
         component: () =>
           import('@/views/pages/RawMaterialCheck/Master/MasterVendorPage.vue'),
       },
+      {
+        path: '/master/element/ingot',
+        name: 'MasterIngot',
+        component: () =>
+          import('@/views/pages/RawMaterialCheck/Master/MasterIngotPage.vue'),
+      },
+      {
+        path: '/master/element/sand',
+        name: 'MasterSand',
+        component: () =>
+          import('@/views/pages/RawMaterialCheck/Master/MasterSandPage.vue'),
+      },
     ],
   },
   {

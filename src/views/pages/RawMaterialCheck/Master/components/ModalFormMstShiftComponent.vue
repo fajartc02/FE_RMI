@@ -1,11 +1,10 @@
 <template>
   <CModal class="w-100" scrollable size="md" :visible="visible" backdrop="static" @close="closeModal">
-    <CommonModalHeaderComponent :title="title" />
+    <CommonModalHeaderComponent :title="title"/>
     <CommonMstFormComponent
-      :name="form.name"
-      :code="form.code"
-      :description="form.description"
-      :form="form"
+      v-model:name="form.name"
+      v-model:code="form.code"
+      v-model:description="form.description"
     />
     <CommonFooterActionComponent
       :submit-title="title"
@@ -18,20 +17,33 @@
 </template>
 
 <script>
-import {
-  ACTION_ADD_SHIFT,
-  ACTION_EDIT_SHIFT,
-  ACTION_REMOVE_SHIFT
-} from '@/store/modules/SHIFT.module'
 import CommonMstFormComponent from "@/views/pages/RawMaterialCheck/Master/components/CommonModalBodyFormComponent.vue";
 import CommonFooterActionComponent
   from "@/views/pages/RawMaterialCheck/Master/components/CommonModalFooterActionComponent.vue";
 import CommonModalHeaderComponent
   from "@/views/pages/RawMaterialCheck/Master/components/CommonModalHeaderComponent.vue";
+import {
+  ACTION_ADD_SHIFT,
+  ACTION_EDIT_SHIFT,
+  ACTION_REMOVE_SHIFT
+} from '@/store/modules/SHIFT.module'
+import {performHttpRequest} from "@/utils/RequestUtils";
+import {mapActions} from "vuex";
+
+const defaultArgs = {
+  id: '',
+  name: '',
+  code: '',
+  description: ''
+};
 
 export default {
   name: "ModalFormMstShiftComponent",
-  components: {CommonModalHeaderComponent, CommonFooterActionComponent, CommonMstFormComponent},
+  components: {
+    CommonModalHeaderComponent,
+    CommonFooterActionComponent,
+    CommonMstFormComponent
+  },
   props: {
     loadedData: Object,
     visible: Boolean
@@ -39,12 +51,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      form: {
-        id: '',
-        name: '',
-        code: '',
-        description: ''
-      },
+      form: defaultArgs,
     }
   },
   computed: {
@@ -60,43 +67,49 @@ export default {
     },
   },
   watch: {
-    loadedData(newValue, oldValue) {
-      if (oldValue !== newValue) {
-        this.form = {
-          ...newValue
+    visible(newValue) {
+      if (newValue) {
+        if (this.hasLoadedData) {
+          this.form = {
+            ...this.loadedData
+          }
+        } else {
+          this.form = {
+            ...defaultArgs
+          }
         }
       }
     },
-    form:{
-      deep: true,
-      handler(newValue, oldValue) {
-        console.log('formvalue', newValue)
-      }
-    }
   },
   methods: {
+    ...mapActions({
+      ACTION_ADD_SHIFT,
+      ACTION_EDIT_SHIFT,
+      ACTION_REMOVE_SHIFT
+    }),
     submit() {
-      this.isLoading = true;
-      if (this.hasLoadedLine) {
-        this.edit();
-      } else {
-        this.save();
-      }
-      this.isLoading = false;
-    },
-    save() {
+      performHttpRequest(async () => {
+        this.isLoading = true;
+        if (this.hasLoadedData) {
+          await this.ACTION_EDIT_SHIFT(this.form)
+        } else {
+          await this.ACTION_ADD_SHIFT(this.form)
+        }
 
-    },
-    edit() {
-
+        this.isLoading = false;
+        this.closeModal()
+      })
     },
     remove() {
-
+      performHttpRequest(async () => {
+        this.isLoading = true;
+        await this.ACTION_REMOVE_SHIFT(this.form)
+        this.isLoading = false;
+        this.closeModal()
+      })
     },
     closeModal() {
-      if (!this.isLoading) {
-        this.$emit('on-close', true)
-      }
+      this.$emit('on-close', true)
     }
   }
 }

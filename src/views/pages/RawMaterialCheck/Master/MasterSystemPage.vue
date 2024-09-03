@@ -51,7 +51,11 @@ export default {
     }
   },
   mounted() {
-    this.ACTION_TBL_SYSTEM()
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this.ACTION_TBL_SYSTEM()
+      }, 300);
+    });
   },
   computed: {
     ...mapGetters([GET_TBL_SYSTEM]),

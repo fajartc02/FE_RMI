@@ -50,7 +50,11 @@ export default {
     }
   },
   mounted() {
-    this.ACTION_TBL_USER()
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this.ACTION_TBL_USER();
+      }, 300);
+    });
   },
   computed: {
     ...mapGetters([GET_TBL_USER]),

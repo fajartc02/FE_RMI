@@ -47,7 +47,22 @@ import {
   ACTION_LINE,
   GET_LINE_SELECT
 } from '@/store/modules/LINE.module'
+import {
+  ACTION_ADD_MACHINE,
+  ACTION_EDIT_MACHINE,
+  ACTION_REMOVE_MACHINE
+} from "@/store/modules/MACHINE.module";
 import {mapActions, mapGetters} from 'vuex';
+import {constructError} from "@/utils/ResponseUtils";
+import {performHttpRequest} from "@/utils/RequestUtils";
+
+const defaultArgs = {
+  id: '',
+  line_id: '',
+  name: '',
+  code: '',
+  description: ''
+};
 
 export default {
   name: "ModalFormMstMesinComponent",
@@ -61,13 +76,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      form: {
-        id: '',
-        line_id: '',
-        name: '',
-        code: '',
-        description: ''
-      },
+      form: defaultArgs,
     }
   },
   mounted() {
@@ -86,38 +95,44 @@ export default {
     }
   },
   watch: {
-    mesinData(newValue, oldValue) {
-      if(oldValue !== newValue) {
-        this.form = {
-          ...newValue
+    visible(newValue) {
+      if (newValue) {
+        if (this.mesinData) {
+          this.form = {
+            ...this.mesinData
+          };
+        } else {
+          this.form = {
+            ...defaultArgs
+          };
         }
       }
     }
   },
   methods: {
-    ...mapActions([ACTION_LINE]),
+    ...mapActions([ACTION_LINE, ACTION_ADD_MACHINE, ACTION_EDIT_MACHINE, ACTION_REMOVE_MACHINE]),
     submit() {
-      this.isLoading = true;
-      if (this.hasLoadedMesin) {
-        this.edit();
-      } else {
-        this.save();
-      }
-      this.isLoading = false;
-    },
-    save() {
-
-    },
-    edit() {
-
+      performHttpRequest(async () => {
+        this.isLoading = true;
+        if (this.hasLoadedMesin) {
+          await this.ACTION_EDIT_MACHINE(this.form);
+        } else {
+          await this.ACTION_ADD_MACHINE(this.form);
+        }
+        this.isLoading = false;
+        this.closeModal()
+      });
     },
     remove() {
-
+      performHttpRequest(async () => {
+        this.isLoading = true;
+        await this.ACTION_REMOVE_MACHINE(this.form);
+        this.isLoading = false;
+        this.closeModal()
+      });
     },
     closeModal() {
-      if (!this.isLoading) {
-        this.$emit('on-close', true)
-      }
+      this.$emit('on-close', true)
     }
   }
 }

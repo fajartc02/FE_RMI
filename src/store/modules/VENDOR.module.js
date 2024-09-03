@@ -46,7 +46,7 @@ const actions = {
       const fetch = async () => {
         ApiService.setHeader()
         console.log('ACTION_TBL_VENDOR', 'filter', filter);
-        const {data} = await ApiService.query('vendor/list', filter)
+        const {data} = await ApiService.query('vendor', filter)
         console.log('ACTION_TBL_VENDOR', 'data', data);
         const pagination = data.meta.pagination
         pagination ? dispatch(ACTION_SET_META, pagination) : null
@@ -66,13 +66,13 @@ const actions = {
     } catch (error) {
       dispatch(ACTION_LOADING, false)
       console.error('ACTION_TBL_VENDOR', 'ERROR', error)
+      throw error;
     }
   },
   async ACTION_ADD_VENDOR({commit, dispatch, state}, params) {
     try {
       ApiService.setHeader();
-      dispatch(ACTION_LOADING, true);
-      const {data} = await ApiService.query('vendor/add', params);
+      const {data} = await ApiService.post('vendor', params);
       console.log('ACTION_ADD_VENDOR', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -87,15 +87,13 @@ const actions = {
 
     } catch (e) {
       console.error('ACTION_ADD_VENDOR', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false);
+      throw e;
     }
   },
   async ACTION_EDIT_VENDOR({commit, dispatch}, VENDORData) {
     try {
       ApiService.setHeader()
-      dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('vendor/edit', VENDORData)
+      const {data} = await ApiService.put(`vendor/${VENDORData.id}`, VENDORData)
       console.log('ACTION_EDIT_VENDOR', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -111,15 +109,13 @@ const actions = {
 
     } catch (e) {
       console.error('ACTION_EDIT_VENDOR', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false)
+      throw e;
     }
   },
   async ACTION_REMOVE_VENDOR({commit, dispatch}, VENDORData) {
     try {
       ApiService.setHeader()
-      dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('vendor/delete', VENDORData)
+      const {data} = await ApiService.delete(`vendor/${VENDORData.id}`)
       console.log('ACTION_REMOVE_VENDOR', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -131,10 +127,9 @@ const actions = {
       } else {
         dispatch(ACTION_TBL_VENDOR);
       }
-    } catch (error) {
+    } catch (e) {
       console.error('ACTION_REMOVE_VENDOR', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false)
+      throw e;
     }
   },
 }

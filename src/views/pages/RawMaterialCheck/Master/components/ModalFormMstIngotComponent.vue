@@ -8,16 +8,31 @@
     >
       <template #default>
         <CFormInput
-          v-model="form.phone"
+          v-model="form.unit"
           type="text"
-          label="Phone"
+          label="Unit"
           class="mb-3"
         />
         <CFormInput
-          v-model="form.address"
+          v-model="form.atomicNumber"
           type="text"
-          label="Address"
+          label="Atomic Number"
           class="mb-3"
+          @keypress="$event.key.match(/^[\d]$/) ? '' : $event.preventDefault()"
+        />
+        <CFormInput
+          v-model="form.budomari"
+          type="text"
+          label="Budomary Number"
+          class="mb-3"
+          @keypress="$event.key.match(/^[\d]$/) ? '' : $event.preventDefault()"
+        />
+        <CFormInput
+          v-model="form.weightMolten"
+          type="text"
+          label="Weight Molten"
+          class="mb-3"
+          @keypress="$event.key.match(/^[\d]$/) ? '' : $event.preventDefault()"
         />
       </template>
     </CommonMstFormComponent>
@@ -32,34 +47,36 @@
 </template>
 
 <script>
-import {
-  ACTION_ADD_VENDOR,
-  ACTION_EDIT_VENDOR,
-  ACTION_REMOVE_VENDOR
-} from '@/store/modules/VENDOR.module'
+import CommonMstFormComponent from "@/views/pages/RawMaterialCheck/Master/components/CommonModalBodyFormComponent.vue";
 import CommonFooterActionComponent
   from "@/views/pages/RawMaterialCheck/Master/components/CommonModalFooterActionComponent.vue";
 import CommonModalHeaderComponent
   from "@/views/pages/RawMaterialCheck/Master/components/CommonModalHeaderComponent.vue";
-import CommonMstFormComponent from "@/views/pages/RawMaterialCheck/Master/components/CommonModalBodyFormComponent.vue";
-import {mapActions} from "vuex";
+import {
+  ACTION_ADD_INGOT,
+  ACTION_EDIT_INGOT,
+  ACTION_REMOVE_INGOT
+} from "@/store/modules/INGOT.module";
 import {performHttpRequest} from "@/utils/RequestUtils";
+import {mapActions} from "vuex";
 
 const defaultArgs = {
   id: '',
   name: '',
   code: '',
   description: '',
-  phone: '',
-  address: ''
+  unit: '',
+  atomicNumber: '',
+  budomari: '',
+  weightMolten: '',
 };
 
 export default {
-  name: "ModalFormMstVendorComponent",
+  name: "ModalFormMstIngotComponent",
   components: {
-    CommonMstFormComponent,
     CommonModalHeaderComponent,
     CommonFooterActionComponent,
+    CommonMstFormComponent
   },
   props: {
     loadedData: Object,
@@ -74,14 +91,14 @@ export default {
   computed: {
     title() {
       if (this.hasLoadedData) {
-        return "Edit Vendor";
+        return "Edit Ingot";
       }
 
-      return "Add Vendor";
+      return "Add Ingot";
     },
     hasLoadedData() {
       return this.loadedData && this.loadedData.id;
-    }
+    },
   },
   watch: {
     visible(newValue) {
@@ -95,30 +112,37 @@ export default {
             ...defaultArgs
           }
         }
+
+        console.log('form', this.form)
       }
-    }
+    },
   },
   methods: {
-    ...mapActions([ACTION_ADD_VENDOR, ACTION_EDIT_VENDOR, ACTION_REMOVE_VENDOR]),
+    ...mapActions({
+      ACTION_ADD_INGOT,
+      ACTION_EDIT_INGOT,
+      ACTION_REMOVE_INGOT
+    }),
     submit() {
       performHttpRequest(async () => {
         this.isLoading = true;
         if (this.hasLoadedData) {
-          await this.ACTION_EDIT_VENDOR(this.form)
+          await this.ACTION_EDIT_INGOT(this.form)
         } else {
-          await this.ACTION_ADD_VENDOR(this.form)
+          await this.ACTION_ADD_INGOT(this.form)
         }
+
         this.isLoading = false;
-        this.closeModal();
-      });
+        this.closeModal()
+      })
     },
     remove() {
       performHttpRequest(async () => {
         this.isLoading = true;
-        await this.ACTION_REMOVE_VENDOR(this.form)
+        await this.ACTION_REMOVE_INGOT(this.form)
         this.isLoading = false;
-        this.closeModal();
-      });
+        this.closeModal()
+      })
     },
     closeModal() {
       this.$emit('on-close', true)
@@ -126,3 +150,4 @@ export default {
   }
 }
 </script>
+

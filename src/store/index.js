@@ -1,4 +1,4 @@
-import { createStore } from 'vuex'
+import {createStore} from 'vuex'
 import QRModule from './modules/QR.module'
 import LOADINGModule from './modules/LOADING.module'
 import AUTHModule from './modules/AUTH.module'
@@ -18,44 +18,48 @@ import STANDARD_SANDModule from "./modules/STANDARD_SAND.module";
 import SYSTEMModule from "./modules/SYSTEM.module";
 import USERModule from "./modules/USER.module";
 import VENDORModule from "./modules/VENDOR.module";
+import SANDModule from "@/store/modules/SAND.module";
+import INGOTModule from "@/store/modules/INGOT.module";
 
 export default createStore({
-    state: {
-        sidebarVisible: '',
-        sidebarUnfoldable: false,
+  state: {
+    sidebarVisible: '',
+    sidebarUnfoldable: false,
+  },
+  mutations: {
+    toggleSidebar(state) {
+      state.sidebarVisible = !state.sidebarVisible
     },
-    mutations: {
-        toggleSidebar(state) {
-            state.sidebarVisible = !state.sidebarVisible
-        },
-        toggleUnfoldable(state) {
-            state.sidebarUnfoldable = !state.sidebarUnfoldable
-        },
-        updateSidebarVisible(state, payload) {
-            state.sidebarVisible = payload.value
-        },
+    toggleUnfoldable(state) {
+      state.sidebarUnfoldable = !state.sidebarUnfoldable
     },
-    actions: {},
-    modules: {
-        METAModule,
-        AUTHModule,
-        LOADINGModule,
+    updateSidebarVisible(state, payload) {
+      state.sidebarVisible = payload.value
+    },
+  },
+  actions: {},
+  modules: {
+    METAModule,
+    AUTHModule,
+    LOADINGModule,
 
-        MACHINEModule,
-        LINEModule,
-        SHIFTModule,
+    MACHINEModule,
+    LINEModule,
+    SHIFTModule,
 
-        QRModule,
-        SAMPLE_CODEModule,
-        GAUGEModule,
-        SAMPLE_INGOTModule,
-        ELEMENTSModule,
-        GRAPHModule,
-        SAMPLE_SANDModule,
-        STANDARD_INGOTModule,
-        STANDARD_SANDModule,
-        SYSTEMModule,
-        USERModule,
-        VENDORModule
-    },
+    QRModule,
+    SAMPLE_CODEModule,
+    GAUGEModule,
+    SAMPLE_INGOTModule,
+    ELEMENTSModule,
+    GRAPHModule,
+    SAMPLE_SANDModule,
+    STANDARD_INGOTModule,
+    STANDARD_SANDModule,
+    SYSTEMModule,
+    USERModule,
+    VENDORModule,
+    SANDModule,
+    INGOTModule
+  },
 })

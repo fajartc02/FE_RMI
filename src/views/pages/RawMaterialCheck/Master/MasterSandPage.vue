@@ -1,7 +1,7 @@
 <template>
-  <div id="mst-shift">
+  <div id="mst-line">
     <div class="container-fluid">
-      <TableAddComponent @on-click="onAdd" tag="Shift"/>
+      <TableAddComponent @on-click="onAdd" tag="Sand"/>
       <div class="row">
         <div class="col-12">
           <FilterComponentVue :fieldsInput="filters" @emit-filter="onChangeFilter"/>
@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <ModalFormMstShiftComponent :loaded-data="selectedRow" :visible="visibleForm" @on-close="visibleForm = false"/>
+    <ModalFormMstSandComponent :loaded-data="selectedRow" :visible="visibleForm" @on-close="onClose"/>
   </div>
 </template>
 
@@ -26,18 +26,21 @@ import PaginationComponent from "@/components/RawMaterialInspection/Pagination/P
 import FilterComponentVue from "@/components/RawMaterialInspection/Filter/FilterComponent.vue";
 import InputModel from "@/components/RawMaterialInspection/Filter/InputModel";
 import TableAddComponent from "@/components/RawMaterialInspection/Table/TableAddComponent.vue";
-import ModalFormMstShiftComponent
-  from "@/views/pages/RawMaterialCheck/Master/components/ModalFormMstShiftComponent.vue";
+import ModalFormMstSandComponent from "@/views/pages/RawMaterialCheck/Master/components/ModalFormMstSandComponent.vue";
 import {mapActions, mapGetters} from 'vuex';
-import {GET_TBL_SHIFT, ACTION_TBL_SHIFT} from "@/store/modules/SHIFT.module";
+import {
+  GET_TBL_SAND,
+  ACTION_TBL_SAND
+} from "@/store/modules/SAND.module";
 
 export default {
-  name: "MasterShiftPage",
+  name: "MasterSand",
   components: {
-    ModalFormMstShiftComponent,
+    ModalFormMstSandComponent,
     TableAddComponent,
     FilterComponentVue,
-    PaginationComponent, TableComponentVue,
+    PaginationComponent,
+    TableComponentVue,
   },
   data() {
     return {
@@ -60,18 +63,18 @@ export default {
   mounted() {
     this.$nextTick(() => {
       setTimeout(() => {
-        this.ACTION_TBL_SHIFT()
-      }, 300);
-    });
+        this.ACTION_TBL_SAND()
+      }, 300)
+    })
   },
   computed: {
-    ...mapGetters([GET_TBL_SHIFT]),
+    ...mapGetters([GET_TBL_SAND]),
     dataTbl() {
-      return this.GET_TBL_SHIFT
+      return this.GET_TBL_SAND
     }
   },
   methods: {
-    ...mapActions([ACTION_TBL_SHIFT]),
+    ...mapActions([ACTION_TBL_SAND]),
     async onChangeFilter(filter) {
 
     },
@@ -82,6 +85,9 @@ export default {
     onAdd() {
       this.selectedRow = null;
       this.visibleForm = true;
+    },
+    onClose() {
+      this.visibleForm = false
     }
   }
 }

@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <ModalFormMstMesinComponent :mesin-data="selectedRow" :visible="visibleForm" @on-close="visibleForm = false"/>
+    <ModalFormMstMesinComponent :mesin-data="selectedRow" :visible="visibleForm" @on-close="onClose"/>
   </div>
 </template>
 <script>
@@ -69,8 +69,12 @@ export default {
     }
   },
   mounted() {
-    this.ACTION_TBL_MACHINE();
-    this.ACTION_LINE();
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this.ACTION_TBL_MACHINE();
+        this.ACTION_LINE();
+      }, 300)
+    })
   },
   computed: {
     ...mapGetters([GET_TBL_MACHINE, GET_LINE_TREESELECT]),
@@ -90,6 +94,12 @@ export default {
     onAdd() {
       this.selectedRow = null;
       this.visibleForm = true;
+    },
+    onClose(hasAction) {
+      this.visibleForm = false
+      if (hasAction === true) {
+        this.ACTION_TBL_MACHINE()
+      }
     }
   }
 }

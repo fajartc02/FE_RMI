@@ -6,7 +6,7 @@
     <CModalBody>
       <div class="mb-3">
         <label class="form-label">Line</label>
-        <Treeselect v-model="form.line_id" :options="GET_LINE_SELECT" :clearable="true"/>
+        <Treeselect v-model="form.lineId" :options="lines" :clearable="true"/>
       </div>
       <CFormInput
         v-model="form.name"
@@ -44,10 +44,23 @@
 <script>
 import Treeselect from "@zanmato/vue3-treeselect";
 import {
-  ACTION_LINE,
   GET_LINE_SELECT
 } from '@/store/modules/LINE.module'
+import {
+  ACTION_ADD_GAUGE,
+  ACTION_EDIT_GAUGE,
+  ACTION_REMOVE_GAUGE
+} from "@/store/modules/GAUGE.module";
 import {mapActions, mapGetters} from 'vuex';
+import {performHttpRequest} from "@/utils/RequestUtils";
+
+const defaultArgs = {
+  id: '',
+  lineId: '',
+  name: '',
+  code: '',
+  description: ''
+};
 
 export default {
   name: "ModalFormMstGaugeComponent",
@@ -61,19 +74,14 @@ export default {
   data() {
     return {
       isLoading: false,
-      form: {
-        id: '',
-        line_id: '',
-        name: '',
-        code: '',
-        description: ''
-      },
+      form: defaultArgs,
     }
-  },
-  mounted() {
   },
   computed: {
     ...mapGetters([GET_LINE_SELECT]),
+    lines(){
+      return this.GET_LINE_SELECT
+    },
     title() {
       if (this.hasLoadedData) {
         return "Edit Gauge";
@@ -86,38 +94,44 @@ export default {
     }
   },
   watch: {
-    loadedData(newValue, oldValue) {
-      if(oldValue !== newValue) {
-        this.form = {
-          ...newValue
+    visible(newValue) {
+      if (newValue) {
+        if (this.hasLoadedData) {
+          this.form = {
+            ...this.loadedData
+          }
+        } else {
+          this.form = {
+            ...defaultArgs
+          }
         }
       }
     }
   },
   methods: {
-    ...mapActions([ACTION_LINE]),
+    ...mapActions([ACTION_ADD_GAUGE, ACTION_EDIT_GAUGE, ACTION_REMOVE_GAUGE]),
     submit() {
-      this.isLoading = true;
-      if (this.hasLoadedData) {
-        this.edit();
-      } else {
-        this.save();
-      }
-      this.isLoading = false;
-    },
-    save() {
-
-    },
-    edit() {
-
+      performHttpRequest(async () => {
+        this.isLoading = true;
+        if (this.hasLoadedData) {
+          await this[ACTION_EDIT_GAUGE](this.form);
+        } else {
+          await this[ACTION_ADD_GAUGE](this.form);
+        }
+        this.isLoading = false;
+        this.closeModal();
+      });
     },
     remove() {
-
+      performHttpRequest(async () => {
+        this.isLoading = true;
+        await this.ACTION_REMOVE_GAUGE(this.form);
+        this.isLoading = false;
+        this.closeModal()
+      })
     },
     closeModal() {
-      if (!this.isLoading) {
-        this.$emit('on-close', true)
-      }
+      this.$emit('on-close', true)
     }
   }
 }

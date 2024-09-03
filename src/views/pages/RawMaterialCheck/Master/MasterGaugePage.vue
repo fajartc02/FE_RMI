@@ -69,8 +69,12 @@ export default {
     }
   },
   mounted() {
-    this.ACTION_TBL_GAUGE();
-    this.ACTION_LINE();
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this.ACTION_TBL_GAUGE();
+        this.ACTION_LINE();
+      }, 300)
+    })
   },
   computed: {
     ...mapGetters([GET_TBL_GAUGE, GET_LINE_TREESELECT]),

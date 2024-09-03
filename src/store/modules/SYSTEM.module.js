@@ -46,7 +46,7 @@ const actions = {
       const fetch = async () => {
         ApiService.setHeader()
         console.log('ACTION_TBL_SYSTEM', 'filter', filter);
-        const {data} = await ApiService.query('system/list', filter)
+        const {data} = await ApiService.query('system', filter)
         console.log('ACTION_TBL_SYSTEM', 'data', data);
         const pagination = data.meta.pagination
         pagination ? dispatch(ACTION_SET_META, pagination) : null
@@ -66,13 +66,13 @@ const actions = {
     } catch (error) {
       dispatch(ACTION_LOADING, false)
       console.error('ACTION_TBL_SYSTEM', 'ERROR', error)
+      throw error;
     }
   },
   async ACTION_ADD_SYSTEM({commit, dispatch, state}, params) {
     try {
       ApiService.setHeader();
-      dispatch(ACTION_LOADING, true);
-      const {data} = await ApiService.query('system/add', params);
+      const {data} = await ApiService.post('system', params);
       console.log('ACTION_ADD_SYSTEM', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -87,15 +87,13 @@ const actions = {
 
     } catch (e) {
       console.error('ACTION_ADD_SYSTEM', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false);
+      throw e;
     }
   },
   async ACTION_EDIT_SYSTEM({commit, dispatch}, SYSTEMData) {
     try {
       ApiService.setHeader()
-      dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('system/edit', SYSTEMData)
+      const {data} = await ApiService.put(`system/${SYSTEMData.id}`, SYSTEMData)
       console.log('ACTION_EDIT_SYSTEM', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -111,15 +109,13 @@ const actions = {
 
     } catch (e) {
       console.error('ACTION_EDIT_SYSTEM', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false)
+      throw e;
     }
   },
   async ACTION_REMOVE_SYSTEM({commit, dispatch}, SYSTEMData) {
     try {
       ApiService.setHeader()
-      dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('system/delete', SYSTEMData)
+      const {data} = await ApiService.delete(`system/${SYSTEMData.id}`)
       console.log('ACTION_REMOVE_SYSTEM', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -131,10 +127,9 @@ const actions = {
       } else {
         dispatch(ACTION_TBL_SYSTEM);
       }
-    } catch (error) {
+    } catch (e) {
       console.error('ACTION_REMOVE_SYSTEM', 'ERROR', e);
-    } finally {
-      dispatch(ACTION_LOADING, false)
+      throw e;
     }
   },
 }
