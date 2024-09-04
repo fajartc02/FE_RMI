@@ -17,6 +17,8 @@ const state = {
 
 const getters = {
     GET_ELEMENT(state) {
+        console.log('GET_ELEMENT', state.ELEMENT_DATA)
+
         state.ELEMENT_DATA.push({ id: 'NONE', name: 'All' })
         if (state.ELEMENT_DATA.length > 0) {
             return state.ELEMENT_DATA.map((element) => {
@@ -78,7 +80,27 @@ const actions = {
             dispatch(ACTION_LOADING, true)
             const { data } = await ApiService.query('sand-element', params)
             dispatch(ACTION_LOADING, false)
-            commit(SET_ELEMENT_INPUT, data.data)
+
+            let elements = []
+            if (data.data) {
+                console.log(data.data)
+
+                for (const key in data.data) {
+                    const element = data.data[key]
+                    if (Array.isArray(element)) {
+                        console.log('array here!')
+                        for (const keyChild in element) {
+                            let value = element[keyChild]
+                            elements.push({...value })
+                        }
+                    } else {
+                        elements.push(element)
+                    }
+                }
+                commit(SET_ELEMENT_INPUT, elements)
+            } else {
+                commit(SET_ELEMENT_INPUT, [])
+            }
         } catch (error) {
             console.error(error)
             dispatch(ACTION_LOADING, false)
@@ -91,6 +113,7 @@ const actions = {
             dispatch(ACTION_LOADING, true)
             const { data } = await ApiService.query('ingot-element', params)
             dispatch(ACTION_LOADING, false)
+
             commit(SET_ELEMENT_INPUT, data.data)
         } catch (error) {
             console.error(error)

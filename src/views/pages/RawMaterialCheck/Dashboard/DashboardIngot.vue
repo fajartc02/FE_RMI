@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-        <h3>Dashboard</h3>
+        <h3>Dashboard Ingot</h3>
         <FilterComponentVue :fieldsInput="fieldsInput" @emit-filter="onChangeFilter" :isDisabledPagination="true" />
       </div>
     </div>
@@ -54,7 +54,7 @@ import { ACTION_INGOT_ELEMENT, GET_ELEMENT } from '@/store/modules/ELEMENTS.modu
 import { ACTION_MACHINE, GET_MACHINE_TREESELECT } from '@/store/modules/MACHINE.module'
 
 export default {
-  name: 'Dashboard',
+  name: 'DashboardIngot',
   data() {
     return {
       fieldsInput: [
