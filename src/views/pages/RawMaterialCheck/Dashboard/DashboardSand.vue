@@ -50,7 +50,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { ACTION_LINE, GET_LINE_TREESELECT } from '@/store/modules/LINE.module'
 import ChartParameterVue from '@/components/RawMaterialInspection/Charts/ChartParameter.vue'
 import moment from 'moment'
-import { ACTION_SAND_ELEMENT, GET_ELEMENT } from '@/store/modules/ELEMENTS.module'
+import { ACTION_SAND_ELEMENT_GRAPH, GET_ELEMENT } from '@/store/modules/ELEMENTS.module'
 import { ACTION_MACHINE, GET_MACHINE_TREESELECT } from '@/store/modules/MACHINE.module'
 
 export default {
@@ -86,8 +86,10 @@ export default {
       this.fieldsInput.splice(idxInchargeInput, 1, InputModel('Incharge', 'option', 'Select Incharge', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false))
     },
     GET_ELEMENT: function () {
-      let idxElementInput = this.fieldsInput.findIndex(x => x.title == 'Element');
-      this.fieldsInput.splice(idxElementInput, 1, InputModel('Element', 'treeselect', 'Select Element', 'NONE', this.GET_ELEMENT, null, false, 'elementId'))
+      if (this.GET_ELEMENT) {
+        let idxElementInput = this.fieldsInput.findIndex(x => x.title == 'Element');
+        this.fieldsInput.splice(idxElementInput, 1, InputModel('Element', 'treeselect', 'Select Element', 'NONE', this.GET_ELEMENT, null, false, 'elementId'))
+      }
     },
     isLineSelected: function () {
       if (!this.isLineSelected) {
@@ -105,7 +107,7 @@ export default {
     ...mapGetters([GET_LINE_TREESELECT, GET_ELEMENT, GET_MACHINE_TREESELECT]),
   },
   methods: {
-    ...mapActions([ACTION_LINE, ACTION_SAND_ELEMENT, ACTION_MACHINE]),
+    ...mapActions([ACTION_LINE, ACTION_SAND_ELEMENT_GRAPH, ACTION_MACHINE]),
     async getLines() {
       await this.ACTION_LINE()
     },
@@ -124,8 +126,8 @@ export default {
     ChartParameterVue
   },
   async mounted() {
+    await this.ACTION_SAND_ELEMENT_GRAPH()
     await this.getLines()
-    await this.ACTION_SAND_ELEMENT()
   }
 }
 </script>

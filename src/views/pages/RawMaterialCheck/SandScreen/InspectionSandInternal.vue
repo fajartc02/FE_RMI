@@ -342,8 +342,6 @@ export default {
       this.checkDateInit()
     },
     GET_ELEMENT_INPUT: function () {
-      console.log('GET_ELEMENT_INPUT', this.GET_ELEMENT_INPUT);
-
       if (this.GET_ELEMENT_INPUT) {
         this.meshElements = this.GET_ELEMENT_INPUT.meshElements.map((element) => {
           return {

@@ -124,6 +124,7 @@ export default {
     ChartParameterVue
   },
   async mounted() {
+    // this.$router.go()
     await this.getLines()
     await this.ACTION_INGOT_ELEMENT()
   }
