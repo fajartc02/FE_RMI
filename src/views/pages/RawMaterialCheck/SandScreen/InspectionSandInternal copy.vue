@@ -521,56 +521,64 @@ export default {
       if (this.isInputValid) {
         const objPayload = {
           headers: { ...this.data.headers },
-          elements: {
-            meshElements: this.meshElements.map((element) => {
-              return {
-                id: element.id,
-                name: element.name,
-                percentValue: Number(element.value) * 2,
-                value: Number(element.value),
-                min: element.min,
-                max: element.max,
-                warningLimit: element.warningLimit,
-                elementIndex: element.elementIndex,
-                percentIndex: element.percentIndex
-              }
-            }),
-            natriumElements: this.natriumElements.map((elements) => {
-              return {
-                elements: elements?.elements?.map((item) => {
-                  return {
-                    parentId: elements.id,
-                    parentName: elements.name,
-                    id: item.id,
-                    name: `${elements.name} - ${item.name}`,
-                    value: Number(item.value),
-                    min: item.min,
-                    max: item.max,
-                    warningLimit: item.warningLimit,
-                  }
-                })
-              }
-            }),
-            dustElement: {
-              id: this.dustElement.id,
-              name: this.dustElement.name,
-              value: Number(this.dustElement.value),
-              min: this.dustElement.min,
-              max: this.dustElement.max,
-              warningLimit: this.dustElement.warningLimit,
+          elements: [
+            {
+              meshElements: this.meshElements.map((element) => {
+                return {
+                  id: element.id,
+                  name: element.name,
+                  percentValue: Number(element.value) * 2,
+                  value: Number(element.value),
+                  min: element.min,
+                  max: element.max,
+                  warningLimit: element.warningLimit,
+                  elementIndex: element.elementIndex,
+                  percentIndex: element.percentIndex
+                }
+              }),
             },
-            gfnElement: {
-              id: this.gfnElement.id,
-              name: this.gfnElement.name,
-              value: Number(this.gfnElement.value),
-              min: this.gfnElement.min,
-              max: this.gfnElement.max,
-              warningLimit: this.gfnElement.warningLimit,
-            }
-          },
+            {
+              natriumElements: this.natriumElements.map((elements) => {
+                return {
+                  elements: elements?.elements?.map((item) => {
+                    return {
+                      parentId: elements.id,
+                      parentName: elements.name,
+                      id: item.id,
+                      name: `${elements.name} - ${item.name}`,
+                      value: Number(item.value),
+                      min: item.min,
+                      max: item.max,
+                      warningLimit: item.warningLimit,
+                    }
+                  })
+                }
+              })
+            },
+            {
+              dustElement: {
+                id: this.dustElement.id,
+                name: this.dustElement.name,
+                value: Number(this.dustElement.value),
+                min: this.dustElement.min,
+                max: this.dustElement.max,
+                warningLimit: this.dustElement.warningLimit,
+              }
+            },
+            {
+              gfnElement: {
+                id: this.gfnElement.id,
+                name: this.gfnElement.name,
+                value: Number(this.gfnElement.value),
+                min: this.gfnElement.min,
+                max: this.gfnElement.max,
+                warningLimit: this.gfnElement.warningLimit,
+              }
+            },
+          ],
           notes: null
         }
-        objPayload.elements.natriumElements = objPayload.elements.natriumElements.flat()
+        objPayload.elements[1].natriumElements = objPayload.elements[1].natriumElements.flat()
         let checkStandardElements = await this.checkElementStandard(objPayload.elements)
         const objPayloadFinal = {
           headers: { ...this.data.headers },
@@ -597,10 +605,10 @@ export default {
     async checkElementStandard(elements) {
       let containerElements = [];
       let containerElementsAbnormal = [];
-      const meshElements = elements.meshElements
-      const natriumElements = elements.natriumElements
-      const dustElement = elements.dustElement
-      const gfnElement = elements.gfnElement
+      const meshElements = elements[0].meshElements
+      const natriumElements = elements[1].natriumElements
+      const dustElement = elements[2].dustElement
+      const gfnElement = elements[3].gfnElement
 
       await meshElements.forEach((element, index) => {
         const gap = element.max - element.min
@@ -722,10 +730,10 @@ export default {
         const response = await this.ACTION_SAMPLE_SAND_DETAIL(id)
 
         this.data.headers = response?.data?.headers ?? {}
-        this.meshElements = response?.data?.elements?.meshElements ?? []
-        this.natriumElements = response?.data?.elements?.natriumElements ?? []
-        this.dustElement = response?.data?.elements?.dustElement ?? {}
-        this.gfnElement = response?.data?.elements?.gfnElement ?? {}
+        this.meshElements = response?.data?.elements[0]?.meshElements ?? []
+        this.natriumElements = response?.data?.elements[1]?.natriumElements ?? []
+        this.dustElement = response?.data?.elements[2]?.dustElement ?? {}
+        this.gfnElement = response?.data?.elements[3]?.gfnElement ?? {}
         this.selectedShift(this.data.headers.shiftId)
         this.notes = response?.data?.notes ?? null
         this.isHeaderNotEmpty = response?.data?.headers != null
