@@ -655,11 +655,11 @@ const MockService = {
                 params: {
                     take: 20,
                     page: 1,
-                    startDate: 1722470400,
-                    endDate: 1724803199,
+                    startDate: 1725148800,
+                    endDate: 1725494399,
                 },
             })
-            .reply(200, { data: SAMPLE_SAND_HISTORICALS_MOCK })
+            .reply(200, {...SAMPLE_SAND_HISTORICALS_MOCK })
 
         mock
             .onGet('sample-sand/c31c4192-c127-4ace-b805-bbb00987788a')
