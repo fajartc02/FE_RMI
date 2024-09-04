@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <ModalFormMstShiftComponent :loaded-data="selectedRow" :visible="visibleForm" @on-close="visibleForm = false"/>
+    <ModalFormMstShiftComponent :loaded-data="selectedRow" :visible="visibleForm" @on-close="onClose"/>
   </div>
 </template>
 
@@ -30,6 +30,7 @@ import ModalFormMstShiftComponent
   from "@/views/pages/RawMaterialCheck/Master/components/ModalFormMstShiftComponent.vue";
 import {mapActions, mapGetters} from 'vuex';
 import {GET_TBL_SHIFT, ACTION_TBL_SHIFT} from "@/store/modules/SHIFT.module";
+import {GET_META} from "@/store/modules/META.module";
 
 export default {
   name: "MasterShiftPage",
@@ -65,10 +66,23 @@ export default {
     });
   },
   computed: {
-    ...mapGetters([GET_TBL_SHIFT]),
+    ...mapGetters([GET_TBL_SHIFT, GET_META]),
     dataTbl() {
       return this.GET_TBL_SHIFT
+    },
+    pagination() {
+      return {
+        page: this.GET_META.page,
+        take: this.GET_META.take
+      };
     }
+  },
+  watch: {
+    GET_META(newValue, oldValue) {
+      if (newValue.page !== oldValue.page || newValue.take !== oldValue.take) {
+        this.ACTION_TBL_SHIFT(this.pagination);
+      }
+    },
   },
   methods: {
     ...mapActions([ACTION_TBL_SHIFT]),
@@ -82,6 +96,11 @@ export default {
     onAdd() {
       this.selectedRow = null;
       this.visibleForm = true;
+    },
+    onClose() {
+      setTimeout(() => {
+        this.visibleForm = false
+      }, 300);
     }
   }
 }

@@ -27,7 +27,7 @@
       <CButton color="secondary" @click="closeModal()">
         Close
       </CButton>
-      <CButton v-if="hasLoadedLine" color="secondary" @click="remove">
+      <CButton v-if="hasLoadedLine" color="primary" @click="remove">
         Delete
       </CButton>
       <CButton color="success" @click="submit">
@@ -35,6 +35,9 @@
       </CButton>
     </CModalFooter>
   </CModal>
+  <ModalConfirm
+    title="Delete?"
+    @confirm="onConfirmDelete"/>
 </template>
 
 <script>
@@ -46,7 +49,8 @@ import {
   ACTION_REMOVE_LINE
 } from '@/store/modules/LINE.module'
 import {mapActions} from "vuex";
-import {performHttpRequest} from "@/utils/RequestUtils";
+import {performDeleteRequest, performHttpRequest} from "@/utils/RequestUtils";
+import ModalConfirm from "@/components/RawMaterialInspection/ModalConfirm.vue";
 
 const defaultArgs = {
   id: '',
@@ -57,6 +61,7 @@ const defaultArgs = {
 
 export default {
   name: "ModalFormMstLineComponent",
+  components: {ModalConfirm},
   props: {
     lineData: Object,
     visible: Boolean
@@ -110,17 +115,19 @@ export default {
       })
     }
     ,
-    remove() {
+    closeModal() {
+      this.$emit('on-close', true)
+    },
+    remove(){
+      this.$store.dispatch('MODALS/open', 'DialogKonfirmasi')
+    },
+    onConfirmDelete() {
       performHttpRequest(async () => {
         this.isLoading = true;
         await this.ACTION_REMOVE_LINE(this.lineData);
-        this.closeModal();
         this.isLoading = false;
-      })
-    }
-    ,
-    closeModal() {
-      this.$emit('on-close', true)
+        this.closeModal();
+      });
     }
   }
 }

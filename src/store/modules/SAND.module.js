@@ -2,9 +2,13 @@ import ApiService from '../services/api.service'
 import {ACTION_LOADING} from './LOADING.module'
 import {ACTION_SET_META} from "@/store/modules/META.module";
 import commonUtils from "@/utils/CommonUtils";
+import {SET_INGOT} from "@/store/modules/INGOT.module";
 
+export const GET_SAND_SELECT = 'GET_SAND_SELECT';
 export const GET_TBL_SAND = 'GET_TBL_SAND';
 export const SET_TBL_SAND = 'SET_TBL_SAND';
+export const SET_SAND = 'SET_SAND';
+export const ACTION_SAND = 'ACTION_SAND';
 export const ACTION_TBL_SAND = 'ACTION_TBL_SAND';
 export const ACTION_ADD_SAND = 'ACTION_ADD_SAND';
 export const ACTION_EDIT_SAND = 'ACTION_EDIT_SAND';
@@ -12,6 +16,7 @@ export const ACTION_REMOVE_SAND = 'ACTION_REMOVE_SAND';
 
 
 const state = {
+  SAND_DATA: [],
   TBL_SAND_DATA: {
     data: null,
     meta: {
@@ -23,16 +28,37 @@ const state = {
 }
 
 const getters = {
-  GET_TBL_SAND: (state) => (state.TBL_SAND_DATA)
+  GET_TBL_SAND: (state) => (state.TBL_SAND_DATA),
+  GET_SAND_SELECT(state) {
+    return [...(state.SAND_DATA.map((item) => {
+      return {
+        id: item.id,
+        label: item.name,
+      }
+    }) ?? [])];
+  }
 }
 
 const mutations = {
   SET_TBL_SAND(state, payload) {
     state.TBL_SAND_DATA = payload
   },
+  SET_SAND(state, payload) {
+    state.SAND_DATA = payload
+  },
 }
 
 const actions = {
+  async ACTION_SAND({commit, dispatch}, filter) {
+    try {
+      ApiService.setHeader()
+      const {data} = await ApiService.query('sand-element', filter)
+      commit(SET_SAND, data.data)
+    } catch (error) {
+      console.error('ACTION_SAND', 'ERROR', error)
+      throw error;
+    }
+  },
   async ACTION_TBL_SAND({commit, dispatch}, filter) {
     try {
       dispatch(ACTION_LOADING, true)
@@ -65,6 +91,7 @@ const actions = {
   },
   async ACTION_ADD_SAND({commit, dispatch, state}, params) {
     try {
+      delete params.id;
       ApiService.setHeader();
       const {data} = await ApiService.post('sand-element', params);
       console.log('ACTION_ADD_SAND', 'data', data);

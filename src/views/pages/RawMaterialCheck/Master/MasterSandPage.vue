@@ -32,6 +32,9 @@ import {
   GET_TBL_SAND,
   ACTION_TBL_SAND
 } from "@/store/modules/SAND.module";
+import {
+  GET_META
+} from "@/store/modules/META.module";
 
 export default {
   name: "MasterSand",
@@ -63,15 +66,28 @@ export default {
   mounted() {
     this.$nextTick(() => {
       setTimeout(() => {
-        this.ACTION_TBL_SAND()
+        this.ACTION_TBL_SAND();
       }, 300)
-    })
+    });
   },
   computed: {
-    ...mapGetters([GET_TBL_SAND]),
+    ...mapGetters([GET_TBL_SAND, GET_META]),
     dataTbl() {
       return this.GET_TBL_SAND
+    },
+    pagination() {
+      return {
+        page: this.GET_META.page,
+        take: this.GET_META.take
+      };
     }
+  },
+  watch: {
+    GET_META(newValue, oldValue) {
+      if (newValue.page !== oldValue.page || newValue.take !== oldValue.take) {
+        this.ACTION_TBL_SAND(this.pagination);
+      }
+    },
   },
   methods: {
     ...mapActions([ACTION_TBL_SAND]),
@@ -87,7 +103,9 @@ export default {
       this.visibleForm = true;
     },
     onClose() {
-      this.visibleForm = false
+      setTimeout(() => {
+        this.visibleForm = false
+      }, 300);
     }
   }
 }

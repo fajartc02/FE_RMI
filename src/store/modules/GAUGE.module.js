@@ -98,6 +98,7 @@ const actions = {
   },
   async ACTION_ADD_GAUGE({commit, dispatch, state}, params) {
     try {
+      delete params.id;
       ApiService.setHeader();
       const {data} = await ApiService.post('gauge', params);
       console.log('ACTION_ADD_GAUGE', 'data', data);

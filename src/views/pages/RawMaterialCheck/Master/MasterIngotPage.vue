@@ -33,6 +33,9 @@ import {
   GET_TBL_INGOT,
   ACTION_TBL_INGOT
 } from "@/store/modules/INGOT.module";
+import {
+  GET_META
+} from "@/store/modules/META.module";
 
 export default {
   name: "MasterIngotPage",
@@ -69,10 +72,23 @@ export default {
     })
   },
   computed: {
-    ...mapGetters([GET_TBL_INGOT]),
+    ...mapGetters([GET_TBL_INGOT, GET_META]),
     dataTbl() {
       return this.GET_TBL_INGOT
+    },
+    pagination() {
+      return {
+        page: this.GET_META.page,
+        take: this.GET_META.take
+      };
     }
+  },
+  watch: {
+    GET_META(newValue, oldValue) {
+      if (newValue.page !== oldValue.page || newValue.take !== oldValue.take) {
+        this.ACTION_TBL_INGOT(this.pagination);
+      }
+    },
   },
   methods: {
     ...mapActions([ACTION_TBL_INGOT]),
@@ -87,11 +103,10 @@ export default {
       this.selectedRow = null;
       this.visibleForm = true;
     },
-    onClose(hasAction) {
-      this.visibleForm = false
-      if (hasAction === true) {
-        //this.ACTION_TBL_INGOT()
-      }
+    onClose() {
+      setTimeout(() => {
+        this.visibleForm = false
+      }, 300)
     }
   }
 }

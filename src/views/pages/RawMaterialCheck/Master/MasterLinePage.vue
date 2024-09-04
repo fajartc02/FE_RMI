@@ -26,9 +26,15 @@ import TableComponentVue from "@/components/RawMaterialInspection/Table/TableCom
 import PaginationComponent from "@/components/RawMaterialInspection/Pagination/PaginationComponent.vue";
 import FilterComponentVue from "@/components/RawMaterialInspection/Filter/FilterComponent.vue";
 import InputModel from "@/components/RawMaterialInspection/Filter/InputModel";
-import {mapActions, mapGetters} from 'vuex';
-import {GET_TBL_LINE, ACTION_TBL_LINE} from "@/store/modules/LINE.module";
 import TableAddComponent from "@/components/RawMaterialInspection/Table/TableAddComponent.vue";
+import {mapActions, mapGetters} from 'vuex';
+import {
+  GET_TBL_LINE,
+  ACTION_TBL_LINE
+} from "@/store/modules/LINE.module";
+import {
+  GET_META
+} from "@/store/modules/META.module";
 
 
 export default {
@@ -60,20 +66,34 @@ export default {
   mounted() {
     this.$nextTick(() => {
       setTimeout(() => {
-        this.ACTION_TBL_LINE()
-      }, 300)
-    })
+        this.ACTION_TBL_LINE({
+          ...this.pagination,
+        });
+      }, 300);
+    });
   },
   computed: {
-    ...mapGetters([GET_TBL_LINE]),
+    ...mapGetters([GET_TBL_LINE, GET_META]),
     lineTbl() {
       return this.GET_TBL_LINE
+    },
+    pagination() {
+      return {
+        page: this.GET_META.page,
+        take: this.GET_META.take
+      };
     }
+  },
+  watch: {
+    GET_META(newValue, oldValue) {
+      if (newValue.page !== oldValue.page || newValue.take !== oldValue.take) {
+        this.ACTION_TBL_LINE(this.pagination);
+      }
+    },
   },
   methods: {
     ...mapActions([ACTION_TBL_LINE]),
     async onChangeFilter(filter) {
-
     },
     onDataSelected(data) {
       this.selectedRow = data;
@@ -83,11 +103,10 @@ export default {
       this.selectedRow = null;
       this.visibleForm = true;
     },
-    onClose(hasAction) {
-      this.visibleForm = false
-      if (hasAction === true) {
-        //this.ACTION_TBL_LINE()
-      }
+    onClose() {
+      setTimeout(() => {
+        this.visibleForm = false;
+      }, 300);
     }
   }
 }

@@ -2,9 +2,13 @@ import ApiService from '../services/api.service'
 import {ACTION_LOADING} from './LOADING.module'
 import {ACTION_SET_META} from "@/store/modules/META.module";
 import commonUtils from "@/utils/CommonUtils";
+import {SET_LINE} from "@/store/modules/LINE.module";
 
+export const GET_INGOT_SELECT = 'GET_INGOT_SELECT';
 export const GET_TBL_INGOT = 'GET_TBL_INGOT';
 export const SET_TBL_INGOT = 'SET_TBL_INGOT';
+export const SET_INGOT = 'SET_INGOT';
+export const ACTION_INGOT = 'ACTION_INGOT';
 export const ACTION_TBL_INGOT = 'ACTION_TBL_INGOT';
 export const ACTION_ADD_INGOT = 'ACTION_ADD_INGOT';
 export const ACTION_EDIT_INGOT = 'ACTION_EDIT_INGOT';
@@ -20,6 +24,7 @@ const mappingPayload = (param) => {
 }
 
 const state = {
+  INGOT_DATA: [],
   TBL_INGOT_DATA: {
     data: null,
     meta: {
@@ -31,16 +36,37 @@ const state = {
 }
 
 const getters = {
-  GET_TBL_INGOT: (state) => (state.TBL_INGOT_DATA)
+  GET_TBL_INGOT: (state) => (state.TBL_INGOT_DATA),
+  GET_INGOT_SELECT(state) {
+    return [...(state.INGOT_DATA.map((item) => {
+      return {
+        id: item.id,
+        label: item.name,
+      }
+    }) ?? [])];
+  }
 }
 
 const mutations = {
   SET_TBL_INGOT(state, payload) {
     state.TBL_INGOT_DATA = payload
   },
+  SET_INGOT(state, payload) {
+    state.INGOT_DATA = payload
+  },
 }
 
 const actions = {
+  async ACTION_INGOT({commit, dispatch}, filter) {
+    try {
+      ApiService.setHeader()
+      const {data} = await ApiService.query('ingot-element', filter)
+      commit(SET_INGOT, data.data)
+    } catch (error) {
+      console.error('ACTION_INGOT', 'ERROR', error)
+      throw error;
+    }
+  },
   async ACTION_TBL_INGOT({commit, dispatch}, filter) {
     try {
       dispatch(ACTION_LOADING, true)
@@ -73,6 +99,7 @@ const actions = {
   },
   async ACTION_ADD_INGOT({commit, dispatch, state}, params) {
     try {
+      delete params.id;
       ApiService.setHeader();
       const {data} = await ApiService.post('ingot-element', mappingPayload(params));
       console.log('ACTION_ADD_INGOT', 'data', data);

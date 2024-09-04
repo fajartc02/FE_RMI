@@ -15,13 +15,6 @@
         class="mb-3"
       />
       <CFormInput
-        v-model="form.code"
-        type="text"
-        label="Code"
-        class="mb-3"
-        disabled
-      />
-      <CFormInput
         v-model="form.description"
         type="text"
         label="Description"
@@ -55,7 +48,6 @@ const defaultArgs = {
   id: '',
   type: '',
   value: '',
-  code: '',
   description: ''
 };
 

@@ -98,6 +98,7 @@ const actions = {
   },
   async ACTION_ADD_SHIFT({commit, dispatch, state}, params) {
     try {
+      delete params.id;
       ApiService.setHeader();
       const {data} = await ApiService.post('shift', params);
       console.log('ACTION_ADD_SHIFT', 'data', data);

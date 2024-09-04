@@ -8,6 +8,10 @@
         <label class="form-label">Line</label>
         <Treeselect v-model="form.line_id" :options="GET_LINE_SELECT" :clearable="true"/>
       </div>
+      <div class="mb-3">
+        <label class="form-label">Material Type</label>
+        <Treeselect key="material" v-model="form.materialType" :options="GET_SYSTEM_TREESELECT" :clearable="true"/>
+      </div>
       <CFormInput
         v-model="form.name"
         type="text"
@@ -31,7 +35,7 @@
       <CButton color="secondary" @click="closeModal">
         Close
       </CButton>
-      <CButton v-if="hasLoadedMesin" color="secondary" @click="remove">
+      <CButton v-if="hasLoadedMesin" color="primary" @click="remove">
         Delete
       </CButton>
       <CButton color="success" @click="submit">
@@ -39,10 +43,12 @@
       </CButton>
     </CModalFooter>
   </CModal>
+  <ModalConfirm
+    title="Delete?"
+    @confirm="onConfirmDelete"/>
 </template>
 
 <script>
-import Treeselect from "@zanmato/vue3-treeselect";
 import {
   ACTION_LINE,
   GET_LINE_SELECT
@@ -52,21 +58,28 @@ import {
   ACTION_EDIT_MACHINE,
   ACTION_REMOVE_MACHINE
 } from "@/store/modules/MACHINE.module";
+import {
+  ACTION_SYSTEM,
+  GET_SYSTEM_SELECT
+} from "@/store/modules/SYSTEM.module";
 import {mapActions, mapGetters} from 'vuex';
-import {constructError} from "@/utils/ResponseUtils";
 import {performHttpRequest} from "@/utils/RequestUtils";
+import Treeselect from "@zanmato/vue3-treeselect";
+import ModalConfirm from "@/components/RawMaterialInspection/ModalConfirm.vue";
 
 const defaultArgs = {
   id: '',
   line_id: '',
   name: '',
   code: '',
-  description: ''
+  description: '',
+  materialType: ''
 };
 
 export default {
   name: "ModalFormMstMesinComponent",
   components: {
+    ModalConfirm,
     Treeselect
   },
   props: {
@@ -80,9 +93,14 @@ export default {
     }
   },
   mounted() {
+    this.$nextTick(() => {
+      this.ACTION_SYSTEM({
+        type: 'material'
+      });
+    });
   },
   computed: {
-    ...mapGetters([GET_LINE_SELECT]),
+    ...mapGetters([GET_LINE_SELECT, GET_SYSTEM_SELECT]),
     title() {
       if (this.hasLoadedMesin) {
         return "Edit Mesin";
@@ -92,7 +110,7 @@ export default {
     },
     hasLoadedMesin() {
       return this.mesinData && this.mesinData.id;
-    }
+    },
   },
   watch: {
     visible(newValue) {
@@ -107,10 +125,19 @@ export default {
           };
         }
       }
+    },
+    GET_SYSTEM_TREESELECT(newValue) {
+      console.log('new value', newValue)
     }
   },
   methods: {
-    ...mapActions([ACTION_LINE, ACTION_ADD_MACHINE, ACTION_EDIT_MACHINE, ACTION_REMOVE_MACHINE]),
+    ...mapActions([
+      ACTION_LINE,
+      ACTION_ADD_MACHINE,
+      ACTION_EDIT_MACHINE,
+      ACTION_REMOVE_MACHINE,
+      ACTION_SYSTEM
+    ]),
     submit() {
       performHttpRequest(async () => {
         this.isLoading = true;
@@ -124,15 +151,18 @@ export default {
       });
     },
     remove() {
+      this.$store.dispatch('MODALS/open', 'DialogKonfirmasi')
+    },
+    closeModal() {
+      this.$emit('on-close', true)
+    },
+    onConfirmDelete() {
       performHttpRequest(async () => {
         this.isLoading = true;
         await this.ACTION_REMOVE_MACHINE(this.form);
         this.isLoading = false;
         this.closeModal()
       });
-    },
-    closeModal() {
-      this.$emit('on-close', true)
     }
   }
 }

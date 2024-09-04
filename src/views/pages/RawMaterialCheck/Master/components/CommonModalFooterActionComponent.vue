@@ -3,7 +3,7 @@
     <CButton color="secondary" @click="() => $emit('on-close')">
       Close
     </CButton>
-    <CButton v-if="hasLoadedData" color="secondary" @click="() => $emit('on-delete')">
+    <CButton v-if="hasLoadedData" color="primary" @click="() => $emit('on-delete')">
       Delete
     </CButton>
     <CButton color="success" @click="() => $emit('on-submit')">

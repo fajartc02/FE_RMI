@@ -87,13 +87,13 @@ const routes = [
         path: '/master/element-standard/ingot',
         name: 'MasterElementStandardIngot',
         component: () =>
-          import('@/views/pages/RawMaterialCheck/Master/MasterGaugePage.vue'),
+          import('@/views/pages/RawMaterialCheck/Master/MasterStandardIngotPage.vue'),
       },
       {
         path: '/master/element-standard/sand',
         name: 'MasterElementStandardSand',
         component: () =>
-          import('@/views/pages/RawMaterialCheck/Master/MasterGaugePage.vue'),
+          import('@/views/pages/RawMaterialCheck/Master/MasterStandardSandPage.vue'),
       },
       {
         path: '/master/shift',
