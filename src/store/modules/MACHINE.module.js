@@ -118,8 +118,11 @@ const actions = {
   },
   async ACTION_EDIT_MACHINE({commit, dispatch, state}, machineData) {
     try {
+      const id = machineData.id;
+      delete machineData.id;
+
       ApiService.setHeader()
-      const {data} = await ApiService.put(`machine/${machineData.id}`, machineData);
+      const {data} = await ApiService.put(`machine/${id}`, machineData);
       console.log('ACTION_EDIT_MACHINE', data);
 
       if (commonUtils.isMock()) {

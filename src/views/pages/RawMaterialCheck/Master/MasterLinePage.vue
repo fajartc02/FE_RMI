@@ -94,6 +94,10 @@ export default {
   methods: {
     ...mapActions([ACTION_TBL_LINE]),
     async onChangeFilter(filter) {
+      this.ACTION_TBL_LINE({
+        ...this.pagination,
+        ...filter
+      });
     },
     onDataSelected(data) {
       this.selectedRow = data;

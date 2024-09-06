@@ -97,10 +97,18 @@ export default {
         this.ACTION_TBL_MACHINE(this.pagination);
       }
     },
+    GET_LINE_TREESELECT: function () {
+      let idxLineInput = this.filters.findIndex(x => x.title == 'Line');
+      this.filters.splice(idxLineInput, 1, InputModel('Line', 'treeselect', 'Select Line', 'NONE', this.GET_LINE_TREESELECT, null, false, 'lineId'))
+    },
   },
   methods: {
     ...mapActions([ACTION_LINE, ACTION_TBL_MACHINE]),
     async onChangeFilter(filter) {
+      this.ACTION_TBL_MACHINE({
+        ...filter,
+        ...this.pagination
+      });
     },
     onDataSelected(data) {
       this.selectedRow = data;

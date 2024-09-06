@@ -131,8 +131,11 @@ const actions = {
   },
   async ACTION_EDIT_SYSTEM({commit, dispatch}, SYSTEMData) {
     try {
+      const id = SYSTEMData.id;
+      delete SYSTEMData.id;
+
       ApiService.setHeader()
-      const {data} = await ApiService.put(`system/${SYSTEMData.id}`, SYSTEMData)
+      const {data} = await ApiService.put(`system/${id}`, SYSTEMData)
       console.log('ACTION_EDIT_SYSTEM', 'data', data);
 
       if (commonUtils.isMock()) {

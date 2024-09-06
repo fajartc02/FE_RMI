@@ -105,7 +105,7 @@ export default {
         this.ACTION_TBL_STANDARD_INGOT(this.pagination);
       }
     },
-   /* GET_MACHINE_TREESELECT(newValue, oldValue) {
+    GET_MACHINE_TREESELECT(newValue, oldValue) {
       if(newValue !== oldValue) {
         let idxMachineInput = this.filters.findIndex(x => x.title == 'Machine');
         this.filters
@@ -124,7 +124,7 @@ export default {
             )
           );
       }
-    },*/
+    },
   },
   methods: {
     ...mapActions([
@@ -139,7 +139,10 @@ export default {
       }
     },
     async onChangeFilter(filter) {
-      this.getTable(filter)
+      this.getTable({
+        ...filter,
+        ...this.pagination
+      })
     },
     onDataSelected(data) {
       this.selectedRow = data;
