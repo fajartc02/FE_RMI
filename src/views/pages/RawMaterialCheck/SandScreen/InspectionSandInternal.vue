@@ -346,13 +346,13 @@ export default {
         this.meshElements = this.GET_ELEMENT_INPUT.meshElements.map((element) => {
           return {
             ...element,
-            value: null,
-            percentValue: null,
-            percentIndex: null
+            value: element.value || null,
+            percentValue: element.percentValue || null,
+            percentIndex: element.percentIndex || null
           }
         })
-        this.GET_ELEMENT_INPUT.gfnElement.value = null
-        this.GET_ELEMENT_INPUT.dustElement.value = null
+        this.GET_ELEMENT_INPUT.gfnElement.value = this.GET_ELEMENT_INPUT.gfnElement.value || null
+        this.GET_ELEMENT_INPUT.dustElement.value = this.GET_ELEMENT_INPUT.dustElement.value || null
 
         this.gfnElement = this.GET_ELEMENT_INPUT.gfnElement
         this.dustElement = this.GET_ELEMENT_INPUT.dustElement
@@ -362,7 +362,7 @@ export default {
             elements: item?.elements?.map(element => {
               return {
                 ...element,
-                value: null
+                value: element.value || null
               }
             })
           }

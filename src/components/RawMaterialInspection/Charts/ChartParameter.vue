@@ -63,7 +63,7 @@ export default {
                 color: '#fff',
                 background: '#FF4560',
               },
-              text: 'Annotation 1',
+              text: 'Notes if any aproblem',
             },
           }],
         },

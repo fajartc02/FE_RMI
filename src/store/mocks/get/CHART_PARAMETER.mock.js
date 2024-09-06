@@ -191,7 +191,7 @@ const CHART_PARAMETER_MOCK = {
                     color: '#fff',
                     background: '#FF4560',
                 },
-                text: 'Annotation 1',
+                text: 'Notes if any action / problem',
             },
         }, ],
     },

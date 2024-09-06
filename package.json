@@ -5,6 +5,7 @@
     "author": "FajarTriCahyono",
     "scripts": {
         "serve": "export VUE_APP_USE_MOCK_SERVICE=false && vue-cli-service serve --port 8090",
+        "serve:cloud": "export VUE_APP_USE_MOCK_SERVICE=false && export VUE_APP_USE_CLOUD_SERVICE=true && vue-cli-service serve --port 8090",
         "serve:windows": "SET VUE_APP_USE_MOCK_SERVICE=false && vue-cli-service serve --port 8090",
         "serve:mock": "export VUE_APP_USE_MOCK_SERVICE=true && vue-cli-service serve --port 8090",
         "serve:mock:windows": "SET VUE_APP_USE_MOCK_SERVICE=true && vue-cli-service serve --port 8090",

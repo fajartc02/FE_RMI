@@ -656,7 +656,7 @@ const MockService = {
                     take: 20,
                     page: 1,
                     startDate: 1725148800,
-                    endDate: 1725494399,
+                    endDate: 1725667199,
                 },
             })
             .reply(200, {...SAMPLE_SAND_HISTORICALS_MOCK })
