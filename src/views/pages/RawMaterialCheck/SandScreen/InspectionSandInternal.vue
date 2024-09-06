@@ -342,8 +342,14 @@ export default {
       this.checkDateInit()
     },
     GET_ELEMENT_INPUT: function () {
-      if (this.GET_ELEMENT_INPUT) {
+      console.log('GET_ELEMENT_INPUT', this.GET_ELEMENT_INPUT);
+
+      if (!this.GET_ELEMENT_INPUT?.elements) {
+        console.log(this.GET_ELEMENT_INPUT.elements.meshElements);
+
         this.meshElements = this.GET_ELEMENT_INPUT.meshElements.map((element) => {
+          console.log('element', element);
+
           return {
             ...element,
             value: element.value || null,
@@ -357,6 +363,37 @@ export default {
         this.gfnElement = this.GET_ELEMENT_INPUT.gfnElement
         this.dustElement = this.GET_ELEMENT_INPUT.dustElement
         this.natriumElements = this.GET_ELEMENT_INPUT.natriumElements.map(item => {
+          return {
+            ...item,
+            elements: item?.elements?.map(element => {
+              return {
+                ...element,
+                value: element.value || null
+              }
+            })
+          }
+        })
+        this.isFormReady = true
+      } else if (this.GET_ELEMENT_INPUT.elements) {
+        console.log(this.GET_ELEMENT_INPUT.elements);
+
+        const elementsData = this.GET_ELEMENT_INPUT.elements
+        this.meshElements = elementsData.meshElements.map((element) => {
+          console.log('element', element);
+
+          return {
+            ...element,
+            value: element.value || null,
+            percentValue: element.percentValue || null,
+            percentIndex: element.percentIndex || null
+          }
+        })
+        // this.GET_ELEMENT_INPUT.gfnElement.value = elementsData?.gfnElement.value || null
+        // this.GET_ELEMENT_INPUT.dustElement.value = elementsData?.dustElement.value || null
+
+        this.gfnElement = elementsData?.gfnElement
+        this.dustElement = elementsData?.dustElement
+        this.natriumElements = elementsData?.natriumElements.map(item => {
           return {
             ...item,
             elements: item?.elements?.map(element => {
@@ -402,7 +439,7 @@ export default {
         this.ACTION_SHIFT()
         this.ACTION_MACHINE({ materialCategory: 'SAND' })
         this.checkDateInit()
-        this.ACTION_SAND_ELEMENT()
+        // this.ACTION_SAND_ELEMENT()
       }
     },
     'data.headers.time': function () {
@@ -717,18 +754,20 @@ export default {
     },
     async getDetailSandCheck(id) {
       try {
-        const response = await this.ACTION_SAMPLE_SAND_DETAIL(id)
+        await this.ACTION_SAMPLE_SAND_DETAIL(id)
 
-        this.data.headers = response?.data?.headers ?? {}
-        this.meshElements = response?.data?.elements?.meshElements ?? []
-        this.natriumElements = response?.data?.elements?.natriumElements ?? []
-        this.dustElement = response?.data?.elements?.dustElement ?? {}
-        this.gfnElement = response?.data?.elements?.gfnElement ?? {}
-        this.selectedShift(this.data.headers.shiftId)
-        this.notes = response?.data?.notes ?? null
-        this.isHeaderNotEmpty = response?.data?.headers != null
-        this.isElementNotEmpty = response?.data?.elements?.length !== 0
+        // this.data.headers = response?.data?.headers || {}
+        // this.meshElements = response?.data?.elements?.meshElements || []
+        // this.natriumElements = response?.data?.elements?.natriumElements || []
+        // this.dustElement = response?.data?.elements?.dustElement || {}
+        // this.gfnElement = response?.data?.elements?.gfnElement || {}
+        // this.selectedShift(this.data.headers.shiftId)
+        // this.notes = response?.data?.notes || null
+        // this.isHeaderNotEmpty = response?.data?.headers != null
+        // this.isElementNotEmpty = response?.data?.elements?.length !== 0
       } catch (error) {
+        console.log(error);
+
         this.$swal('Error', 'Internal Server Error', 'error')
       }
     }
@@ -737,18 +776,18 @@ export default {
     // QRScanner,
     HeaderComp,
     LoadingComponent,
-    Treeselect
   },
   mounted() {
     this.ACTION_SHIFT()
     this.ACTION_MACHINE({ materialCategory: 'SAND' })
-    this.checkDateInit()
-    this.isNightCondition()
+
     if (this.$route.query.id) {
       this.isSubmitted = true
       this.isSandCheck = true
       this.getDetailSandCheck(this.$route.query.id)
     } else {
+      this.checkDateInit()
+      this.isNightCondition()
       this.ACTION_SAND_ELEMENT()
     }
   }

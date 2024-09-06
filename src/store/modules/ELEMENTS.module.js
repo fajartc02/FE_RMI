@@ -11,7 +11,7 @@ export const SET_ELEMENT_INPUT = 'SET_ELEMENT_INPUT'
 export const ACTION_SAND_ELEMENT = 'ACTION_SAND_ELEMENT'
 export const ACTION_SAND_ELEMENT_GRAPH = 'ACTION_SAND_ELEMENT_GRAPH'
 export const ACTION_INGOT_ELEMENT = 'ACTION_INGOT_ELEMENT'
-
+export const ACTION_SET_INPUT_ELEMENT = 'ACTION_SET_INPUT_ELEMENT'
 const state = {
   ELEMENT_DATA: [],
   ELEMENT_INPUT: [],
@@ -109,6 +109,14 @@ const actions = {
     } catch (error) {
       console.error(error)
       dispatch(ACTION_LOADING, false)
+      return error
+    }
+  },
+  async ACTION_SET_INPUT_ELEMENT({ commit, dispatch }, params) {
+    try {
+      commit(SET_ELEMENT_INPUT, params)
+    } catch (error) {
+      console.error(error)
       return error
     }
   },

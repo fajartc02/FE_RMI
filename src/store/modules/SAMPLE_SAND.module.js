@@ -1,4 +1,5 @@
 import ApiService from '../services/api.service'
+import { ACTION_SET_INPUT_ELEMENT, SET_ELEMENT } from './ELEMENTS.module'
 import { ACTION_LOADING } from './LOADING.module'
 import { ACTION_SET_META } from './META.module'
 import { SET_QR_SAMPLE } from './QR.module'
@@ -58,11 +59,14 @@ const actions = {
       return error
     }
   },
-  async ACTION_SAMPLE_SAND_DETAIL({ dispatch }, id) {
+  async ACTION_SAMPLE_SAND_DETAIL({ commit, dispatch }, id) {
     try {
       ApiService.setHeader()
       dispatch(ACTION_LOADING, true)
       const { data } = await ApiService.get('sample-sand', id)
+      console.log(data)
+
+      dispatch(ACTION_SET_INPUT_ELEMENT, data.data)
       return data
     } catch (error) {
       return error
