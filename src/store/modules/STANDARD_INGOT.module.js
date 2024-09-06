@@ -72,6 +72,10 @@ const actions = {
   async ACTION_ADD_STANDARD_INGOT({commit, dispatch, state}, params) {
     try {
       delete params.id;
+      delete params.minWarning;
+      delete params.maxWarning;
+      commonUtils.removeAllKeyWithSpecifyKey(params, 'name');
+
       ApiService.setHeader();
       dispatch(ACTION_LOADING, true);
       const {data} = await ApiService.post('ingot-standard', params);
@@ -97,6 +101,9 @@ const actions = {
     try {
       const id = STANDARD_INGOTData.id;
       delete STANDARD_INGOTData.id;
+      delete STANDARD_INGOTData.minWarning;
+      delete STANDARD_INGOTData.maxWarning;
+      commonUtils.removeAllKeyWithSpecifyKey(STANDARD_INGOTData, 'name');
 
       ApiService.setHeader()
       dispatch(ACTION_LOADING, true)

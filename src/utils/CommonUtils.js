@@ -130,5 +130,44 @@ export default {
     return process.env.VUE_APP_USE_MOCK_SERVICE
       && typeof process.env.VUE_APP_USE_MOCK_SERVICE === 'string'
       && process.env.VUE_APP_USE_MOCK_SERVICE.trim() === 'true'
-  }
+  },
+  removeAllKeyWithSpecifyKey(obj, substring) {
+    for (const key in obj) {
+      if (key.toLowerCase().includes(substring.toLowerCase())) {
+        delete obj[key]; // Delete the key if it contains the substring
+      }
+    }
+  },
+  decideElementStandardWarningLimit(elementArr, elementObj, isMin, isMax) {
+    if (parseFloat(elementObj.warningLimit) === 0.0) {
+      return;
+    }
+
+    let shouldUpdate = false;
+    if (isMin && parseFloat(elementObj.min) > 0.0) {
+      elementObj.minWarning = elementObj.min * (elementObj.warningLimit / 100);
+      shouldUpdate = true;
+    }
+
+    if (isMax && parseFloat(elementObj.max) > 0.0) {
+      elementObj.maxWarning = elementObj.max * (elementObj.warningLimit / 100);
+      shouldUpdate = true;
+    }
+
+    if (shouldUpdate) {
+      return elementArr.map((item) => {
+        if (item.elementId === elementObj.elementId) {
+          return {
+            ...item,
+            minWarning: elementObj.minWarning,
+            maxWarning: elementObj.maxWarning
+          };
+        }
+
+        return item;
+      });
+    }
+
+    return elementArr;
+  },
 }
