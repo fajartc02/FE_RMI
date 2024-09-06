@@ -81,6 +81,10 @@ export default {
   methods: {
     ...mapActions([ACTION_TBL_USER]),
     async onChangeFilter(filter) {
+      this.ACTION_TBL_USER({
+        ...filter,
+        ...this.pagination
+      });
     },
     onDataSelected(data) {
       this.selectedRow = data;

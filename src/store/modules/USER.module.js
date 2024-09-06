@@ -92,8 +92,11 @@ const actions = {
   },
   async ACTION_EDIT_USER({commit, dispatch}, USERData) {
     try {
+      const id = USERData.id;
+      delete USERData.id;
+
       ApiService.setHeader()
-      const {data} = await ApiService.put(`user/${USERData.id}`, USERData)
+      const {data} = await ApiService.put(`user/${id}`, USERData)
       console.log('ACTION_EDIT_USER', 'data', data);
 
       if (commonUtils.isMock()) {

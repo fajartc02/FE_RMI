@@ -92,7 +92,10 @@ export default {
       });
     },
     async onChangeFilter(filter) {
-
+      this.getTbl({
+        ...filter,
+        ...this.pagination
+      });
     },
     onDataSelected(data) {
       this.selectedRow = data;

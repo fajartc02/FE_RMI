@@ -22,7 +22,7 @@
           </CFormSelect>
           <div v-else-if="field.type === 'treeselect'">
             <label class="form-label">{{ field.title }}</label>
-            <Treeselect v-model="field.value" :options="field.options" :clearable="true" :disabled="field.disabled" />
+            <Treeselect v-model="field.value" :placeholder="field.placeholder" :options="field.options" :clearable="true" :disabled="field.disabled" />
           </div>
         </template>
       </CCol>

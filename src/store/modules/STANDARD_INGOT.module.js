@@ -95,9 +95,12 @@ const actions = {
   },
   async ACTION_EDIT_STANDARD_INGOT({commit, dispatch}, STANDARD_INGOTData) {
     try {
+      const id = STANDARD_INGOTData.id;
+      delete STANDARD_INGOTData.id;
+
       ApiService.setHeader()
       dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.put(`ingot-standard/${STANDARD_INGOTData.id}`, STANDARD_INGOTData)
+      const {data} = await ApiService.put(`ingot-standard/${id}`, STANDARD_INGOTData)
       console.log('ACTION_EDIT_STANDARD_INGOT', 'data', data);
 
       if (commonUtils.isMock()) {

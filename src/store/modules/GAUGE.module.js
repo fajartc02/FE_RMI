@@ -120,8 +120,11 @@ const actions = {
   },
   async ACTION_EDIT_GAUGE({commit, dispatch}, GAUGEData) {
     try {
+      const id = GAUGEData.id;
+      delete GAUGEData.id;
+
       ApiService.setHeader()
-      const {data} = await ApiService.put(`gauge/${GAUGEData.id}`, GAUGEData)
+      const {data} = await ApiService.put(`gauge/${id}`, GAUGEData)
       console.log('ACTION_EDIT_GAUGE', 'data', data);
 
       if (commonUtils.isMock()) {

@@ -140,8 +140,11 @@ const actions = {
   },
   async ACTION_EDIT_LINE({commit, dispatch}, lineData) {
     try {
+      const id = lineData.id;
+      delete lineData.id;
+
       ApiService.setHeader()
-      const {data} = await ApiService.put(`line/${lineData.id}`, lineData)
+      const {data} = await ApiService.put(`line/${id}`, lineData)
       console.log('on edit line', data);
 
       if (commonUtils.isMock()) {

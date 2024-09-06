@@ -87,7 +87,10 @@ export default {
   methods: {
     ...mapActions([ACTION_TBL_SHIFT]),
     async onChangeFilter(filter) {
-
+      this.ACTION_TBL_SHIFT({
+        ...filter,
+        ...this.pagination
+      });
     },
     onDataSelected(data) {
       this.selectedRow = data;

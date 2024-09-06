@@ -122,8 +122,11 @@ const actions = {
   },
   async ACTION_EDIT_VENDOR({commit, dispatch}, VENDORData) {
     try {
+      const id = VENDORData.id;
+      delete VENDORData.id;
+
       ApiService.setHeader()
-      const {data} = await ApiService.put(`vendor/${VENDORData.id}`, VENDORData)
+      const {data} = await ApiService.put(`vendor/${id}`, VENDORData)
       console.log('ACTION_EDIT_VENDOR', 'data', data);
 
       if (commonUtils.isMock()) {

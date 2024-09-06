@@ -120,8 +120,11 @@ const actions = {
   },
   async ACTION_EDIT_SHIFT({commit, dispatch}, SHIFTData) {
     try {
+      const id = SHIFTData.id;
+      delete SHIFTData.id;
+
       ApiService.setHeader()
-      const {data} = await ApiService.put(`shift/${SHIFTData.id}`, SHIFTData)
+      const {data} = await ApiService.put(`shift/${id}`, SHIFTData)
       console.log('ACTION_EDIT_SHIFT', 'data', data);
 
       if (commonUtils.isMock()) {

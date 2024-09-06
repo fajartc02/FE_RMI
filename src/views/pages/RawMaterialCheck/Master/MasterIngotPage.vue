@@ -93,7 +93,10 @@ export default {
   methods: {
     ...mapActions([ACTION_TBL_INGOT]),
     async onChangeFilter(filter) {
-
+      this.ACTION_TBL_INGOT({
+        ...filter,
+        ...this.pagination,
+      });
     },
     onDataSelected(data) {
       this.selectedRow = data;

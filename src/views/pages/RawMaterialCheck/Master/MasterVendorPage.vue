@@ -82,7 +82,10 @@ export default {
   methods: {
     ...mapActions([ACTION_TBL_VENDOR]),
     async onChangeFilter(filter) {
-
+      this.ACTION_TBL_VENDOR({
+        ...filter,
+        ...this.pagination
+      });
     },
     onDataSelected(data) {
       this.selectedRow = data;

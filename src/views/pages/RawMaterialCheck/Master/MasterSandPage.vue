@@ -92,7 +92,10 @@ export default {
   methods: {
     ...mapActions([ACTION_TBL_SAND]),
     async onChangeFilter(filter) {
-
+      this.ACTION_TBL_SAND({
+        ...filter,
+        ...this.pagination
+      });
     },
     onDataSelected(data) {
       this.selectedRow = data;

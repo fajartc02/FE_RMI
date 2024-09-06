@@ -69,7 +69,7 @@ import ModalConfirm from "@/components/RawMaterialInspection/ModalConfirm.vue";
 
 const defaultArgs = {
   id: '',
-  line_id: '',
+  lineId: '',
   name: '',
   code: '',
   description: '',
