@@ -44,16 +44,19 @@
                 <td colspan="9" class="text-center">Please select ingot element</td>
               </tr>
               <tr v-else v-for="(element, i) in elementData" :key="i">
-                <td>{{ element.name }}</td>
+                <td>{{ element.elementName }}</td>
                 <td>{{ element.lineName }}</td>
                 <td>
-                  <input class="form-control" type="number" min="0" v-model="element.min">
+                  <input class="form-control" type="number" min="0" v-model="element.min"
+                         @input="decideWarningLimit(element, true, false)">
                 </td>
                 <td>
-                  <input class="form-control" type="number" min="0" v-model="element.max">
+                  <input class="form-control" type="number" min="0" v-model="element.max"
+                         @input="decideWarningLimit(element, false, true)">
                 </td>
                 <td>
-                  <input class="form-control" type="number" min="0" v-model="element.warningLimit">
+                  <input class="form-control" type="number" min="0" v-model="element.warningLimit"
+                         @input="decideWarningLimit(element, true, true)">
                 </td>
                 <td>{{ element.minWarning }}</td>
                 <td>{{ element.maxWarning }}</td>
@@ -99,18 +102,7 @@ import {
 } from "@/store/modules/SAND.module";
 import {performHttpRequest} from "@/utils/RequestUtils";
 import {mapActions, mapGetters} from "vuex";
-
-const emptyElement = {
-  name: '',
-  vendorName: null,
-  lineName: '',
-  inCharge: null,
-  min: 0,
-  max: 0,
-  warningLimit: 0,
-  minWarning: 0,
-  maxWarning: 0,
-};
+import commonUtils from "@/utils/CommonUtils";
 
 export default {
   name: "ModalFormMstStandardSandComponent",
@@ -159,15 +151,15 @@ export default {
   watch: {
     visible(newValue) {
       if (newValue) {
-        /* if (this.hasLoadedData) {
-           this.form = {
-             ...this.loadedData
-           }
-         } else {
-           this.form = {
-             ...defaultArgs
-           }
-         }*/
+        if (this.hasLoadedData) {
+          this.selectedLine = this.loadedData.lineNm;
+          this.selectedElements = this.loadedData.elements;
+          this.elementData = this.GET_INGOT_SELECT.filter(el => this.selectedElements?.includes(el.id));
+        } else {
+          this.selectedLine = null;
+          this.selectedElements = null;
+          this.elementData = [];
+        }
       }
     },
     selectedElements(newValue) {
@@ -202,10 +194,10 @@ export default {
       /*console.log('onSelectElement data', data);
       console.log('onSelectElement selectedElements', this.selectedElements);*/
       const newElement = {
-        name: data.label,
-        vendorName: this.selectedVendor?.label,
+        elementId: data.id,
+        elementName: data.label,
+        lineId: this.selectedLine?.id,
         lineName: this.selectedLine?.label,
-        inCharge: this.selectedInCharge?.id,
         min: 0,
         max: 0,
         warningLimit: 0,
@@ -214,7 +206,7 @@ export default {
       };
 
       const copyElement = [...(this.elementData ?? [])];
-      const existingIndex = copyElement.findIndex((element) => (element.name === newElement.name));
+      const existingIndex = copyElement.findIndex((element) => (element.elementName === newElement.elementName));
       if (existingIndex > -1) {
         copyElement.splice(existingIndex, 1, newElement);
       } else {
@@ -228,20 +220,33 @@ export default {
       console.log('onDeselectElement selectedElements', this.selectedElements);*/
 
       const copyElement = [...(this.elementData ?? [])];
-      const existingIndex = copyElement.findIndex((element) => (element.name === data.label));
+      const existingIndex = copyElement.findIndex((element) => (element.elementId === data.id));
       if (existingIndex > -1) {
         copyElement.splice(existingIndex, 1);
       }
 
       this.elementData = copyElement;
     },
+    decideWarningLimit(element, isMin, isMax) {
+      return commonUtils.decideElementStandardWarningLimit(
+        this.elementData,
+        element,
+        isMin,
+        isMax
+      );
+    },
     submit() {
       performHttpRequest(async () => {
         this.isLoading = true;
+        const payload = {
+          id: this.loadedData.id,
+          elements: this.elementData
+        };
+
         if (this.hasLoadedData) {
-          await this.ACTION_EDIT_STANDARD_SAND(this.form)
+          await this.ACTION_EDIT_STANDARD_SAND(payload)
         } else {
-          await this.ACTION_ADD_STANDARD_SAND(this.form)
+          await this.ACTION_ADD_STANDARD_SAND(payload)
         }
 
         this.isLoading = false;
@@ -257,7 +262,7 @@ export default {
     onConfirmDelete() {
       performHttpRequest(async () => {
         this.isLoading = true;
-        await this.ACTION_REMOVE_STANDARD_SAND(this.form)
+        await this.ACTION_REMOVE_STANDARD_SAND(this.loadedData)
         this.isLoading = false;
         this.closeModal()
       });

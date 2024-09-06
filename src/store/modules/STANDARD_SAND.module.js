@@ -72,6 +72,10 @@ const actions = {
   async ACTION_ADD_STANDARD_SAND({commit, dispatch, state}, params) {
     try {
       delete params.id;
+      delete params.minWarning;
+      delete params.maxWarning;
+      commonUtils.removeAllKeyWithSpecifyKey(params, 'name');
+
       ApiService.setHeader();
       const {data} = await ApiService.post('sand-standard', params);
       console.log('ACTION_ADD_STANDARD_SAND', 'data', data);
@@ -94,6 +98,9 @@ const actions = {
     try {
       const id = STANDARD_SANDData.id;
       delete STANDARD_SANDData.id;
+      delete params.minWarning;
+      delete params.maxWarning;
+      commonUtils.removeAllKeyWithSpecifyKey(STANDARD_SANDData, 'name');
 
       ApiService.setHeader()
       const {data} = await ApiService.put(`sand-standard/${id}`, STANDARD_SANDData)

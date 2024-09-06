@@ -93,7 +93,10 @@ const actions = {
     try {
       delete params.id;
       ApiService.setHeader();
-      const {data} = await ApiService.post('sand-element', params);
+      const {data} = await ApiService.post('sand-element', {
+        ...params,
+        elementIndex: parseInt(params.elementIndex)
+      });
       console.log('ACTION_ADD_SAND', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -114,7 +117,10 @@ const actions = {
   async ACTION_EDIT_SAND({commit, dispatch}, sandData) {
     try {
       ApiService.setHeader()
-      const {data} = await ApiService.put(`sand-element/${sandData.id}`, sandData)
+      const {data} = await ApiService.put(`sand-element/${sandData.id}`, {
+        ...sandData,
+        elementIndex: parseInt(sandData.elementIndex)
+      });
       console.log('ACTION_EDIT_SAND', 'data', data);
 
       if (commonUtils.isMock()) {
