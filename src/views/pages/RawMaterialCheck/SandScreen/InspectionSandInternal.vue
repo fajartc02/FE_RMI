@@ -283,7 +283,7 @@ import DAY_CONSTANT from '@/constants/DAY_CONSTANT'
 import DAYTIME_CONSTANT from '@/constants/DAYTIME_CONSTANT'
 import { ACTION_SHIFT, GET_SHIFT } from '@/store/modules/SHIFT.module';
 import { ACTION_MACHINE, GET_MACHINE } from '@/store/modules/MACHINE.module';
-import { ACTION_SAND_ELEMENT, GET_ELEMENT_INPUT } from '@/store/modules/ELEMENTS.module';
+import { ACTION_SAND_ELEMENT_CHECK, GET_ELEMENT_INPUT } from '@/store/modules/ELEMENTS.module';
 import { isNumber } from 'highcharts';
 import STATUS_ELEMENT_CONSTANT from '@/constants/STATUS_ELEMENT_CONSTANT';
 import { ACTION_SAMPLE_SAND, ACTION_SAMPLE_SAND_DETAIL, ADD_SAMPLE_SAND } from '@/store/modules/SAMPLE_SAND.module';
@@ -342,14 +342,8 @@ export default {
       this.checkDateInit()
     },
     GET_ELEMENT_INPUT: function () {
-      console.log('GET_ELEMENT_INPUT', this.GET_ELEMENT_INPUT);
-
       if (!this.GET_ELEMENT_INPUT?.elements) {
-        console.log(this.GET_ELEMENT_INPUT.elements.meshElements);
-
         this.meshElements = this.GET_ELEMENT_INPUT.meshElements.map((element) => {
-          console.log('element', element);
-
           return {
             ...element,
             value: element.value || null,
@@ -439,7 +433,7 @@ export default {
         this.ACTION_SHIFT()
         this.ACTION_MACHINE({ materialCategory: 'SAND' })
         this.checkDateInit()
-        // this.ACTION_SAND_ELEMENT()
+        // this.ACTION_SAND_ELEMENT_CHECK()
       }
     },
     'data.headers.time': function () {
@@ -479,7 +473,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([ACTION_SHIFT, ACTION_MACHINE, ACTION_SAND_ELEMENT, ACTION_SAMPLE_SAND, ACTION_SAMPLE_SAND_DETAIL, ADD_SAMPLE_SAND]),
+    ...mapActions([ACTION_SHIFT, ACTION_MACHINE, ACTION_SAND_ELEMENT_CHECK, ACTION_SAMPLE_SAND, ACTION_SAMPLE_SAND_DETAIL, ADD_SAMPLE_SAND]),
     selectedDay(dayIndex) {
       this.DAY_CONSTANT.forEach((day) => {
         day.isActive = day.idx === dayIndex ? true : false
@@ -788,7 +782,7 @@ export default {
     } else {
       this.checkDateInit()
       this.isNightCondition()
-      this.ACTION_SAND_ELEMENT()
+      this.ACTION_SAND_ELEMENT_CHECK()
     }
   }
 }
