@@ -317,7 +317,7 @@ export default {
       performHttpRequest(async () => {
         this.isLoading = true;
         const payload = {
-          id: this.loadedData.id,
+          id: this.loadedData?.id,
           elements: this.elementData
         };
 
@@ -338,9 +338,12 @@ export default {
       this.$emit('on-close', true)
     },
     onConfirmDelete() {
+      if (!this.hasLoadedData) {
+        return;
+      }
       performHttpRequest(async () => {
         this.isLoading = true;
-        await this.ACTION_REMOVE_STANDARD_INGOT(this.form)
+        await this.ACTION_REMOVE_STANDARD_INGOT(this.loadedData.id)
         this.isLoading = false;
         this.closeModal()
       });
