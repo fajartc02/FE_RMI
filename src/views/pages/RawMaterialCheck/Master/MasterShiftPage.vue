@@ -30,7 +30,11 @@ import ModalFormMstShiftComponent
   from "@/views/pages/RawMaterialCheck/Master/components/ModalFormMstShiftComponent.vue";
 import {mapActions, mapGetters} from 'vuex';
 import {GET_TBL_SHIFT, ACTION_TBL_SHIFT} from "@/store/modules/SHIFT.module";
-import {GET_META} from "@/store/modules/META.module";
+import {
+  ACTION_SET_META,
+  GET_META
+} from "@/store/modules/META.module";
+import moment from "moment";
 
 export default {
   name: "MasterShiftPage",
@@ -53,7 +57,7 @@ export default {
           null,
           null,
           false,
-          'filterName'
+          'name'
         ),
       ],
     }
@@ -61,7 +65,16 @@ export default {
   mounted() {
     this.$nextTick(() => {
       setTimeout(() => {
-        this.ACTION_TBL_SHIFT()
+        this.ACTION_SET_META({
+          page: 1,
+          take: 20,
+          itemCount: 5,
+          pageCount: 1,
+          hasPreviousPage: false,
+          hasNextPage: false,
+          timestamp: moment().format('YYYY-MM-DD'),
+        });
+        this.ACTION_TBL_SHIFT(this.pagination)
       }, 300);
     });
   },
@@ -85,7 +98,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([ACTION_TBL_SHIFT]),
+    ...mapActions([ACTION_TBL_SHIFT, ACTION_SET_META]),
     async onChangeFilter(filter) {
       this.ACTION_TBL_SHIFT({
         ...filter,

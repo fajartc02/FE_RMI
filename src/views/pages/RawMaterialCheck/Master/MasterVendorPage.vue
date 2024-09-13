@@ -26,8 +26,10 @@ import InputModel from "@/components/RawMaterialInspection/Filter/InputModel";
 import {mapActions, mapGetters} from 'vuex';
 import {GET_TBL_VENDOR, ACTION_TBL_VENDOR} from "@/store/modules/VENDOR.module";
 import {
+  ACTION_SET_META,
   GET_META
 } from "@/store/modules/META.module";
+import moment from "moment";
 
 export default {
   name: "MasterVendorPage",
@@ -48,7 +50,7 @@ export default {
           null,
           null,
           false,
-          'filterName'
+          'name'
         ),
       ],
     }
@@ -56,7 +58,16 @@ export default {
   mounted() {
     this.$nextTick(() => {
       setTimeout(() => {
-        this.ACTION_TBL_VENDOR();
+        this.ACTION_SET_META({
+          page: 1,
+          take: 20,
+          itemCount: 5,
+          pageCount: 1,
+          hasPreviousPage: false,
+          hasNextPage: false,
+          timestamp: moment().format('YYYY-MM-DD'),
+        });
+        this.ACTION_TBL_VENDOR(this.pagination);
       }, 300);
     });
   },
@@ -80,7 +91,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([ACTION_TBL_VENDOR]),
+    ...mapActions([ACTION_TBL_VENDOR, ACTION_SET_META]),
     async onChangeFilter(filter) {
       this.ACTION_TBL_VENDOR({
         ...filter,

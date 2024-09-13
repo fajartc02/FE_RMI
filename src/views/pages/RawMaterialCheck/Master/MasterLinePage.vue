@@ -33,8 +33,10 @@ import {
   ACTION_TBL_LINE
 } from "@/store/modules/LINE.module";
 import {
+  ACTION_SET_META,
   GET_META
 } from "@/store/modules/META.module";
+import moment from "moment";
 
 
 export default {
@@ -58,7 +60,7 @@ export default {
           null,
           null,
           false,
-          'filterName'
+          'name'
         ),
       ],
     }
@@ -66,6 +68,15 @@ export default {
   mounted() {
     this.$nextTick(() => {
       setTimeout(() => {
+        this.ACTION_SET_META({
+          page: 1,
+          take: 20,
+          itemCount: 5,
+          pageCount: 1,
+          hasPreviousPage: false,
+          hasNextPage: false,
+          timestamp: moment().format('YYYY-MM-DD'),
+        });
         this.ACTION_TBL_LINE({
           ...this.pagination,
         });
@@ -92,7 +103,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([ACTION_TBL_LINE]),
+    ...mapActions([ACTION_TBL_LINE, ACTION_SET_META]),
     async onChangeFilter(filter) {
       this.ACTION_TBL_LINE({
         ...this.pagination,

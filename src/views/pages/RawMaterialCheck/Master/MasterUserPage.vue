@@ -25,8 +25,10 @@ import InputModel from "@/components/RawMaterialInspection/Filter/InputModel";
 import {mapActions, mapGetters} from 'vuex';
 import {GET_TBL_USER, ACTION_TBL_USER} from "@/store/modules/USER.module";
 import {
+  ACTION_SET_META,
   GET_META
 } from "@/store/modules/META.module";
+import moment from "moment";
 
 export default {
   name: "MasterUserPage",
@@ -47,7 +49,7 @@ export default {
           null,
           null,
           false,
-          'filterNameOrEmail'
+          'nameOrEmail'
         ),
       ],
     }
@@ -55,7 +57,16 @@ export default {
   mounted() {
     this.$nextTick(() => {
       setTimeout(() => {
-        this.ACTION_TBL_USER();
+        this.ACTION_SET_META({
+          page: 1,
+          take: 20,
+          itemCount: 5,
+          pageCount: 1,
+          hasPreviousPage: false,
+          hasNextPage: false,
+          timestamp: moment().format('YYYY-MM-DD'),
+        });
+        this.ACTION_TBL_USER(this.pagination);
       }, 300);
     });
   },
@@ -79,7 +90,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([ACTION_TBL_USER]),
+    ...mapActions([ACTION_TBL_USER, ACTION_SET_META]),
     async onChangeFilter(filter) {
       this.ACTION_TBL_USER({
         ...filter,

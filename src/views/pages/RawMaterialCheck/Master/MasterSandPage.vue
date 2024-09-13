@@ -33,8 +33,10 @@ import {
   ACTION_TBL_SAND
 } from "@/store/modules/SAND.module";
 import {
+  ACTION_SET_META,
   GET_META
 } from "@/store/modules/META.module";
+import moment from "moment";
 
 export default {
   name: "MasterSand",
@@ -58,7 +60,7 @@ export default {
           null,
           null,
           false,
-          'filterName'
+          'name'
         ),
       ],
     }
@@ -66,7 +68,16 @@ export default {
   mounted() {
     this.$nextTick(() => {
       setTimeout(() => {
-        this.ACTION_TBL_SAND();
+        this.ACTION_SET_META({
+          page: 1,
+          take: 20,
+          itemCount: 5,
+          pageCount: 1,
+          hasPreviousPage: false,
+          hasNextPage: false,
+          timestamp: moment().format('YYYY-MM-DD'),
+        });
+        this.ACTION_TBL_SAND(this.pagination);
       }, 300)
     });
   },
@@ -90,7 +101,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([ACTION_TBL_SAND]),
+    ...mapActions([ACTION_TBL_SAND, ACTION_SET_META]),
     async onChangeFilter(filter) {
       this.ACTION_TBL_SAND({
         ...filter,

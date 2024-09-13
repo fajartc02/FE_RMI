@@ -25,7 +25,11 @@ import ModalFormMstSystemComponent
 import InputModel from "@/components/RawMaterialInspection/Filter/InputModel";
 import {mapActions, mapGetters} from 'vuex';
 import {GET_TBL_SYSTEM, ACTION_TBL_SYSTEM} from "@/store/modules/SYSTEM.module";
-import {GET_META} from "@/store/modules/META.module";
+import {
+  ACTION_SET_META,
+  GET_META
+} from "@/store/modules/META.module";
+import moment from "moment";
 
 export default {
   name: "MasterSystemPage",
@@ -46,7 +50,7 @@ export default {
           null,
           null,
           false,
-          'filterName'
+          'name'
         ),
       ],
     }
@@ -54,7 +58,16 @@ export default {
   mounted() {
     this.$nextTick(() => {
       setTimeout(() => {
-        this.ACTION_TBL_SYSTEM()
+        this.ACTION_SET_META({
+          page: 1,
+          take: 20,
+          itemCount: 5,
+          pageCount: 1,
+          hasPreviousPage: false,
+          hasNextPage: false,
+          timestamp: moment().format('YYYY-MM-DD'),
+        });
+        this.ACTION_TBL_SYSTEM(this.pagination)
       }, 300);
     });
   },
@@ -78,7 +91,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([ACTION_TBL_SYSTEM]),
+    ...mapActions([ACTION_TBL_SYSTEM, ACTION_SET_META]),
     async onChangeFilter(filter) {
       this.ACTION_TBL_SYSTEM({
         ...filter,

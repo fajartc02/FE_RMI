@@ -61,9 +61,11 @@ export default {
     };
   },
   watch: {
-    /*GET_META() {
-      this.meta = { ...this.GET_META };
-    },*/
+    GET_META(newValue, oldValue) {
+      if(newValue !== oldValue){
+        this.meta = { ...this.GET_META };
+      }
+    },
   },
   computed: {
     ...mapGetters([GET_META]),

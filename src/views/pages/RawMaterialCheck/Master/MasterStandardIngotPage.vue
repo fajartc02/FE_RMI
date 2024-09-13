@@ -33,9 +33,11 @@ import {
   GET_MACHINE_TREESELECT
 } from "@/store/modules/MACHINE.module";
 import {
+  ACTION_SET_META,
   GET_META
 } from "@/store/modules/META.module";
 import {constructError} from "@/utils/ResponseUtils";
+import moment from "moment";
 
 export default {
   name: "MasterElementStandardIngotPage",
@@ -56,7 +58,7 @@ export default {
           null,
           null,
           false,
-          'filterName'
+          'name'
         ),
         InputModel(
           'Machine',
@@ -74,6 +76,16 @@ export default {
   mounted() {
     this.$nextTick(() => {
       setTimeout(() => {
+        this.ACTION_SET_META({
+          page: 1,
+          take: 20,
+          itemCount: 5,
+          pageCount: 1,
+          hasPreviousPage: false,
+          hasNextPage: false,
+          timestamp: moment().format('YYYY-MM-DD'),
+        });
+
         this.getTable();
 
         try {
@@ -129,20 +141,21 @@ export default {
   methods: {
     ...mapActions([
       ACTION_TBL_STANDARD_INGOT,
-      ACTION_MACHINE
+      ACTION_MACHINE,
+      ACTION_SET_META
     ]),
     getTable(filter = {}) {
       try {
-        this.ACTION_TBL_STANDARD_INGOT(filter);
+        this.ACTION_TBL_STANDARD_INGOT({
+          ...filter,
+          ...this.pagination
+        });
       } catch (e) {
         this.$swal('Error', `Something wrong, please try again<br>Detail Error: ${constructError(e)} `, 'error')
       }
     },
     async onChangeFilter(filter) {
-      this.getTable({
-        ...filter,
-        ...this.pagination
-      })
+      this.getTable(filter)
     },
     onDataSelected(data) {
       this.selectedRow = data;

@@ -34,8 +34,10 @@ import {
   ACTION_TBL_INGOT
 } from "@/store/modules/INGOT.module";
 import {
+  ACTION_SET_META,
   GET_META
 } from "@/store/modules/META.module";
+import moment from "moment";
 
 export default {
   name: "MasterIngotPage",
@@ -59,7 +61,7 @@ export default {
           null,
           null,
           false,
-          'filterName'
+          'name'
         ),
       ],
     }
@@ -67,7 +69,16 @@ export default {
   mounted() {
     this.$nextTick(() => {
       setTimeout(() => {
-        this.ACTION_TBL_INGOT()
+        this.ACTION_SET_META({
+          page: 1,
+          take: 20,
+          itemCount: 5,
+          pageCount: 1,
+          hasPreviousPage: false,
+          hasNextPage: false,
+          timestamp: moment().format('YYYY-MM-DD'),
+        });
+        this.ACTION_TBL_INGOT(this.pagination)
       }, 300)
     })
   },
@@ -91,7 +102,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([ACTION_TBL_INGOT]),
+    ...mapActions([ACTION_TBL_INGOT, ACTION_SET_META]),
     async onChangeFilter(filter) {
       this.ACTION_TBL_INGOT({
         ...filter,

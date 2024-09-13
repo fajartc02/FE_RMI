@@ -24,12 +24,16 @@ import InputModel from "@/components/RawMaterialInspection/Filter/InputModel";
 import ModalFormMstStandardSandComponent
   from "@/views/pages/RawMaterialCheck/Master/components/ModalFormMstStandardSandComponent.vue";
 import {mapActions, mapGetters} from 'vuex';
-import {GET_META} from "@/store/modules/META.module";
+import {
+  ACTION_SET_META,
+  GET_META
+} from "@/store/modules/META.module";
 import {
   GET_TBL_STANDARD_SAND,
   ACTION_TBL_STANDARD_SAND
 } from "@/store/modules/STANDARD_SAND.module";
 import {performHttpRequest} from "@/utils/RequestUtils";
+import moment from "moment";
 
 export default {
   name: "MasterStandardSandPage",
@@ -50,7 +54,7 @@ export default {
           null,
           null,
           false,
-          'filterName'
+          'name'
         ),
       ],
     }
@@ -58,6 +62,15 @@ export default {
   mounted() {
     this.$nextTick(() => {
       setTimeout(() => {
+        this.ACTION_SET_META({
+          page: 1,
+          take: 20,
+          itemCount: 5,
+          pageCount: 1,
+          hasPreviousPage: false,
+          hasNextPage: false,
+          timestamp: moment().format('YYYY-MM-DD'),
+        });
         this.getTbl();
       }, 300);
     });
@@ -82,7 +95,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([ACTION_TBL_STANDARD_SAND]),
+    ...mapActions([ACTION_TBL_STANDARD_SAND, ACTION_SET_META]),
     getTbl(filter = {}) {
       performHttpRequest(async () => {
         await this.ACTION_TBL_STANDARD_SAND({
@@ -93,8 +106,7 @@ export default {
     },
     async onChangeFilter(filter) {
       this.getTbl({
-        ...filter,
-        ...this.pagination
+        ...filter
       });
     },
     onDataSelected(data) {
