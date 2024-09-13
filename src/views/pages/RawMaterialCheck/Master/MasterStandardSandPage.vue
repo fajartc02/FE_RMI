@@ -34,6 +34,8 @@ import {
 } from "@/store/modules/STANDARD_SAND.module";
 import {performHttpRequest} from "@/utils/RequestUtils";
 import moment from "moment";
+import {GET_INGOT_TREESELECT} from "@/store/modules/INGOT.module";
+import {ACTION_SAND, GET_SAND_SELECT, GET_SAND_TREESELECT} from "@/store/modules/SAND.module";
 
 export default {
   name: "MasterStandardSandPage",
@@ -47,14 +49,14 @@ export default {
       visibleForm: false,
       filters: [
         InputModel(
-          'Name',
-          'text',
-          'Search Name',
+          'Element',
+          'treeselect',
+          'Select Element',
           null,
-          null,
+          GET_SAND_TREESELECT,
           null,
           false,
-          'name'
+          'elementId'
         ),
       ],
     }
@@ -72,11 +74,20 @@ export default {
           timestamp: moment().format('YYYY-MM-DD'),
         });
         this.getTbl();
+
+        try{
+          this.ACTION_SAND();
+        }catch (e){
+        }
       }, 300);
     });
   },
   computed: {
-    ...mapGetters([GET_TBL_STANDARD_SAND, GET_META]),
+    ...mapGetters([
+      GET_TBL_STANDARD_SAND,
+      GET_META,
+      GET_SAND_TREESELECT
+    ]),
     dataTbl() {
       return this.GET_TBL_STANDARD_SAND
     },
@@ -93,9 +104,20 @@ export default {
         this.getTbl();
       }
     },
+    GET_SAND_TREESELECT(newValue, oldValue) {
+      let idx = this.filters.findIndex(x => x.id === 'elementId');
+      this.remapFilter(idx, {
+        ...this.filters[idx],
+        options: this.GET_SAND_TREESELECT,
+      });
+    }
   },
   methods: {
-    ...mapActions([ACTION_TBL_STANDARD_SAND, ACTION_SET_META]),
+    ...mapActions([
+      ACTION_TBL_STANDARD_SAND,
+      ACTION_SET_META,
+      ACTION_SAND
+    ]),
     getTbl(filter = {}) {
       performHttpRequest(async () => {
         await this.ACTION_TBL_STANDARD_SAND({
@@ -121,6 +143,13 @@ export default {
       setTimeout(() => {
         this.visibleForm = false
       }, 300);
+    },
+    remapFilter(index, model) {
+      this.filters.splice(
+        index,
+        1,
+        model
+      );
     }
   }
 }

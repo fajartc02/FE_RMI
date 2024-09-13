@@ -34,15 +34,21 @@ const state = {
 }
 
 const getters = {
-  GET_SYSTEM : (state) => (state.TBL_SYSTEM_DATA),
-  GET_SYSTEM_SELECT(state)  {
-    return [...(state.SYSTEM_DATA?.map((item) => {
+  GET_SYSTEM_SELECT(state) {
+    const data = [...(state.SYSTEM_DATA?.map((item) => {
       return {
-        id: item.type,
+        id: item.value,
         label: item.value,
       }
     }) ?? [])];
-  }
+
+    data.unshift({id: '', label: 'Select Value'});
+
+    return data;
+  },
+  GET_TBL_SYSTEM(state) {
+    return state.TBL_SYSTEM_DATA;
+  },
 }
 
 const mutations = {

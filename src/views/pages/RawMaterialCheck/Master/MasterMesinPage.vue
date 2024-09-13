@@ -87,7 +87,7 @@ export default {
         });
         this.ACTION_TBL_MACHINE(this.pagination);
         this.ACTION_LINE();
-      }, 300)
+      }, 300);
     })
   },
   computed: {
@@ -110,7 +110,20 @@ export default {
     },
     GET_LINE_TREESELECT: function () {
       let idxLineInput = this.filters.findIndex(x => x.title == 'Line');
-      this.filters.splice(idxLineInput, 1, InputModel('Line', 'treeselect', 'Select Line', 'NONE', this.GET_LINE_TREESELECT, null, false, 'lineId'))
+      this.filters.splice(
+        idxLineInput,
+        1,
+        InputModel(
+          'Line',
+          'treeselect',
+          'Select Line',
+          'NONE',
+          this.GET_LINE_TREESELECT,
+          null,
+          false,
+          'lineId'
+        )
+      );
     },
   },
   methods: {

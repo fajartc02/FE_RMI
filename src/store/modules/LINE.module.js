@@ -33,26 +33,28 @@ const getters = {
     return state.LINE_DATA
   },
   GET_LINE_SELECT(state) {
-    const data =  [...state.LINE_DATA.map((line) => {
+    const data =  [...(state.LINE_DATA?.map((line) => {
       return {
         id: line.id,
         label: line.name,
       }
-    })];
+    }) || [])];
 
     data.unshift({id: '', label: 'Select Line'});
 
     return data;
   },
   GET_LINE_TREESELECT(state) {
-    const data = [...state.LINE_DATA.map((line) => {
+    const data = [...(state.LINE_DATA?.map((line) => {
       return {
         id: line.id,
         label: line.name,
       }
-    })];
+    }) || [])];
 
-    data.unshift({id: 'NONE', name: 'All'});
+    data.unshift({id: 'NONE', label: 'All'});
+
+    console.log('GET_LINE_TREESELECT', data)
 
     return data;
   },

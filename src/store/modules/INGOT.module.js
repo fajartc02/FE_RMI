@@ -5,6 +5,7 @@ import commonUtils from "@/utils/CommonUtils";
 import {SET_LINE} from "@/store/modules/LINE.module";
 
 export const GET_INGOT_SELECT = 'GET_INGOT_SELECT';
+export const GET_INGOT_TREESELECT = 'GET_INGOT_TREESELECT';
 export const GET_TBL_INGOT = 'GET_TBL_INGOT';
 export const SET_TBL_INGOT = 'SET_TBL_INGOT';
 export const SET_INGOT = 'SET_INGOT';
@@ -38,12 +39,24 @@ const state = {
 const getters = {
   GET_TBL_INGOT: (state) => (state.TBL_INGOT_DATA),
   GET_INGOT_SELECT(state) {
-    return [...(state.INGOT_DATA.map((item) => {
+    return [...(state.INGOT_DATA?.map((item) => {
       return {
         id: item.id,
         label: item.name,
       }
     }) ?? [])];
+  },
+  GET_INGOT_TREESELECT(state){
+    const data = [...(state.INGOT_DATA?.map((item) => {
+      return {
+        id: item.id,
+        label: item.name,
+      }
+    }) ?? [])];
+
+    data.unshift({id: 'NONE', label: 'All'});
+
+    return data;
   }
 }
 

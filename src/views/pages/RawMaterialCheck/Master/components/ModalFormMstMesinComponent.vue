@@ -6,11 +6,11 @@
     <CModalBody>
       <div class="mb-3">
         <label class="form-label">Line</label>
-        <Treeselect v-model="form.line_id" :options="GET_LINE_SELECT" :clearable="true"/>
+        <Treeselect v-model="form.lineId" :options="GET_LINE_SELECT" :clearable="true"/>
       </div>
       <div class="mb-3">
         <label class="form-label">Material Type</label>
-        <Treeselect key="material" v-model="form.materialType" :options="GET_SYSTEM_TREESELECT" :clearable="true"/>
+        <Treeselect v-model="form.materialType" :options="GET_SYSTEM_SELECT" :clearable="true"/>
       </div>
       <CFormInput
         v-model="form.name"
@@ -94,9 +94,11 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.ACTION_SYSTEM({
-        type: 'material'
-      });
+      setTimeout(() => {
+        this.ACTION_SYSTEM({
+          type: 'MATERIAL_TYPE'
+        });
+      }, 300);
     });
   },
   computed: {
@@ -117,7 +119,8 @@ export default {
       if (newValue) {
         if (this.mesinData) {
           this.form = {
-            ...this.mesinData
+            ...this.mesinData,
+            materialType: this.mesinData.materialType ? this.mesinData.materialType : this.mesinData.materialCategory
           };
         } else {
           this.form = {
@@ -125,9 +128,6 @@ export default {
           };
         }
       }
-    },
-    GET_SYSTEM_TREESELECT(newValue) {
-      console.log('new value', newValue)
     }
   },
   methods: {

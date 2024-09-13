@@ -48,7 +48,7 @@ import moment from 'moment';
 export default {
   data() {
     return {
-      optionsPerPage: [20, 40, 60, 80, 100],
+      optionsPerPage: [10, 20, 40, 60, 80, 100],
       meta: {
         page: 1,
         take: 20,

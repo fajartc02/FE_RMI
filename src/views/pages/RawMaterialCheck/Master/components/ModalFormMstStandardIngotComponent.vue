@@ -5,9 +5,11 @@
       <div class="mb-3">
         <label class="form-label">Vendor</label>
         <Treeselect
+          v-model="loadedVendor"
           :options="GET_VENDOR_SELECT"
           :clearable="true"
           placeholder="Select Vendor"
+          :disabled="hasLoadedData"
           @select="onSelectVendor"
           @deselect="onDeselectVendor"
         />
@@ -15,9 +17,10 @@
       <div class="mb-3">
         <label class="form-label">Line</label>
         <Treeselect
+          v-model="loadedLine"
           :options="GET_LINE_SELECT"
           :clearable="true"
-          :disabled="selectedVendor === null"
+          :disabled="selectedVendor === null || hasLoadedData"
           placeholder="Select Line"
           @select="onSelectLine"
           @deselect="onDeselectLine"
@@ -26,9 +29,10 @@
       <div class="mb-3">
         <label class="form-label">In Charge</label>
         <Treeselect
+          v-model="loadedIncharge"
           :options="GET_SYSTEM_SELECT"
           :clearable="true"
-          :disabled="selectedLine === null"
+          :disabled="selectedLine === null  || hasLoadedData"
           placeholder="Select In Charge"
           @select="onSelectInCharge"
           @deselect="onDeselectInCharge"
@@ -39,7 +43,7 @@
         <Treeselect
           v-model="selectedElements"
           :options="GET_INGOT_SELECT"
-          :disabled="selectedInCharge === null"
+          :disabled="selectedInCharge === null || hasLoadedData"
           :multiple="true"
           :close-on-select="true"
           @select="onSelectElement"
@@ -165,6 +169,9 @@ export default {
       selectedInCharge: null,
       selectedElements: null,
       elementData: [],
+      loadedLine: null,
+      loadedVendor: null,
+      loadedIncharge: null
     }
   },
   mounted() {
@@ -174,7 +181,7 @@ export default {
         this.getVendor();
         this.getInCharge();
         this.getElements();
-      }, 500);
+      }, 300);
     });
   },
   computed: {
@@ -199,11 +206,29 @@ export default {
     visible(newValue) {
       if (newValue) {
         if (this.hasLoadedData) {
-          this.selectedVendor = this.loadedData.vendor;
-          this.selectedLine = this.loadedData.line;
-          this.selectedInCharge = this.loadedData.inCharge;
-          this.selectedElements = this.loadedData.elements;
-          this.elementData = this.GET_INGOT_SELECT.filter(el => this.selectedElements?.includes(el.id));
+          console.log('loaded data', this.loadedData);
+          this.loadedVendor = this.loadedData.vendorId;
+          this.loadedLine = this.loadedData.lineId;
+          this.loadedIncharge = this.loadedData.inCharge;
+          this.selectedElements = [this.loadedData.elementId];
+          this.elementData = [
+            {
+              elementId: this.loadedData?.elementId,
+              elementName: this.loadedData?.element,
+              vendorId: this.loadedData?.vendorId,
+              vendorName: this.loadedData?.vendor,
+              lineId: this.loadedData?.lineId,
+              lineName: this.loadedData?.line,
+              inCharge: this.loadedData?.inCharge,
+              min: this.loadedData?.min,
+              max: this.loadedData?.max,
+              warningLimit: this.loadedData?.warningLimit,
+              minWarning: this.loadedData?.min * (this.loadedData?.warningLimit / 100),
+              maxWarning: this.loadedData?.max * (this.loadedData?.warningLimit / 100),
+            }
+          ];
+          console.log('element data', this.loadedData);
+          //this.elementData = this.GET_INGOT_SELECT.filter(el => this.selectedElements?.includes(el.id));
         } else {
           this.selectedVendor = null;
           this.selectedLine = null;

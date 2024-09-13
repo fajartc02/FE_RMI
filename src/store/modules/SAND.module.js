@@ -2,9 +2,9 @@ import ApiService from '../services/api.service'
 import {ACTION_LOADING} from './LOADING.module'
 import {ACTION_SET_META} from "@/store/modules/META.module";
 import commonUtils from "@/utils/CommonUtils";
-import {SET_INGOT} from "@/store/modules/INGOT.module";
 
 export const GET_SAND_SELECT = 'GET_SAND_SELECT';
+export const GET_SAND_TREESELECT = 'GET_SAND_TREESELECT';
 export const GET_TBL_SAND = 'GET_TBL_SAND';
 export const SET_TBL_SAND = 'SET_TBL_SAND';
 export const SET_SAND = 'SET_SAND';
@@ -30,12 +30,24 @@ const state = {
 const getters = {
   GET_TBL_SAND: (state) => (state.TBL_SAND_DATA),
   GET_SAND_SELECT(state) {
-    return [...(state.SAND_DATA.map((item) => {
+    return [...(state.SAND_DATA?.map((item) => {
       return {
         id: item.id,
         label: item.name,
       }
     }) ?? [])];
+  },
+  GET_SAND_TREESELECT(state){
+    const data = [...(state.SAND_DATA?.map((item) => {
+      return {
+        id: item.id,
+        label: item.name,
+      }
+    }) ?? [])];
+
+    data.unshift({id: 'NONE', label: 'All'});
+
+    return data;
   }
 }
 

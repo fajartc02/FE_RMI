@@ -2,9 +2,9 @@ import ApiService from '../services/api.service'
 import {ACTION_LOADING} from './LOADING.module'
 import {ACTION_SET_META} from "@/store/modules/META.module";
 import commonUtils from "@/utils/CommonUtils";
-import {SET_SYSTEM} from "@/store/modules/SYSTEM.module";
 
 export const GET_VENDOR_SELECT = 'GET_VENDOR_SELECT';
+export const GET_VENDOR_TREESELECT = 'GET_VENDOR_TREESELECT';
 export const GET_VENDOR = 'GET_VENDOR';
 export const GET_TBL_VENDOR = 'GET_TBL_VENDOR';
 export const SET_VENDOR = 'SET_VENDOR';
@@ -42,8 +42,18 @@ const getters = {
         }
       }) ?? [])
     ];
-
-    console.log('data VENDOR', data)
+    return data;
+  },
+  GET_VENDOR_TREESELECT(state){
+    const data = [
+      ...(state.VENDOR_DATA?.map((item) => {
+        return {
+          id: item.id,
+          label: item.name,
+        }
+      }) ?? [])
+    ];
+    data.unshift({id: 'NONE', label: 'All'});
     return data;
   }
 }

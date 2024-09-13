@@ -27,7 +27,7 @@ const state = {
 
 const getters = {
   GET_GAUGE(state) {
-    if (state) {
+    if (state.GAUGE_DATA) {
       return state.GAUGE_DATA.map((gauge) => {
         return {
           ...gauge,

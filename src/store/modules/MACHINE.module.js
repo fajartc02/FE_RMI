@@ -31,13 +31,16 @@ const getters = {
     return state.MACHINE_DATA
   },
   GET_MACHINE_TREESELECT(state) {
-    state.MACHINE_DATA.push({id: 'NONE', name: 'All'})
-    return state.MACHINE_DATA.map((machine) => {
+    const data = [...(state.MACHINE_DATA?.map((machine) => {
       return {
         id: machine.id,
         label: machine.name,
       }
-    })
+    }) || [])];
+
+    data.unshift({id: 'NONE', name: 'All'});
+
+    return data;
   },
   GET_TBL_MACHINE: state => (state.TBL_MACHINE_DATA),
 }
@@ -77,7 +80,17 @@ const actions = {
         console.log('ACTION_TBL_MACHINE', 'data', data);
         const pagination = data.meta.pagination
         pagination ? dispatch(ACTION_SET_META, pagination) : null
-        commit(SET_TBL_MACHINE, data)
+
+        const remapData = data.data.map((machine) => {
+          return {
+            ...machine,
+            line: machine.line?.name ? machine.line.name : machine.line,
+          }
+        });
+        commit(SET_TBL_MACHINE, {
+          ...data,
+          data: remapData
+        })
       }
 
       if (commonUtils.isMock()) {

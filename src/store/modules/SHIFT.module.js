@@ -32,6 +32,11 @@ const getters = {
     return state.SHIFT_DATA
   },
   GET_SHIFT_TREESELECT(state) {
+    if ((state.SHIFT_DATA ?? []).length === 0) {
+      return [
+        {id: 'NONE', name: 'All'},
+      ];
+    }
     state.SHIFT_DATA.push({id: 'NONE', name: 'All'})
     return state.SHIFT_DATA.map((shift) => {
       return {

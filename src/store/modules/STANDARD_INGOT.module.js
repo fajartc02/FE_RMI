@@ -51,7 +51,20 @@ const actions = {
         const pagination = data.meta.pagination
         pagination ? dispatch(ACTION_SET_META, pagination) : null
         dispatch(ACTION_LOADING, false)
-        commit(SET_TBL_STANDARD_INGOT, data)
+
+        const remapData = data.data.map((item) => {
+          return {
+            ...item,
+            element: item.element?.name ? item.element?.name : item.element,
+            vendor: item.vendor?.name ? item.vendor?.name : item.vendor,
+            line: item.line?.name ? item.line?.name : item.line
+          }
+        });
+
+        commit(SET_TBL_STANDARD_INGOT, {
+          ...data,
+          data: remapData
+        });
       }
 
       if (commonUtils.isMock()) {

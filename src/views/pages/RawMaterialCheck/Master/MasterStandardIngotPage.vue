@@ -29,15 +29,23 @@ import {
   ACTION_TBL_STANDARD_INGOT
 } from "@/store/modules/STANDARD_INGOT.module";
 import {
-  ACTION_MACHINE,
-  GET_MACHINE_TREESELECT
-} from "@/store/modules/MACHINE.module";
-import {
   ACTION_SET_META,
   GET_META
 } from "@/store/modules/META.module";
 import {constructError} from "@/utils/ResponseUtils";
 import moment from "moment";
+import {
+  ACTION_LINE,
+  GET_LINE_TREESELECT
+} from "@/store/modules/LINE.module";
+import {
+  ACTION_VENDOR,
+  GET_VENDOR_TREESELECT
+} from "@/store/modules/VENDOR.module";
+import {
+  ACTION_INGOT,
+  GET_INGOT_TREESELECT
+} from "@/store/modules/INGOT.module";
 
 export default {
   name: "MasterElementStandardIngotPage",
@@ -51,24 +59,34 @@ export default {
       visibleForm: false,
       filters: [
         InputModel(
-          'Name',
-          'text',
-          'Search Name',
-          null,
-          null,
+          'Line',
+          'treeselect',
+          'Select Line',
+          'NONE',
+          GET_LINE_TREESELECT,
           null,
           false,
-          'name'
+          'lineId'
         ),
         InputModel(
-          'Machine',
+          'Vendor',
           'treeselect',
-          'Select Machine',
+          'Select Vendor',
+          'NONE',
+          GET_VENDOR_TREESELECT,
           null,
-          [],
+          false,
+          'vendorId'
+        ),
+        InputModel(
+          'Element',
+          'treeselect',
+          'Select Element',
+          'NONE',
+          GET_INGOT_TREESELECT,
           null,
-          true,
-          'machineId'
+          false,
+          'elementId'
         ),
       ],
     }
@@ -89,7 +107,17 @@ export default {
         this.getTable();
 
         try {
-          this.ACTION_MACHINE();
+          this.ACTION_LINE();
+        } catch (e) {
+        }
+
+        try {
+          this.ACTION_VENDOR();
+        } catch (e) {
+        }
+
+        try {
+          this.ACTION_INGOT();
         } catch (e) {
         }
       }, 300);
@@ -99,7 +127,9 @@ export default {
     ...mapGetters([
       GET_TBL_STANDARD_INGOT,
       GET_META,
-      GET_MACHINE_TREESELECT
+      GET_LINE_TREESELECT,
+      GET_VENDOR_TREESELECT,
+      GET_INGOT_TREESELECT
     ]),
     dataTbl() {
       return this.GET_TBL_STANDARD_INGOT
@@ -117,32 +147,35 @@ export default {
         this.ACTION_TBL_STANDARD_INGOT(this.pagination);
       }
     },
-    GET_MACHINE_TREESELECT(newValue, oldValue) {
-      if(newValue !== oldValue) {
-        let idxMachineInput = this.filters.findIndex(x => x.title == 'Machine');
-        this.filters
-          .splice(
-            idxMachineInput,
-            1,
-            InputModel(
-              'Machine',
-              'treeselect',
-              'Select Machine',
-              'NONE',
-              newValue,
-              null,
-              false,
-              'machineId'
-            )
-          );
-      }
+    GET_LINE_TREESELECT(newVal, oldVal) {
+      let idx = this.filters.findIndex(x => x.id === 'lineId');
+      this.remapFilter(idx, {
+        ...this.filters[idx],
+        options: this.GET_LINE_TREESELECT,
+      });
     },
+    GET_VENDOR_TREESELECT(newVal, oldVal) {
+      let idx = this.filters.findIndex(x => x.id === 'vendorId');
+      this.remapFilter(idx, {
+        ...this.filters[idx],
+        options: this.GET_VENDOR_TREESELECT,
+      });
+    },
+    GET_INGOT_TREESELECT(newVal, oldVal) {
+      let idx = this.filters.findIndex(x => x.id === 'elementId');
+      this.remapFilter(idx, {
+        ...this.filters[idx],
+        options: this.GET_INGOT_TREESELECT,
+      });
+    }
   },
   methods: {
     ...mapActions([
       ACTION_TBL_STANDARD_INGOT,
-      ACTION_MACHINE,
-      ACTION_SET_META
+      ACTION_SET_META,
+      ACTION_LINE,
+      ACTION_VENDOR,
+      ACTION_INGOT
     ]),
     getTable(filter = {}) {
       try {
@@ -170,7 +203,13 @@ export default {
         this.visibleForm = false
       }, 300);
     },
-
+    remapFilter(index, model) {
+      this.filters.splice(
+        index,
+        1,
+        model
+      );
+    }
   }
 }
 </script>
