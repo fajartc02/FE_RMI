@@ -8,6 +8,7 @@ export const SET_ELEMENT = 'SET_ELEMENT'
 export const GET_ELEMENT_INPUT = 'GET_ELEMENT_INPUT'
 export const SET_ELEMENT_INPUT = 'SET_ELEMENT_INPUT'
 // export const ACTION_ELEMENT_QUERY = 'ACTION_ELEMENT_QUERY'
+export const ACTION_SAND_ELEMENT_CHECK = 'ACTION_SAND_ELEMENT_CHECK'
 export const ACTION_SAND_ELEMENT = 'ACTION_SAND_ELEMENT'
 export const ACTION_SAND_ELEMENT_GRAPH = 'ACTION_SAND_ELEMENT_GRAPH'
 export const ACTION_INGOT_ELEMENT = 'ACTION_INGOT_ELEMENT'
@@ -85,6 +86,25 @@ const actions = {
       ApiService.setHeader()
       dispatch(ACTION_LOADING, true)
       const { data } = await ApiService.query('sand-element', params)
+      dispatch(ACTION_LOADING, false)
+
+      if (data.data) {
+        commit(SET_ELEMENT_INPUT, data.data)
+      } else {
+        commit(SET_ELEMENT_INPUT, [])
+      }
+    } catch (error) {
+      console.error(error)
+      dispatch(ACTION_LOADING, false)
+      return error
+    }
+  },
+  async ACTION_SAND_ELEMENT_CHECK({ commit, dispatch }, params) {
+    try {
+      // commit(SET_ELEMENT_INPUT, [])
+      ApiService.setHeader()
+      dispatch(ACTION_LOADING, true)
+      const { data } = await ApiService.query('sand-element/check', params)
       dispatch(ACTION_LOADING, false)
 
       if (data.data) {
