@@ -52,14 +52,14 @@ const actions = {
         pagination ? dispatch(ACTION_SET_META, pagination) : null
         dispatch(ACTION_LOADING, false)
 
-        const remapData = data.data.map((item) => {
+        const remapData = data.data ? data.data.map((item) => {
           return {
             ...item,
             element: item.element?.name ? item.element?.name : item.element,
             vendor: item.vendor?.name ? item.vendor?.name : item.vendor,
             line: item.line?.name ? item.line?.name : item.line
           }
-        });
+        }) : null;
 
         commit(SET_TBL_STANDARD_INGOT, {
           ...data,
