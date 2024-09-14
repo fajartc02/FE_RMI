@@ -44,7 +44,7 @@ export default {
         InputModel('Line', 'treeselect', 'Select Line', null, [], null, false, 'lineId'),
         InputModel('Machine', 'treeselect', 'Select Machine', null, [], null, true, 'machineId'),
         InputModel('Shift', 'treeselect', 'Select Shift', null, [], null, false, 'shiftId'),
-        InputModel('Status', 'option', 'Select Status', null, [{ id: 'NONE', label: 'All' }, { id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false)
+        InputModel('Status', 'option', 'Select Status', null, [{ id: 'NONE', label: 'All' }, { id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'REVISION', label: 'REVISION' }], null, false)
       ],
       isLineChanges: false,
       isLineSelected: false
@@ -61,7 +61,7 @@ export default {
       let idxStatusInput = this.filters.findIndex(x => x.title == 'Status');
       this.filters.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', this.GET_MACHINE_TREESELECT, null, false, 'machineId'))
       this.filters.splice(idxInchargeInput, 1, InputModel('Incharge', 'option', 'Select Incharge', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false))
-      this.filters.splice(idxStatusInput, 1, InputModel('Status', 'option', 'Select Status', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false))
+      this.filters.splice(idxStatusInput, 1, InputModel('Status', 'option', 'Select Status', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'REVISION', label: 'REVISION' }], null, false))
     },
     GET_SHIFT_TREESELECT: function () {
       let idxShiftInput = this.filters.findIndex(x => x.title == 'Shift');
@@ -110,16 +110,13 @@ export default {
     LoadingComponent,
     PaginationComponent
   },
-  async mounted() {
+  mounted() {
     try {
-      setTimeout(() => {
-        this.ACTION_LINE({ page: 1, line: null })
-        this.ACTION_SHIFT()
-      }, 1000)
+      this.ACTION_LINE({ page: 1, line: null })
+      this.ACTION_SHIFT()
     } catch (error) {
       this.$swal('Error', error, 'error')
     }
-
   }
 }
 </script>

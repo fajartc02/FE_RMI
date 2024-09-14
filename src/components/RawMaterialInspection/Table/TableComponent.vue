@@ -3,7 +3,7 @@
     <CTable v-if="dataTable?.data" class="text-center" striped bordered hover>
       <CTableHead>
         <CTableRow>
-          <template v-for="(label, index) in Object.keys(dataTable.data[0])">
+          <template v-for="(label, index) in Object.keys(dataTable?.data[0])">
             <CTableHeaderCell v-if="label != 'id' && !label.toLowerCase().includes('id')" :key="index" scope="col">
               {{ convertCase(label) }}
             </CTableHeaderCell>
@@ -12,11 +12,11 @@
         </CTableRow>
       </CTableHead>
       <CTableBody>
-        <CTableRow v-for="(item, index) in dataTable.data" :key="index">
-          <template v-for="(value, key, idxChild) in item" :key="idxChild">
+        <CTableRow v-for="(item, index) in dataTable?.data" :key="index + 1">
+          <template v-for="(value, key, idxChild) in item" :key="idxChild + 2">
             <CTableDataCell v-if="key != 'id' && !key.toLowerCase().includes('id')"
               :class="`${value === 'OK' ? 'text-success' : value === 'NG' ? 'text-danger' : `${value}`.includes('REVISION') || `${value}`.includes('WARNING') ? 'text-warning' : ''}`">
-              {{ value }}
+              {{ typeof value === 'object' ? value?.name : value }}
             </CTableDataCell>
           </template>
           <CTableDataCell>
@@ -47,12 +47,7 @@ export default {
   computed: {
     ...mapGetters([IS_LOADING]),
     getKeys: function () {
-      return Object.keys(this.dataTable.data[0]);
-    }
-  },
-  watch: {
-    IS_LOADING(newValue, oldValue) {
-      console.log('IS_LOADING', newValue)
+      return Object.keys(this.dataTable?.data[0]);
     }
   },
   props: {
@@ -67,7 +62,6 @@ export default {
   },
   methods: {
     handleAction(item) {
-      console.log('Action button clicked for:', item);
       this.$emit('emit-data', item)
     },
     convertCase(str) {

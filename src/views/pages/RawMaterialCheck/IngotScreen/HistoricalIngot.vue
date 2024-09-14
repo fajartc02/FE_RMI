@@ -100,7 +100,7 @@ export default {
       let idxStatusInput = this.filters.findIndex(x => x.title == 'Status');
       this.filters.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', this.GET_MACHINE_TREESELECT, null, false, 'machineId'))
       this.filters.splice(idxInchargeInput, 1, InputModel('Incharge', 'option', 'Select Incharge', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false))
-      this.filters.splice(idxStatusInput, 1, InputModel('Status', 'option', 'Select Status', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'RECHECK', label: 'RECHECK' }], null, false))
+      this.filters.splice(idxStatusInput, 1, InputModel('Status', 'option', 'Select Status', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'REVISION', label: 'REVISION' }], null, false))
     },
     isLineChanges: function () {
       this.ACTION_MACHINE({ lineId: this.isLineChanges })
