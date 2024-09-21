@@ -1,6 +1,6 @@
 <template>
   <div class="position-relative">
-    <CTable v-if="dataTable?.data" class="text-center" striped bordered hover>
+    <CTable v-if="dataTable?.data && dataTable?.data.length > 0" class="text-center" striped bordered hover>
       <CTableHead>
         <CTableRow>
           <template v-for="(label, index) in Object.keys(dataTable?.data[0])">

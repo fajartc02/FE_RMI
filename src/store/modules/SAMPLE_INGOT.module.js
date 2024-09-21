@@ -34,7 +34,13 @@ const state = {
 
 const getters = {
   GET_SAMPLE_INGOT(state) {
-    return state.SAMPLE_INGOT_DATA
+    return (
+      state.SAMPLE_INGOT_DATA || {
+        headers: null,
+        tablePureVendor: null,
+        tableInternalVendor: null,
+      }
+    )
   },
   GET_SAMPLE_INGOT_HISTORICAL(state) {
     return state.SAMPLE_INGOT_HISTORICAL
@@ -44,9 +50,15 @@ const getters = {
 const mutations = {
   SET_SAMPLE_INGOT(state, payload) {
     state.SAMPLE_INGOT_DATA = payload
+      ? payload
+      : {
+          headers: null,
+          tablePureVendor: null,
+          tableInternalVendor: null,
+        }
   },
   SET_SAMPLE_INGOT_HISTORICAL(state, payload) {
-    state.SAMPLE_INGOT_HISTORICAL.data = payload.data
+    state.SAMPLE_INGOT_HISTORICAL.data = payload.data ? payload.data : []
     state.SAMPLE_INGOT_HISTORICAL.meta = payload.meta
   },
 }
@@ -72,11 +84,23 @@ const actions = {
         dispatch(ACTION_LOADING, false)
         commit(SET_QR_SAMPLE, data.data)
         return data.data
+          ? data.data
+          : {
+              headers: null,
+              tablePureVendor: null,
+              tableInternalVendor: null,
+            }
       } else {
         const { data } = await ApiService.get(`shimadzu`, gaugeId)
         dispatch(ACTION_LOADING, false)
         commit(SET_QR_SAMPLE, data.data)
         return data.data
+          ? data.data
+          : {
+              headers: null,
+              tablePureVendor: null,
+              tableInternalVendor: null,
+            }
       }
     } catch (error) {
       dispatch(ACTION_LOADING, false)

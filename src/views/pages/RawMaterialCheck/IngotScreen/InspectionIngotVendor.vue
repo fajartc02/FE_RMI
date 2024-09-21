@@ -290,7 +290,7 @@ export default {
         console.log(this.GET_SAMPLE_CODE);
         console.log(this.GET_QR_SAMPLE);
 
-        if (this.GET_SAMPLE_CODE?.headers.sampleCode) {
+        if (this.GET_SAMPLE_CODE?.headers?.sampleCode) {
           this.input = {
             ...this.input,
             header: {
