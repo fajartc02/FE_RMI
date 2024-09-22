@@ -264,7 +264,7 @@ export default {
         if (data) {
           const uniqueData = data.values.filter((value, index, self) => {
             return index === self.findIndex((t) => (
-              t.gaugeId === value.gaugeId
+              t.id === value.id
             ))
           })
 
