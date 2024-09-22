@@ -320,7 +320,12 @@ export default {
     conditionJudgmentIngotCheck({ data }) {
       try {
         if (data) {
-          this.elementOutOfRanged = data.values
+          const uniqueData = data.values.filter((value, index, self) => {
+            return index === self.findIndex((t) => (
+              t.gaugeId === value.gaugeId
+            ))
+          })
+          this.elementOutOfRanged = uniqueData
           this.reportLink = data.reportLink
           this.modalShowJudg = true
           return false
