@@ -2,6 +2,7 @@ import ApiService from '../services/api.service'
 import { ACTION_LOADING } from './LOADING.module'
 
 export const GET_ELEMENT = 'GET_ELEMENT'
+export const FILTER_SAND_GRAPH = 'FILTER_SAND_GRAPH'
 export const SET_ELEMENT = 'SET_ELEMENT'
 // export const ACTION_ELEMENT = 'ACTION_ELEMENT'
 
@@ -24,10 +25,26 @@ const getters = {
     state.ELEMENT_DATA.push({ id: 'NONE', name: 'All' })
     if (state.ELEMENT_DATA && state.ELEMENT_DATA.length > 0) {
       return state.ELEMENT_DATA.map((element) => {
+        console.log(element)
         return {
           ...element,
           id: element.id,
           label: element.name,
+          isSelected: false,
+        }
+      })
+    } else {
+      return []
+    }
+  },
+  FILTER_SAND_GRAPH(state) {
+    state.ELEMENT_DATA.push({ id: 'NONE', name: 'All' })
+    if (state.ELEMENT_DATA && state.ELEMENT_DATA.length > 0) {
+      return state.ELEMENT_DATA.map((element) => {
+        return {
+          ...element,
+          id: element.id,
+          label: element.code,
           isSelected: false,
         }
       })

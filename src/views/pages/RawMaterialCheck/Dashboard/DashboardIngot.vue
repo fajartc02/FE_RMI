@@ -22,13 +22,15 @@
                       <h6 v-else-if="!this.filters?.elementId">{{ element.label }} ({{ element.code }})</h6>
                       <div class="card" v-if="!this.filters?.elementId">
                         <div class="card-body p-0">
-                          <ChartParameterVue :inCharge="incharge.label" :elementId="element.id" :filters="filters" />
+                          <ChartParameterVue :inCharge="incharge.label" :elementId="element.id" :filters="filters"
+                            :element="'INGOT'" />
                         </div>
                       </div>
                       <template v-else>
                         <div v-if="this.filters.elementId == element.id" class="card">
                           <div class="card-body p-0">
-                            <ChartParameterVue :inCharge="incharge.label" :elementId="element.id" :filters="filters" />
+                            <ChartParameterVue :inCharge="incharge.label" :elementId="element.id" :filters="filters"
+                              :element="'INGOT'" />
                           </div>
                         </div>
                       </template>

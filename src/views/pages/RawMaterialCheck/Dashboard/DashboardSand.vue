@@ -15,20 +15,22 @@
             </CAccordionHeader>
             <CAccordionBody class="p-1">
               <div class="row">
-                <template v-for="element in GET_ELEMENT" :key="element.id">
+                <template v-for="element in FILTER_SAND_GRAPH" :key="element.id">
                   <template v-if="!this.filters?.elementId || this.filters?.elementId == element.id">
                     <div v-if="incharge.id != 'NONE' && element.id != 'NONE'" class="col-12 col-lg-6 my-1">
                       <h6 v-if="this.filters.elementId == element.id">{{ element.label }} ({{ element.code }})</h6>
                       <h6 v-else-if="!this.filters?.elementId">{{ element.label }} ({{ element.code }})</h6>
                       <div class="card" v-if="!this.filters?.elementId">
                         <div class="card-body p-0">
-                          <ChartParameterVue :inCharge="incharge.label" :elementId="element.id" :filters="filters" />
+                          <ChartParameterVue :inCharge="incharge.label" :elementId="element.id" :filters="filters"
+                            :element="'SAND'" />
                         </div>
                       </div>
                       <template v-else>
                         <div v-if="this.filters.elementId == element.id" class="card">
                           <div class="card-body p-0">
-                            <ChartParameterVue :inCharge="incharge.label" :elementId="element.id" :filters="filters" />
+                            <ChartParameterVue :inCharge="incharge.label" :elementId="element.id" :filters="filters"
+                              :element="'SAND'" />
                           </div>
                         </div>
                       </template>
@@ -50,7 +52,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { ACTION_LINE, GET_LINE_TREESELECT } from '@/store/modules/LINE.module'
 import ChartParameterVue from '@/components/RawMaterialInspection/Charts/ChartParameter.vue'
 import moment from 'moment'
-import { ACTION_SAND_ELEMENT_GRAPH, GET_ELEMENT } from '@/store/modules/ELEMENTS.module'
+import { ACTION_SAND_ELEMENT_GRAPH, FILTER_SAND_GRAPH } from '@/store/modules/ELEMENTS.module'
 import { ACTION_MACHINE, GET_MACHINE_TREESELECT } from '@/store/modules/MACHINE.module'
 
 export default {
@@ -85,10 +87,10 @@ export default {
       this.fieldsInput.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', this.GET_MACHINE_TREESELECT, null, false, 'machineId'))
       this.fieldsInput.splice(idxInchargeInput, 1, InputModel('Incharge', 'option', 'Select Incharge', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false))
     },
-    GET_ELEMENT: function () {
-      if (this.GET_ELEMENT) {
+    FILTER_SAND_GRAPH: function () {
+      if (this.FILTER_SAND_GRAPH) {
         let idxElementInput = this.fieldsInput.findIndex(x => x.title == 'Element');
-        this.fieldsInput.splice(idxElementInput, 1, InputModel('Element', 'treeselect', 'Select Element', 'NONE', this.GET_ELEMENT, null, false, 'elementId'))
+        this.fieldsInput.splice(idxElementInput, 1, InputModel('Element', 'treeselect', 'Select Element', 'NONE', this.FILTER_SAND_GRAPH, null, false, 'elementId'))
       }
     },
     isLineSelected: function () {
@@ -104,7 +106,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([GET_LINE_TREESELECT, GET_ELEMENT, GET_MACHINE_TREESELECT]),
+    ...mapGetters([GET_LINE_TREESELECT, FILTER_SAND_GRAPH, GET_MACHINE_TREESELECT]),
   },
   methods: {
     ...mapActions([ACTION_LINE, ACTION_SAND_ELEMENT_GRAPH, ACTION_MACHINE]),

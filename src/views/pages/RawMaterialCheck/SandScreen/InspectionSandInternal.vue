@@ -171,8 +171,8 @@
                         <th>
                           Total Debu<small class="text-danger">*</small>
                         </th>
-                        <td>
-                          <input v-model="dustElement.value" type="number" class="form-control">
+                        <td class="justify-content-center m-auto">
+                          <b>{{ dustElement?.value || 0 }}</b>
                         </td>
                         <th>Total</th>
                         <th>
@@ -220,12 +220,41 @@
                         <tr>
                           <th>{{ element.name }}</th>
                           <th v-for="subElement in element?.elements" :key="subElement.id">
-                            <input type="number" class="form-control" v-model="subElement.value">
+                            <b
+                              v-if="subElement?.name.toUpperCase() === 'SODA' && element?.code.toUpperCase() === 'NATRIUM_TYPE_1'">{{
+                                getCalculateSodaType1
+                              }}</b>
+                            <b
+                              v-if="subElement?.name.toUpperCase() === 'SODA' && element?.code.toUpperCase() === 'NATRIUM_TYPE_2'">{{
+                                getCalculateSodaType2
+                              }}</b>
+                            <b
+                              v-if="subElement?.name.toUpperCase() === 'BINDER' && element?.code.toUpperCase() === 'NATRIUM_TYPE_1'">{{
+                                getCalculateBinderType1
+                              }}</b>
+                            <b
+                              v-if="subElement?.name.toUpperCase() === 'BINDER' && element?.code.toUpperCase() === 'NATRIUM_TYPE_2'">{{
+                                getCalculateBinderType2 }}</b>
+                            <input
+                              v-if="subElement?.name.toUpperCase() !== 'SODA' && subElement?.name.toUpperCase() !== 'BINDER'"
+                              type="number" class="form-control" v-model="subElement.value">
                           </th>
                         </tr>
                       </template>
                     </thead>
                   </table>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer p-3">
+              <div class="row">
+                <div class="col-6 col-lg-6">
+                  <h6>SODA Type 1 = ((19.9 - Vol.) X 0.31): 10</h6>
+                  <h6>SODA Type 2 = ((9.9- Vol.) X 0.31): 10</h6>
+                </div>
+                <div class="col-6 col-lg-6">
+                  <h6>Binder Type 1 = Soda Type 1 X 4.09</h6>
+                  <h6>Binder Type 2 = Soda type 2 X 4.09</h6>
                 </div>
               </div>
             </div>
@@ -369,12 +398,10 @@ export default {
         })
         this.isFormReady = true
       } else if (this.GET_ELEMENT_INPUT.elements) {
-        console.log(this.GET_ELEMENT_INPUT.elements);
 
         const elementsData = this.GET_ELEMENT_INPUT.elements
         this.meshElements = elementsData.meshElements.map((element) => {
           console.log('element', element);
-
           return {
             ...element,
             value: element.value || null,
@@ -405,10 +432,17 @@ export default {
     },
     'meshElements': {
       handler: function () {
+        let mesh200 = this?.meshElements.find(item => item?.code?.toLowerCase() === 'mesh200')
+        let pan = this?.meshElements.find(item => item?.code?.toLowerCase() === 'pan')
         this.data.elements = this.meshElements.map((element) => {
+          // find mesh200 and pan
           if (element.value || element.value === 0) {
             element.value = parseFloat(element.value)
             element.percentIndex = this.multipleElementIndex(element.value, element.elementIndex)
+          }
+          // handling totalSand from mesh200 & pan
+          if (element?.code.toLowerCase() === 'pan' || element?.code.toLowerCase() === 'mesh200') {
+            this.dustElement.value = (parseFloat(mesh200?.value * 2) || 0) + (parseFloat(pan?.value * 2) || 0)
           }
           return {
             id: element.id,
@@ -440,7 +474,14 @@ export default {
       if (this.data.headers.time) {
         this.isNightCondition()
       }
-    }
+    },
+    // 'natriumElements': {
+    //   handler: function () {
+    //     console.log('natriumElements', this.natriumElements);
+    //     this.data.elements = this.natriumElements
+    //   },
+    //   deep: true
+    // }
   },
   computed: {
     ...mapGetters([IS_LOADING, GET_SHIFT, GET_MACHINE, GET_ELEMENT_INPUT]),
@@ -467,9 +508,27 @@ export default {
         this.data.headers.shiftId &&
         this.data.headers.machineId &&
         this.meshElements.filter(element => isNumber(element.value)).length == this.meshElements.length &&
-        this.natriumElements.filter(element => element?.elements?.filter(item => isNumber(item.value)).length == element?.elements?.length).length == this.natriumElements.length &&
+        this.natriumElements.filter(element => element?.elements?.filter(item => isNumber(item.value)).length == element?.elements?.length - 2).length == this.natriumElements.length &&
         isNumber(this.dustElement?.value ?? 0) &&
         isNumber(this.gfnElement?.value ?? 0)
+    },
+    getCalculateSodaType1() {
+      let findNatriumType1 = this.natriumElements.find(element => element?.code?.toUpperCase() === 'NATRIUM_TYPE_1')
+      let findVolumeElement = findNatriumType1?.elements?.find(element => element?.name?.toLowerCase() === 'volume')
+
+      return this.calculateSodaType1(findVolumeElement?.value) || 0
+    },
+    getCalculateSodaType2() {
+      let findNatriumType2 = this.natriumElements.find(element => element?.code?.toUpperCase() === 'NATRIUM_TYPE_2')
+      let findVolumeElement = findNatriumType2?.elements?.find(element => element?.name?.toLowerCase() === 'volume')
+
+      return this.calculateSodaType2(findVolumeElement?.value) || 0
+    },
+    getCalculateBinderType1() {
+      return this.calculateBinder(this.getCalculateSodaType1) || 0
+    },
+    getCalculateBinderType2() {
+      return this.calculateBinder(this.getCalculateSodaType2) || 0
     },
   },
   methods: {
@@ -478,6 +537,18 @@ export default {
       this.DAY_CONSTANT.forEach((day) => {
         day.isActive = day.idx === dayIndex ? true : false
       })
+    },
+    calculateSodaType1(volumeValue) {
+      // ((19.9 - Vol.) X 0.31): 10
+      return +(((19.9 - volumeValue) * 0.31) / 10).toFixed(2)
+    },
+    calculateSodaType2(volumeValue) {
+      // ((9.9- Vol.) X 0.31): 10
+      return +(((9.9 - volumeValue) * 0.31) / 10).toFixed(2)
+    },
+    calculateBinder(sodaValue) {
+      // Soda Type 1 X 4.09
+      return +(sodaValue * 4.09).toFixed(2)
     },
     isNightCondition() {
       if (this.data.headers.time) {
@@ -565,21 +636,68 @@ export default {
               }
             }),
             natriumElements: this.natriumElements.map((elements) => {
-              return {
-                elements: elements?.elements?.map((item) => {
+              return elements?.elements?.map((item) => {
+                if (item?.code.toUpperCase() === 'SODA_TYPE_1') {
                   return {
                     parentId: elements.id,
                     parentName: elements.name,
                     id: item.id,
                     name: `${elements.name} - ${item.name}`,
-                    value: Number(item.value),
+                    value: Number(this.getCalculateSodaType1),
                     min: item.min,
                     max: item.max,
                     warningLimit: item.warningLimit,
                   }
-                })
-              }
-            }),
+                }
+                if (item?.code.toUpperCase() === 'SODA_TYPE_2') {
+                  return {
+                    parentId: elements.id,
+                    parentName: elements.name,
+                    id: item.id,
+                    name: `${elements.name} - ${item.name}`,
+                    value: Number(this.getCalculateSodaType2),
+                    min: item.min,
+                    max: item.max,
+                    warningLimit: item.warningLimit,
+                  }
+                }
+                if (item?.code.toUpperCase() === 'BINDER_TYPE_1') {
+                  return {
+                    parentId: elements.id,
+                    parentName: elements.name,
+                    id: item.id,
+                    name: `${elements.name} - ${item.name}`,
+                    value: Number(this.getCalculateBinderType1),
+                    min: item.min,
+                    max: item.max,
+                    warningLimit: item.warningLimit,
+                  }
+                }
+                if (item?.code.toUpperCase() === 'BINDER_TYPE_2') {
+                  return {
+                    parentId: elements.id,
+                    parentName: elements.name,
+                    id: item.id,
+                    name: `${elements.name} - ${item.name}`,
+                    value: Number(this.getCalculateBinderType2),
+                    min: item.min,
+                    max: item.max,
+                    warningLimit: item.warningLimit,
+                  }
+                }
+                return {
+                  parentId: elements.id,
+                  parentName: elements.name,
+                  id: item.id,
+                  name: `${elements.name} - ${item.name}`,
+                  value: Number(item.value),
+                  min: item.min,
+                  max: item.max,
+                  warningLimit: item.warningLimit,
+                }
+              })
+            }
+            ),
             dustElement: {
               id: this.dustElement.id,
               name: this.dustElement.name,
