@@ -1,7 +1,16 @@
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import router from '../router'
-import MockService from "@/store/mocks/mock.service";
+import MockService from '@/store/mocks/mock.service'
+
+function warningLimitFormula(min, max, warningLimit, isMax = false) {
+  if (min === 0 || max === 0) return 0
+  let formula = 0
+  isMax
+    ? (formula = max - ((min + max) / 2) * (warningLimit / 100))
+    : (formula = min + ((min + max) / 2) * (warningLimit / 100))
+  return formula
+}
 
 export default {
   // method
@@ -66,7 +75,7 @@ export default {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-primary ml-1',
       },
-    }).then(result => {
+    }).then((result) => {
       if (result.value) {
         router.back()
       }
@@ -88,7 +97,7 @@ export default {
       allowEscapeKey: false,
       showLoaderOnConfirm: true,
       showLoaderOnDeny: true,
-      preConfirm: async password => {
+      preConfirm: async (password) => {
         const form = {
           no_hp: localStorage.getItem('userNoHp'),
           password,
@@ -101,57 +110,70 @@ export default {
         localStorage.clear()
         window.location.reload('/login')
       },
-    }).then(res => {
-      if (res.isConfirmed) {
-        if (res.value.status === 200) {
-          const result = res.value.data
-          localStorage.setItem('userId', result.data.userId)
-          localStorage.setItem('userEmail', result.data.userEmail)
-          localStorage.setItem('userAvatar', result.data.userAvatar)
-          localStorage.setItem('userAvatar64', result.data.userAvatar64 || '')
-          localStorage.setItem('permission', JSON.stringify(result.data.userPermission) || '')
-          localStorage.setItem('token', result.token)
-          localStorage.setItem('userNoHp', result.data.userNoHp)
-          axios.defaults.headers.common.Authorization = `Bearer ${result.token}`
-          // axios.defaults.headers.common['auth-token'] = result.token
-          // eslint-disable-next-line no-restricted-globals
-          location.reload()
-        } else {
-          $toast.error(res.value.msg)
-          this.errorToken(path, 'Password Salah!', false)
+    })
+      .then((res) => {
+        if (res.isConfirmed) {
+          if (res.value.status === 200) {
+            const result = res.value.data
+            localStorage.setItem('userId', result.data.userId)
+            localStorage.setItem('userEmail', result.data.userEmail)
+            localStorage.setItem('userAvatar', result.data.userAvatar)
+            localStorage.setItem('userAvatar64', result.data.userAvatar64 || '')
+            localStorage.setItem(
+              'permission',
+              JSON.stringify(result.data.userPermission) || '',
+            )
+            localStorage.setItem('token', result.token)
+            localStorage.setItem('userNoHp', result.data.userNoHp)
+            axios.defaults.headers.common.Authorization = `Bearer ${result.token}`
+            // axios.defaults.headers.common['auth-token'] = result.token
+            // eslint-disable-next-line no-restricted-globals
+            location.reload()
+          } else {
+            $toast.error(res.value.msg)
+            this.errorToken(path, 'Password Salah!', false)
+          }
         }
-      }
-    }).catch(error => error)
+      })
+      .catch((error) => error)
   },
   async errorToken(path, msg) {
     await this.errorTokenSwalPassword(path, msg)
   },
   isMock() {
-    return process.env.VUE_APP_USE_MOCK_SERVICE
-      && typeof process.env.VUE_APP_USE_MOCK_SERVICE === 'string'
-      && process.env.VUE_APP_USE_MOCK_SERVICE.trim() === 'true'
+    return (
+      process.env.VUE_APP_USE_MOCK_SERVICE &&
+      typeof process.env.VUE_APP_USE_MOCK_SERVICE === 'string' &&
+      process.env.VUE_APP_USE_MOCK_SERVICE.trim() === 'true'
+    )
   },
   removeAllKeyWithSpecifyKey(obj, substring) {
     for (const key in obj) {
       if (key.toLowerCase().includes(substring.toLowerCase())) {
-        delete obj[key]; // Delete the key if it contains the substring
+        delete obj[key] // Delete the key if it contains the substring
       }
     }
   },
   decideElementStandardWarningLimit(elementArr, elementObj, isMin, isMax) {
     if (parseFloat(elementObj.warningLimit) === 0.0) {
-      return;
+      return
     }
 
-    let shouldUpdate = false;
+    let shouldUpdate = false
     if (isMin && parseFloat(elementObj.min) > 0.0) {
-      elementObj.minWarning = elementObj.min * (elementObj.warningLimit / 100);
-      shouldUpdate = true;
+      elementObj.minWarning =
+        elementObj.min +
+        (elementObj.max - elementObj.min) * (elementObj.warningLimit / 100)
+      // elementObj.minWarning = warningLimitFormula(elementObj.min, elementObj.max, elementObj.warningLimit, true)
+      shouldUpdate = true
     }
 
     if (isMax && parseFloat(elementObj.max) > 0.0) {
-      elementObj.maxWarning = elementObj.max * (elementObj.warningLimit / 100);
-      shouldUpdate = true;
+      // elementObj.maxWarning = elementObj.max * (elementObj.warningLimit / 100)
+      elementObj.maxWarning =
+        elementObj.max -
+        (elementObj.max - elementObj.min) * (elementObj.warningLimit / 100)
+      shouldUpdate = true
     }
 
     if (shouldUpdate) {
@@ -160,14 +182,14 @@ export default {
           return {
             ...item,
             minWarning: elementObj.minWarning,
-            maxWarning: elementObj.maxWarning
-          };
+            maxWarning: elementObj.maxWarning,
+          }
         }
 
-        return item;
-      });
+        return item
+      })
     }
 
-    return elementArr;
+    return elementArr
   },
 }

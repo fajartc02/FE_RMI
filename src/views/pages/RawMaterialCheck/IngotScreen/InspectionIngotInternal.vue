@@ -262,13 +262,13 @@ export default {
     conditionJudgmentIngotCheck({ data }) {
       try {
         if (data) {
-          const uniqueData = data.values.filter((value, index, self) => {
-            return index === self.findIndex((t) => (
-              t.id === value.id
-            ))
-          })
+          this.elementOutOfRanged = data.values
+          console.log('data.values', data.values);
 
-          this.elementOutOfRanged = uniqueData
+          const uniqueData = this.elementOutOfRanged.elements.filter((value, index, self) => index === self.findIndex((item) => item.id === value.id))
+          console.log('uniqueData', uniqueData);
+          this.elementOutOfRanged.elements = uniqueData
+          this.elementOutOfRanged = this.elementOutOfRanged
           this.reportLink = data.reportLink
           this.modalShowJudg = true
           return false

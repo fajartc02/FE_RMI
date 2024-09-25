@@ -1,119 +1,83 @@
 <template>
   <CModal class="w-100" scrollable fullscreen :visible="visible" backdrop="static" @close="closeModal">
-    <CommonModalHeaderComponent :title="title"/>
+    <CommonModalHeaderComponent :title="title" />
     <CModalBody>
       <div class="mb-3">
         <label class="form-label">Vendor</label>
-        <Treeselect
-          v-model="loadedVendor"
-          :options="GET_VENDOR_SELECT"
-          :clearable="true"
-          placeholder="Select Vendor"
-          :disabled="hasLoadedData"
-          @select="onSelectVendor"
-          @deselect="onDeselectVendor"
-        />
+        <Treeselect v-model="loadedVendor" :options="GET_VENDOR_SELECT" :clearable="true" placeholder="Select Vendor"
+          :disabled="hasLoadedData" @select="onSelectVendor" @deselect="onDeselectVendor" />
       </div>
       <div class="mb-3">
         <label class="form-label">Line</label>
-        <Treeselect
-          v-model="loadedLine"
-          :options="GET_LINE_SELECT"
-          :clearable="true"
-          :disabled="selectedVendor === null || hasLoadedData"
-          placeholder="Select Line"
-          @select="onSelectLine"
-          @deselect="onDeselectLine"
-        />
+        <Treeselect v-model="loadedLine" :options="GET_LINE_SELECT" :clearable="true"
+          :disabled="selectedVendor === null || hasLoadedData" placeholder="Select Line" @select="onSelectLine"
+          @deselect="onDeselectLine" />
       </div>
       <div class="mb-3">
         <label class="form-label">In Charge</label>
-        <Treeselect
-          v-model="loadedIncharge"
-          :options="GET_SYSTEM_SELECT"
-          :clearable="true"
-          :disabled="selectedLine === null  || hasLoadedData"
-          placeholder="Select In Charge"
-          @select="onSelectInCharge"
-          @deselect="onDeselectInCharge"
-        />
+        <Treeselect v-model="loadedIncharge" :options="GET_SYSTEM_SELECT" :clearable="true"
+          :disabled="selectedLine === null || hasLoadedData" placeholder="Select In Charge" @select="onSelectInCharge"
+          @deselect="onDeselectInCharge" />
       </div>
       <div class="mb-3">
         <label class="form-label">Ingot Element</label>
-        <Treeselect
-          v-model="selectedElements"
-          :options="GET_INGOT_SELECT"
-          :disabled="selectedInCharge === null || hasLoadedData"
-          :multiple="true"
-          :close-on-select="true"
-          @select="onSelectElement"
-          @deselect="onDeselectElement"
-        />
+        <Treeselect v-model="selectedElements" :options="GET_INGOT_SELECT"
+          :disabled="selectedInCharge === null || hasLoadedData" :multiple="true" :close-on-select="true"
+          @select="onSelectElement" @deselect="onDeselectElement" />
       </div>
       <div class="mb-3">
         <div class="row">
           <div class="col-md-12 col-lg-12">
             <table class="table table-bordered table-striped text-center">
               <thead>
-              <tr>
-                <th>Name</th>
-                <th>Vendor Name</th>
-                <th>Line Name</th>
-                <th>In Charge</th>
-                <th>Min</th>
-                <th>Max</th>
-                <th>Warning Limit</th>
-                <th>Min +</th>
-                <th>Max -</th>
-              </tr>
+                <tr>
+                  <th>Name</th>
+                  <th>Vendor Name</th>
+                  <th>Line Name</th>
+                  <th>In Charge</th>
+                  <th>Min</th>
+                  <th>Max</th>
+                  <th>Warning Limit</th>
+                  <th>Min +</th>
+                  <th>Max -</th>
+                </tr>
               </thead>
               <tbody>
-              <tr v-if="elementData?.length === 0">
-                <td colspan="9" class="text-center">Please select ingot element</td>
-              </tr>
-              <tr v-else v-for="(element, i) in elementData" :key="i">
-                <td>{{ element.elementName }}</td>
-                <td>{{ element.vendorName }}</td>
-                <td>{{ element.lineName }}</td>
-                <td style="width: 30%;">
-                  <Treeselect
-                    v-model="element.inCharge"
-                    :options="GET_SYSTEM_SELECT"
-                    :clearable="true"
-                  />
-                </td>
-                <td>
-                  <input class="form-control" type="number" min="0" v-model="element.min"
-                         @input="decideWarningLimit(element, true, false)">
-                </td>
-                <td>
-                  <input class="form-control" type="number" min="0" v-model="element.max"
-                         @input="decideWarningLimit(element, false, true)">
-                </td>
-                <td>
-                  <input class="form-control" type="number" min="0" v-model="element.warningLimit"
-                         @input="decideWarningLimit(element, true, true)">
-                </td>
-                <td>{{ element.minWarning }}</td>
-                <td>{{ element.maxWarning }}</td>
-              </tr>
+                <tr v-if="elementData?.length === 0">
+                  <td colspan="9" class="text-center">Please select ingot element</td>
+                </tr>
+                <tr v-else v-for="(element, i) in elementData" :key="i">
+                  <td>{{ element.elementName }}</td>
+                  <td>{{ element.vendorName }}</td>
+                  <td>{{ element.lineName }}</td>
+                  <td style="width: 30%;">
+                    <Treeselect v-model="element.inCharge" :options="GET_SYSTEM_SELECT" :clearable="true" />
+                  </td>
+                  <td>
+                    <input class="form-control" type="number" min="0" v-model="element.min"
+                      @input="decideWarningLimit(element, true, false)">
+                  </td>
+                  <td>
+                    <input class="form-control" type="number" min="0" v-model="element.max"
+                      @input="decideWarningLimit(element, false, true)">
+                  </td>
+                  <td>
+                    <input class="form-control" type="number" min="0" v-model="element.warningLimit"
+                      @input="decideWarningLimit(element, true, true)">
+                  </td>
+                  <td>{{ element.minWarning }}</td>
+                  <td>{{ element.maxWarning }}</td>
+                </tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
     </CModalBody>
-    <CommonFooterActionComponent
-      :submit-title="title"
-      :has-loaded-data="hasLoadedData"
-      @on-close="closeModal"
-      @on-submit="submit"
-      @on-delete="remove"
-    />
+    <CommonFooterActionComponent :submit-title="title" :has-loaded-data="hasLoadedData" @on-close="closeModal"
+      @on-submit="submit" @on-delete="remove" />
   </CModal>
-  <ModalConfirm
-    title="Delete?"
-    @confirm="onConfirmDelete"/>
+  <ModalConfirm title="Delete?" @confirm="onConfirmDelete" />
 </template>
 
 <script>
@@ -145,8 +109,8 @@ import {
   GET_INGOT_SELECT,
   ACTION_INGOT
 } from "@/store/modules/INGOT.module";
-import {performHttpRequest} from "@/utils/RequestUtils";
-import {mapActions, mapGetters} from "vuex";
+import { performHttpRequest } from "@/utils/RequestUtils";
+import { mapActions, mapGetters } from "vuex";
 import commonUtils from "@/utils/CommonUtils";
 
 export default {
@@ -376,4 +340,3 @@ export default {
   }
 }
 </script>
-

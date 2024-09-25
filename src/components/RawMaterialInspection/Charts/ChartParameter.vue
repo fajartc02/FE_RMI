@@ -100,6 +100,8 @@ export default {
           inCharge: this.inCharge,
           elementId: this.elementId
         }
+        console.log('filterChart', this.filterChart);
+
         if (this.elementId != 'NONE') {
           if (this.element == 'INGOT') {
             const { data } = await this.ACTION_GRAPH(this.filterChart)
@@ -156,8 +158,8 @@ export default {
                 },
                 tooltip: {
                   custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-                    console.log('seriesIndex, dataPointIndex');
-                    console.log(seriesIndex, dataPointIndex);
+                    // console.log('seriesIndex, dataPointIndex');
+                    // console.log(seriesIndex, dataPointIndex);
                     return `<div class="card">
     <div class="card-header">
       <b>${moment(w.globals.seriesX[seriesIndex][dataPointIndex]).format('YYYY-MM-DD HH:mm:ss')}</b>
@@ -182,8 +184,8 @@ export default {
                   shared: false,
                   y: {
                     formatter: function (val, opts) {
-                      console.log('opts, Y');
-                      console.log(opts);
+                      // console.log('opts, Y');
+                      // console.log(opts);
                       return (val).toFixed(2)
                     }
                   },
@@ -252,8 +254,8 @@ export default {
                 },
                 tooltip: {
                   custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-                    console.log('seriesIndex, dataPointIndex');
-                    console.log(seriesIndex, dataPointIndex);
+                    // console.log('seriesIndex, dataPointIndex');
+                    // console.log(seriesIndex, dataPointIndex);
                     return `<div class="card">
     <div class="card-header">
       <b>${moment(w.globals.seriesX[seriesIndex][dataPointIndex]).format('YYYY-MM-DD HH:mm:ss')}</b>
@@ -278,8 +280,8 @@ export default {
                   shared: false,
                   y: {
                     formatter: function (val, opts) {
-                      console.log('opts, Y');
-                      console.log(opts);
+                      // console.log('opts, Y');
+                      // console.log(opts);
                       return (val).toFixed(2)
                     }
                   },
@@ -310,7 +312,7 @@ export default {
       }
     },
     GET_GRAPH() {
-      console.log(this.GET_GRAPH);
+      // console.log(this.GET_GRAPH);
     }
   },
   props: {
