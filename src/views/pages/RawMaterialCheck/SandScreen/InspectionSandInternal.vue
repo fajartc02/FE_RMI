@@ -183,7 +183,7 @@
                         <td class="bg-dark" rowspan="2" colspan="3"></td>
                         <th colspan="2">Total % X Index</th>
                         <th>GFN</th>
-                        <th rowspan="2">
+                        <th rowspan="2" style="font-size: 20px;">
                           {{ calcGfn(sumOfElementValue) }}
                         </th>
                       </tr>
@@ -208,7 +208,7 @@
                       </tr>
                       <template v-for="(element) in natriumElements" :key="element.id">
                         <tr>
-                          <th style="width: 100px">ITEM</th>
+                          <th style="width: 300px">ITEM</th>
                           <th v-for="subElement in element?.elements" :key="subElement.id">{{ subElement.name }}<small
                               class="text-danger">*</small></th>
                         </tr>
@@ -219,21 +219,22 @@
                         </tr>
                         <tr>
                           <th>{{ element.name }}</th>
-                          <th v-for="subElement in element?.elements" :key="subElement.id">
-                            <b
-                              v-if="subElement?.name.toUpperCase() === 'SODA' && element?.code.toUpperCase() === 'NATRIUM_TYPE_1'">{{
+                          <th v-for="subElement in element?.elements" :key="subElement.id"
+                            :style="subElement?.name.toUpperCase() !== 'SODA' && subElement?.name.toUpperCase() !== 'BINDER' ? 'width: 150px' : ''">
+                            <b v-if="subElement?.name.toUpperCase() === 'SODA' && element?.code.toUpperCase() === 'NATRIUM_TYPE_1'"
+                              style="font-size: 20px;">{{
                                 getCalculateSodaType1
                               }}</b>
-                            <b
-                              v-if="subElement?.name.toUpperCase() === 'SODA' && element?.code.toUpperCase() === 'NATRIUM_TYPE_2'">{{
+                            <b v-if="subElement?.name.toUpperCase() === 'SODA' && element?.code.toUpperCase() === 'NATRIUM_TYPE_2'"
+                              style="font-size: 20px;">{{
                                 getCalculateSodaType2
                               }}</b>
-                            <b
-                              v-if="subElement?.name.toUpperCase() === 'BINDER' && element?.code.toUpperCase() === 'NATRIUM_TYPE_1'">{{
+                            <b v-if="subElement?.name.toUpperCase() === 'BINDER' && element?.code.toUpperCase() === 'NATRIUM_TYPE_1'"
+                              style="font-size: 20px;">{{
                                 getCalculateBinderType1
                               }}</b>
-                            <b
-                              v-if="subElement?.name.toUpperCase() === 'BINDER' && element?.code.toUpperCase() === 'NATRIUM_TYPE_2'">{{
+                            <b v-if="subElement?.name.toUpperCase() === 'BINDER' && element?.code.toUpperCase() === 'NATRIUM_TYPE_2'"
+                              style="font-size: 20px;">{{
                                 getCalculateBinderType2 }}</b>
                             <input
                               v-if="subElement?.name.toUpperCase() !== 'SODA' && subElement?.name.toUpperCase() !== 'BINDER'"

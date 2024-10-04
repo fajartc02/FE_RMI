@@ -128,7 +128,7 @@ export default {
   async mounted() {
     // this.$router.go()
     await this.getLines()
-    await this.ACTION_INGOT_ELEMENT()
+    await this.ACTION_INGOT_ELEMENT({ take: 50 })
   }
 }
 </script>

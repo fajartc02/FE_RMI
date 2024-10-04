@@ -265,16 +265,19 @@ export default {
           this.elementOutOfRanged = data.values
           console.log('data.values', data.values);
 
-          const uniqueData = this.elementOutOfRanged.elements.filter((value, index, self) => index === self.findIndex((item) => item.id === value.id))
-          console.log('uniqueData', uniqueData);
-          this.elementOutOfRanged.elements = uniqueData
-          this.elementOutOfRanged = this.elementOutOfRanged
+          console.log(this.elementOutOfRanged);
+          // const uniqueData = this.elementOutOfRanged.elements.filter((value, index, self) => index === self.findIndex((item) => item.id === value.id))
+          // console.log('uniqueData', uniqueData);
+          // this.elementOutOfRanged.elements = uniqueData
+          // this.elementOutOfRanged = this.elementOutOfRanged
           this.reportLink = data.reportLink
           this.modalShowJudg = true
           return false
         }
         return true
       } catch (error) {
+        console.log(error);
+
         this.$swal('Error', 'Internal Server Error', 'error')
       }
     },
@@ -305,6 +308,7 @@ export default {
         this.modalShowJudg = false
 
       } catch (error) {
+        console.log(error);
         this.$swal('Error', 'Internal Server Error', 'error')
       }
     }

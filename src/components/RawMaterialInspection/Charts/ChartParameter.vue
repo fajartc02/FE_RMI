@@ -12,6 +12,9 @@ export default {
   name: "ChartParameter",
   data() {
     return {
+      colors: ['#FF4560', '#FEB019', '#00E396', '#007bff', '#FEB019', '#FF4560'],
+      dashArray: [4, 4, 0, 0, 4, 4],
+      markers: [0, 0, 3, 3, 0, 0],
       chartOptions: {
         chart: {
           type: 'area',
@@ -40,9 +43,9 @@ export default {
           colors: ['transparent'],
         },
         stroke: {
-          dashArray: [4, 4, 0, 4, 4],
+          dashArray: [4, 4, 0, 0, 4, 4],
         },
-        colors: ['#FF4560', '#FEB019', '#00E396', '#FEB019', '#FF4560'],
+        colors: ['#FF4560', '#FEB019', '#00E396', '#007bff', '#FEB019', '#FF4560'],
         yaxis: {
           labels: {
             formatter: function (val) {
@@ -108,6 +111,9 @@ export default {
 
             if (data) {
               this.series = data.series
+
+              data.series.length === 6 ? this.colors = ['#FF4560', '#FEB019', '#00E396', '#007bff', '#FEB019', '#FF4560'] : this.colors = ['#FF4560', '#FEB019', '#00E396', '#FEB019', '#FF4560']
+              data.series.length === 6 ? this.dashArray = [4, 4, 0, 0, 4, 4] : this.dashArray = [4, 4, 0, 4, 4]
               this.chartOptions = {
                 chart: {
                   type: 'area',
@@ -136,9 +142,9 @@ export default {
                   colors: ['transparent'],
                 },
                 stroke: {
-                  dashArray: [4, 4, 0, 4, 4],
+                  dashArray: [4, 4, 0, 0, 4, 4],
                 },
-                colors: ['#FF4560', '#FEB019', '#00E396', '#FEB019', '#FF4560'],
+                colors: this.colors,
                 yaxis: {
                   labels: {
                     formatter: function (val) {
@@ -201,9 +207,18 @@ export default {
             }
           } else {
             const { data } = await this.ACTION_GRAPH_SAND(this.filterChart)
-
             if (data) {
               this.series = data.series
+              if (data.series.length === 6) {
+                this.colors = ['#FF4560', '#FEB019', '#00E396', '#007bff', '#FEB019', '#FF4560']
+                this.dashArray = [5, 5, 0, 0, 5, 5]
+                this.markers = [0, 0, 2, 2, 0, 0]
+              } else {
+                this.colors = ['#FF4560', '#FEB019', '#00E396', '#FEB019', '#FF4560']
+                this.dashArray = [5, 5, 0, 5, 5]
+                this.markers = [0, 0, 2, 0, 0]
+              }
+
               this.chartOptions = {
                 chart: {
                   type: 'area',
@@ -222,7 +237,8 @@ export default {
                   enabled: false
                 },
                 markers: {
-                  size: 0,
+                  size: this.markers,
+                  strokeColors: '#000',
                 },
                 title: {
                   show: false
@@ -232,9 +248,9 @@ export default {
                   colors: ['transparent'],
                 },
                 stroke: {
-                  dashArray: [4, 4, 0, 4, 4],
+                  dashArray: this.dashArray,
                 },
-                colors: ['#FF4560', '#FEB019', '#00E396', '#FEB019', '#FF4560'],
+                colors: this.colors,
                 yaxis: {
                   labels: {
                     formatter: function (val) {
@@ -334,6 +350,7 @@ export default {
     }
   },
   mounted() {
+
     this.getGraph()
   }
 }

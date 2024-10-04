@@ -4,7 +4,8 @@
       <CTableHead>
         <CTableRow>
           <template v-for="(label, index) in Object.keys(dataTable?.data[0])">
-            <CTableHeaderCell v-if="label != 'id' && !label.toLowerCase().includes('id')" :key="index" scope="col">
+            <CTableHeaderCell v-if="label != 'id' && !label.toLowerCase().includes('id')" :key="index" scope="col"
+              :style="`${convertCase(label) === 'Standard' ? 'min-width: 300px;' : ''}`">
               {{ convertCase(label) }}
             </CTableHeaderCell>
           </template>

@@ -144,6 +144,8 @@ export default {
           await this.ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL(data.id)
         } else if (`${this.selectedIncharge ? this.selectedIncharge : data.inCharge}`.toUpperCase() == 'VENDOR') {
           await this.ACT_SAMP_INGOT_VEN_HIS_DET(data.id)
+        } else if (`${this.selectedIncharge ? this.selectedIncharge : data.inCharge}`.toUpperCase() == 'VENDOR_INTERNAL') {
+          await this.ACT_SAMP_INGOT_VEN_HIS_DET(data.id)
         }
       } catch (error) {
         console.log(error);
