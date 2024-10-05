@@ -307,7 +307,7 @@ export default {
         this.isLoading = true;
         const payload = {
           id: this.loadedData?.id,
-          elements: this.elementData
+          ...this.elementData[0]
         };
 
         if (this.hasLoadedData) {

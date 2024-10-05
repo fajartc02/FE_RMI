@@ -256,12 +256,14 @@ export default {
           this.$swal('Success', 'Add sample success, Pengecekan tidak ada abnormal', 'success')
         }
       } catch (error) {
+        console.log(error)
         this.$swal('Error', 'Error add sample code', 'error')
       }
     },
     conditionJudgmentIngotCheck({ data }) {
       try {
-        if (data) {
+        console.log(data)
+        if (data?.values[0]?.elements.length > 0) {
           this.elementOutOfRanged = data.values
           console.log('data.values', data.values);
 
