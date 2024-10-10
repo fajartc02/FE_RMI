@@ -165,7 +165,7 @@ export default {
       reportLink: null,
       modalShowJudg: false,
       form: {
-        header: null,
+        headers: null,
         values: null
       },
       containerInput: [],
@@ -200,7 +200,7 @@ export default {
     cancelScanned() {
       this.focusToggle(false)
       this.form = {
-        header: null,
+        headers: null,
         values: null
       }
       this.displaySampleCode = ''
@@ -216,7 +216,7 @@ export default {
         for (let i = 0; i < parentRawData.length; i++) {
           let childRawData = parentRawData[i]?.split(';')
           // 0: column
-          // 1: header value
+          // 1: headers value
           if (i == 0) {
             for (let j = 0; j < childRawData.length; j++) {
               const col = childRawData[j];
@@ -246,10 +246,10 @@ export default {
             containerSampleValue.push(objValue)
           }
         }
-        this.form.header = headerData
+        this.form.headers = headerData
         this.form.values = containerSampleValue
         await this.$store.dispatch(ACTION_QR_SAMPLE, this.form)
-        this.displaySampleCode = this.form.header?.sample_code
+        this.displaySampleCode = this.form.headers?.sample_code
         this.$store.dispatch(ACTION_LOADING, false)
       } catch (error) {
         console.log(error)
@@ -262,7 +262,7 @@ export default {
           }).then(async (result) => {
             if (result.isConfirmed) {
               this.$swal("Saved!", "", "success");
-              this.form.header.sampleCodeParent = this.form.header.sampleCode
+              this.form.headers.sampleCodeParent = this.form.headers.sampleCode
               console.log(this.form);
               await this.$store.dispatch(ACTION_QR_SAMPLE, this.form)
             }
@@ -293,7 +293,7 @@ export default {
         if (this.GET_SAMPLE_CODE?.headers?.sampleCode) {
           this.input = {
             ...this.input,
-            header: {
+            headers: {
               sampleCodeVendor: this.GET_SAMPLE_CODE.headers.sampleCode
             }
           }
