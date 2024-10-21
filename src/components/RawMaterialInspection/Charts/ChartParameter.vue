@@ -111,9 +111,17 @@ export default {
 
             if (data) {
               this.series = data.series
-
-              data.series.length === 6 ? this.colors = ['#FF4560', '#FEB019', '#00E396', '#007bff', '#FEB019', '#FF4560'] : this.colors = ['#FF4560', '#FEB019', '#00E396', '#FEB019', '#FF4560']
-              data.series.length === 6 ? this.dashArray = [4, 4, 0, 0, 4, 4] : this.dashArray = [4, 4, 0, 4, 4]
+              if (data.series.length === 6) {
+                this.colors = ['#FF4560', '#FEB019', '#00E396', '#007bff', '#FEB019', '#FF4560']
+                this.dashArray = [5, 5, 0, 0, 5, 5]
+                this.markers = [0, 0, 2, 2, 0, 0]
+              } else {
+                this.colors = ['#FF4560', '#FEB019', '#00E396', '#FEB019', '#FF4560']
+                this.dashArray = [5, 5, 0, 5, 5]
+                this.markers = [0, 0, 2, 0, 0]
+              }
+              // data.series.length === 6 ? this.colors = ['#FF4560', '#FEB019', '#00E396', '#007bff', '#FEB019', '#FF4560'] : this.colors = ['#FF4560', '#FEB019', '#00E396', '#FEB019', '#FF4560']
+              // data.series.length === 6 ? this.dashArray = [4, 4, 0, 0, 4, 4] : this.dashArray = [4, 4, 0, 4, 4]
               this.chartOptions = {
                 chart: {
                   type: 'area',
@@ -132,17 +140,19 @@ export default {
                   enabled: false
                 },
                 markers: {
-                  size: 0,
+                  size: this.markers,
+                  strokeColors: '#000',
                 },
                 title: {
                   show: false
                 },
+                colors: this.colors,
                 fill: {
                   type: 'solid',
                   colors: ['transparent'],
                 },
                 stroke: {
-                  dashArray: [4, 4, 0, 0, 4, 4],
+                  dashArray: this.dashArray,
                 },
                 colors: this.colors,
                 yaxis: {
@@ -160,7 +170,8 @@ export default {
                   type: 'datetime'
                 },
                 legend: {
-                  show: false
+                  show: true,
+                  position: 'bottom',
                 },
                 tooltip: {
                   custom: function ({ series, seriesIndex, dataPointIndex, w }) {
@@ -179,7 +190,7 @@ export default {
         <div class="col-auto">
           <b>${series[seriesIndex][dataPointIndex].toFixed(2)}</b>
         </div>
-        <div class="col-auto">${data.units}</div></div>
+        <div class="col-auto">${data.units || '%'}</div></div>
       </div>
     </div>
   </div>`
@@ -266,7 +277,8 @@ export default {
                   type: 'datetime'
                 },
                 legend: {
-                  show: false
+                  show: true,
+                  position: 'bottom',
                 },
                 tooltip: {
                   custom: function ({ series, seriesIndex, dataPointIndex, w }) {

@@ -1,6 +1,6 @@
 import ApiService from '../services/api.service'
-import {ACTION_LOADING} from './LOADING.module'
-import {ACTION_SET_META} from "@/store/modules/META.module";
+import { ACTION_LOADING } from './LOADING.module'
+import { ACTION_SET_META } from "@/store/modules/META.module";
 import commonUtils from "@/utils/CommonUtils";
 
 export const GET_VENDOR_SELECT = 'GET_VENDOR_SELECT';
@@ -42,9 +42,10 @@ const getters = {
         }
       }) ?? [])
     ];
+    data.unshift({ id: 'NONE', label: 'All' });
     return data;
   },
-  GET_VENDOR_TREESELECT(state){
+  GET_VENDOR_TREESELECT(state) {
     const data = [
       ...(state.VENDOR_DATA?.map((item) => {
         return {
@@ -53,7 +54,7 @@ const getters = {
         }
       }) ?? [])
     ];
-    data.unshift({id: 'NONE', label: 'All'});
+    data.unshift({ id: 'NONE', label: 'All' });
     return data;
   }
 }
@@ -68,24 +69,24 @@ const mutations = {
 }
 
 const actions = {
-  async ACTION_VENDOR({commit, dispatch}, params) {
+  async ACTION_VENDOR({ commit, dispatch }, params) {
     try {
       ApiService.setHeader()
-      const {data} = await ApiService.query('vendor', params)
+      const { data } = await ApiService.query('vendor', params)
       commit(SET_VENDOR, data.data)
     } catch (error) {
       console.error('ACTION_VENDOR', 'ERROR', error)
       throw error
     }
   },
-  async ACTION_TBL_VENDOR({commit, dispatch}, filter) {
+  async ACTION_TBL_VENDOR({ commit, dispatch }, filter) {
     try {
       dispatch(ACTION_LOADING, true)
 
       const fetch = async () => {
         ApiService.setHeader()
         console.log('ACTION_TBL_VENDOR', 'filter', filter);
-        const {data} = await ApiService.query('vendor', filter)
+        const { data } = await ApiService.query('vendor', filter)
         console.log('ACTION_TBL_VENDOR', 'data', data);
         const pagination = data.meta.pagination
         pagination ? dispatch(ACTION_SET_META, pagination) : null
@@ -108,11 +109,11 @@ const actions = {
       throw error;
     }
   },
-  async ACTION_ADD_VENDOR({commit, dispatch, state}, params) {
+  async ACTION_ADD_VENDOR({ commit, dispatch, state }, params) {
     try {
       delete params.id;
       ApiService.setHeader();
-      const {data} = await ApiService.post('vendor', params);
+      const { data } = await ApiService.post('vendor', params);
       console.log('ACTION_ADD_VENDOR', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -130,13 +131,13 @@ const actions = {
       throw e;
     }
   },
-  async ACTION_EDIT_VENDOR({commit, dispatch}, VENDORData) {
+  async ACTION_EDIT_VENDOR({ commit, dispatch }, VENDORData) {
     try {
       const id = VENDORData.id;
       delete VENDORData.id;
 
       ApiService.setHeader()
-      const {data} = await ApiService.put(`vendor/${id}`, VENDORData)
+      const { data } = await ApiService.put(`vendor/${id}`, VENDORData)
       console.log('ACTION_EDIT_VENDOR', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -155,10 +156,10 @@ const actions = {
       throw e;
     }
   },
-  async ACTION_REMOVE_VENDOR({commit, dispatch}, VENDORData) {
+  async ACTION_REMOVE_VENDOR({ commit, dispatch }, VENDORData) {
     try {
       ApiService.setHeader()
-      const {data} = await ApiService.delete(`vendor/${VENDORData.id}`)
+      const { data } = await ApiService.delete(`vendor/${VENDORData.id}`)
       console.log('ACTION_REMOVE_VENDOR', 'data', data);
 
       if (commonUtils.isMock()) {

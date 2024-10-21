@@ -79,13 +79,14 @@ export default {
   watch: {
     GET_LINE_TREESELECT: function () {
       let idxLineInput = this.fieldsInput.findIndex(x => x.title == 'Line');
-      this.fieldsInput.splice(idxLineInput, 1, InputModel('Line', 'treeselect', 'Select Line', 'NONE', this.GET_LINE_TREESELECT, null, false, 'lineId'))
+      let setIdSelectedFirstLine = this.GET_LINE_TREESELECT[1]?.id || 'NONE'
+      this.fieldsInput.splice(idxLineInput, 1, InputModel('Line', 'treeselect', 'Select Line', setIdSelectedFirstLine, this.GET_LINE_TREESELECT, null, false, 'lineId'))
     },
     GET_MACHINE_TREESELECT: function () {
       let idxMachineInput = this.fieldsInput.findIndex(x => x.title == 'Machine');
       let idxInchargeInput = this.fieldsInput.findIndex(x => x.title == 'Incharge');
-      this.fieldsInput.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', this.GET_MACHINE_TREESELECT, null, false, 'machineId'))
-      this.fieldsInput.splice(idxInchargeInput, 1, InputModel('Incharge', 'option', 'Select Incharge', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false))
+      this.fieldsInput.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', [...this.GET_MACHINE_TREESELECT], null, false, 'machineId'))
+      this.fieldsInput.splice(idxInchargeInput, 1, InputModel('Incharge', 'option', 'Select Incharge', 'INTERNAL', [{ id: 'NONE', label: 'All' }, { id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, true))
     },
     FILTER_SAND_GRAPH: function () {
       if (this.FILTER_SAND_GRAPH) {
@@ -96,7 +97,7 @@ export default {
     isLineSelected: function () {
       if (!this.isLineSelected) {
         let idxMachineInput = this.fieldsInput.findIndex(x => x.title == 'Machine');
-        this.fieldsInput.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', this.GET_MACHINE_TREESELECT, null, true, 'machineId'))
+        this.fieldsInput.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', [{ id: 'NONE', label: 'All' }, ...this.GET_MACHINE_TREESELECT], null, true, 'machineId'))
       }
     },
     selectedLineId: function () {

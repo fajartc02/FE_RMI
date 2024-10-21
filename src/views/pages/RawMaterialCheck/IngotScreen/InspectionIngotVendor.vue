@@ -262,6 +262,9 @@ export default {
           }).then(async (result) => {
             if (result.isConfirmed) {
               this.$swal("Saved!", "", "success");
+              setTimeout(() => {
+                this.$swal.close()
+              }, 1000)
               this.form.headers.sampleCodeParent = this.form.headers.sampleCode
               console.log(this.form);
               await this.$store.dispatch(ACTION_QR_SAMPLE, this.form)
@@ -273,6 +276,9 @@ export default {
         }
 
         this.$swal('Error', error, 'error')
+        setTimeout(() => {
+          this.$swal.close()
+        }, 1000)
         this.$store.dispatch(ACTION_LOADING, false)
         return error
       }
@@ -309,12 +315,19 @@ export default {
         let state = this.conditionJudgmentIngotCheck(response)
 
         if (state) {
-          this.$router.push('/inspection/ingot/historical')
           this.$swal('Success', 'Add sample success, Pengecekan tidak ada abnormal', 'success')
+          this.modalShowJudg = false
+          setTimeout(() => {
+            this.$swal.close()
+            this.$router.push('/inspection/ingot/historical')
+          }, 1000)
         }
       } catch (error) {
         console.log(error);
         this.$swal('Error', 'Internal Server Error', 'error')
+        setTimeout(() => {
+          this.$swal.close()
+        }, 1000)
       }
     },
     conditionJudgmentIngotCheck({ data }) {
@@ -333,6 +346,9 @@ export default {
         return true
       } catch (error) {
         this.$swal('Error', 'Internal Server Error', 'error')
+        setTimeout(() => {
+          this.$swal.close()
+        }, 1000)
       }
     }
   },

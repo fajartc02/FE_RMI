@@ -54,6 +54,7 @@ import ChartParameterVue from '@/components/RawMaterialInspection/Charts/ChartPa
 import moment from 'moment'
 import { ACTION_INGOT_ELEMENT, GET_ELEMENT } from '@/store/modules/ELEMENTS.module'
 import { ACTION_MACHINE, GET_MACHINE_TREESELECT } from '@/store/modules/MACHINE.module'
+import { ACTION_VENDOR, GET_VENDOR_SELECT } from '@/store/modules/VENDOR.module'
 
 export default {
   name: 'DashboardIngot',
@@ -65,7 +66,7 @@ export default {
         InputModel('Line', 'treeselect', 'Select Line', 'NONE', [{ id: 'NONE', label: 'All' }], null, false, 'lineId'),
         InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', [{ id: 'NONE', label: 'All' }], null, true, 'machineId'),
         InputModel('Element', 'treeselect', 'Select Element', null, [], null, false, 'elementId'),
-        InputModel('In Charge', 'option', 'Select Incharge', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false),
+        InputModel('In Charge', 'option', 'Select InCharge', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false),
       ],
       isLineSelected: false,
       selectedLineId: null,
@@ -79,35 +80,47 @@ export default {
   watch: {
     GET_LINE_TREESELECT: function () {
       let idxLineInput = this.fieldsInput.findIndex(x => x.title == 'Line');
-      this.fieldsInput.splice(idxLineInput, 1, InputModel('Line', 'treeselect', 'Select Line', 'NONE', this.GET_LINE_TREESELECT, null, false, 'lineId'))
+      let setIdSelectedFirstLine = this.GET_LINE_TREESELECT[1]?.id || 'NONE'
+      this.fieldsInput.splice(idxLineInput, 1, InputModel('Line', 'treeselect', 'Select Line', setIdSelectedFirstLine, this.GET_LINE_TREESELECT, null, false, 'lineId'))
     },
     GET_MACHINE_TREESELECT: function () {
       let idxMachineInput = this.fieldsInput.findIndex(x => x.title == 'Machine');
-      let idxInchargeInput = this.fieldsInput.findIndex(x => x.title == 'Incharge');
-      this.fieldsInput.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', this.GET_MACHINE_TREESELECT, null, false, 'machineId'))
-      this.fieldsInput.splice(idxInchargeInput, 1, InputModel('Incharge', 'option', 'Select Incharge', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false))
+      let idxInchargeInput = this.fieldsInput.findIndex(x => x.title == 'In Charge');
+      this.fieldsInput.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', [{ id: 'NONE', label: 'All' }, ...this.GET_MACHINE_TREESELECT], null, false, 'machineId'))
+      this.fieldsInput.splice(idxInchargeInput, 1, InputModel('In Charge', 'option', 'Select In Charge', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false))
     },
     GET_ELEMENT: function () {
       let idxElementInput = this.fieldsInput.findIndex(x => x.title == 'Element');
       this.fieldsInput.splice(idxElementInput, 1, InputModel('Element', 'treeselect', 'Select Element', 'NONE', this.GET_ELEMENT, null, false, 'elementId'))
     },
+    GET_VENDOR_SELECT: function () {
+      console.log('this.GET_VENDOR_SELECT', this.GET_VENDOR_SELECT);
+
+      let idxVendorInput = this.fieldsInput.findIndex(x => x.title == 'Vendor');
+      this.fieldsInput.splice(idxVendorInput, 1, InputModel('Vendor', 'option', 'Select Vendor', 'NONE', this.GET_VENDOR_SELECT, null, false, 'vendorId'))
+    },
     isLineSelected: function () {
       if (!this.isLineSelected) {
         let idxMachineInput = this.fieldsInput.findIndex(x => x.title == 'Machine');
-        this.fieldsInput.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', this.GET_MACHINE_TREESELECT, null, true, 'machineId'))
+        this.fieldsInput.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', [{ id: 'NONE', label: 'All' }, ...this.GET_MACHINE_TREESELECT], null, true, 'machineId'))
       }
     },
     selectedLineId: function () {
       if (this.selectedLineId) {
         this.ACTION_MACHINE({ lineId: this.selectedLineId })
       }
+    },
+    'filters.incharge': function () {
+      if (this.filters?.incharge && this.filters?.incharge === 'VENDOR') {
+        this.ACTION_VENDOR({ take: 50 })
+      }
     }
   },
   computed: {
-    ...mapGetters([GET_LINE_TREESELECT, GET_ELEMENT, GET_MACHINE_TREESELECT]),
+    ...mapGetters([GET_LINE_TREESELECT, GET_ELEMENT, GET_MACHINE_TREESELECT, GET_VENDOR_SELECT]),
   },
   methods: {
-    ...mapActions([ACTION_LINE, ACTION_INGOT_ELEMENT, ACTION_MACHINE]),
+    ...mapActions([ACTION_LINE, ACTION_INGOT_ELEMENT, ACTION_MACHINE, ACTION_VENDOR]),
     async getLines() {
       await this.ACTION_LINE()
     },
@@ -129,6 +142,8 @@ export default {
     // this.$router.go()
     await this.getLines()
     await this.ACTION_INGOT_ELEMENT({ take: 50 })
+
+    this.fieldsInput.push(InputModel('Vendor', 'option', 'Select Vendor', 'NONE', [{ id: 'NONE', label: 'All' }], null, true, 'vendorId'))
   }
 }
 </script>

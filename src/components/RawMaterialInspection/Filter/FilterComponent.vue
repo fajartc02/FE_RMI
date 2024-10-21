@@ -17,7 +17,8 @@
           <CFormTextarea v-if="field.type === 'textarea'" v-model="field.value" :label="field.title"
             :placeholder="field.placeholder" :disabled="field.disabled">
           </CFormTextarea>
-          <CFormSelect v-model="field.value" v-else-if="field.type === 'option'" :label="field.title">
+          <CFormSelect v-model="field.value" v-else-if="field.type === 'option'" :label="field.title"
+            :disabled="field.disabled">
             <option v-for="option in field.options" :key="option" :value="option.id">{{ option.label }}</option>
           </CFormSelect>
           <div v-else-if="field.type === 'treeselect'">
@@ -213,7 +214,12 @@ export default {
 }
 </script>
 <style>
+.vue3-treeselect--disabled .vue3-treeselect__control {
+  height: 30.2px;
+  background-color: #EAEAEA !important;
+}
+
 .vue3-treeselect__control {
-  height: 33.2px;
+  height: 30.2px;
 }
 </style>

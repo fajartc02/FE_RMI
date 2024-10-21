@@ -1,6 +1,6 @@
 import ApiService from '../services/api.service'
-import {ACTION_LOADING} from './LOADING.module'
-import {ACTION_SET_META} from "@/store/modules/META.module";
+import { ACTION_LOADING } from './LOADING.module'
+import { ACTION_SET_META } from "@/store/modules/META.module";
 import commonUtils from "@/utils/CommonUtils";
 
 export const GET_MACHINE = 'GET_MACHINE'
@@ -36,10 +36,8 @@ const getters = {
         id: machine.id,
         label: machine.name,
       }
-    }) || [])];
-
-    data.unshift({id: 'NONE', name: 'All'});
-
+    }) ?? [])];
+    data.unshift({ id: 'NONE', label: 'All' });
     return data;
   },
   GET_TBL_MACHINE: state => (state.TBL_MACHINE_DATA),
@@ -55,11 +53,11 @@ const mutations = {
 }
 
 const actions = {
-  async ACTION_MACHINE({commit, dispatch}, params) {
+  async ACTION_MACHINE({ commit, dispatch }, params) {
     try {
       ApiService.setHeader()
       dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('machine/', params)
+      const { data } = await ApiService.query('machine/', params)
       dispatch(ACTION_LOADING, false)
       commit(SET_MACHINE, data.data)
       return
@@ -69,14 +67,14 @@ const actions = {
       return error
     }
   },
-  async ACTION_TBL_MACHINE({commit, dispatch}, filter) {
+  async ACTION_TBL_MACHINE({ commit, dispatch }, filter) {
     try {
       dispatch(ACTION_LOADING, true)
 
       const fetch = async () => {
         ApiService.setHeader()
         console.log('ACTION_TBL_MACHINE', 'filter', filter);
-        const {data} = await ApiService.query('machine', filter)
+        const { data } = await ApiService.query('machine', filter)
         console.log('ACTION_TBL_MACHINE', 'data', data);
         const pagination = data.meta.pagination
         pagination ? dispatch(ACTION_SET_META, pagination) : null
@@ -108,11 +106,11 @@ const actions = {
       dispatch(ACTION_LOADING, false)
     }
   },
-  async ACTION_ADD_MACHINE({commit, dispatch, state}, params) {
+  async ACTION_ADD_MACHINE({ commit, dispatch, state }, params) {
     try {
       delete params.id;
       ApiService.setHeader()
-      const {data} = await ApiService.post(`machine`, params);
+      const { data } = await ApiService.post(`machine`, params);
       console.log('ACTION_ADD_MACHINE', data);
 
       if (commonUtils.isMock()) {
@@ -129,13 +127,13 @@ const actions = {
       throw e;
     }
   },
-  async ACTION_EDIT_MACHINE({commit, dispatch, state}, machineData) {
+  async ACTION_EDIT_MACHINE({ commit, dispatch, state }, machineData) {
     try {
       const id = machineData.id;
       delete machineData.id;
 
       ApiService.setHeader()
-      const {data} = await ApiService.put(`machine/${id}`, machineData);
+      const { data } = await ApiService.put(`machine/${id}`, machineData);
       console.log('ACTION_EDIT_MACHINE', data);
 
       if (commonUtils.isMock()) {
@@ -153,10 +151,10 @@ const actions = {
       return e;
     }
   },
-  async ACTION_REMOVE_MACHINE({commit, dispatch, state}, machineData) {
+  async ACTION_REMOVE_MACHINE({ commit, dispatch, state }, machineData) {
     try {
       ApiService.setHeader()
-      const {data} = await ApiService.delete(`machine/${machineData.id}`);
+      const { data } = await ApiService.delete(`machine/${machineData.id}`);
       console.log('ACTION_REMOVE_MACHINE', data);
 
       if (commonUtils.isMock()) {

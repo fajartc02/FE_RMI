@@ -21,36 +21,44 @@ const state = {
 
 const getters = {
   GET_ELEMENT(state) {
-    console.log('GET_ELEMENT_STORE', state.ELEMENT_DATA)
-    state.ELEMENT_DATA.push({ id: 'NONE', name: 'All' })
-    if (state.ELEMENT_DATA && state.ELEMENT_DATA.length > 0) {
-      return state.ELEMENT_DATA.map((element) => {
-        console.log(element)
+    const data = [
+      ...(state.ELEMENT_DATA?.map((item) => {
         return {
-          ...element,
-          id: element.id,
-          label: element.name,
+          ...item,
+          id: item.id,
+          label: item.code,
           isSelected: false,
         }
-      })
-    } else {
-      return []
-    }
+      }) ?? [])
+    ];
+    data.unshift({ id: 'NONE', label: 'All' })
+    return data;
   },
   FILTER_SAND_GRAPH(state) {
-    state.ELEMENT_DATA.push({ id: 'NONE', name: 'All' })
-    if (state.ELEMENT_DATA && state.ELEMENT_DATA.length > 0) {
-      return state.ELEMENT_DATA.map((element) => {
+    const data = [
+      ...(state.ELEMENT_DATA?.map((item) => {
         return {
-          ...element,
-          id: element.id,
-          label: element.code,
+          ...item,
+          id: item.id,
+          label: item.code,
           isSelected: false,
         }
-      })
-    } else {
-      return []
-    }
+      }) ?? [])
+    ];
+    data.unshift({ id: 'NONE', label: 'All' })
+    return data;
+    // if (state.ELEMENT_DATA && state.ELEMENT_DATA.length > 0) {
+    //   return state.ELEMENT_DATA.map((element) => {
+    //     return {
+    //       ...element,
+    //       id: element.id,
+    //       label: element.code,
+    //       isSelected: false,
+    //     }
+    //   })
+    // } else {
+    //   return []
+    // }
   },
   GET_ELEMENT_INPUT(state) {
     return state.ELEMENT_INPUT

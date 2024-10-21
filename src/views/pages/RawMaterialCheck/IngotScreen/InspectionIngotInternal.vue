@@ -252,12 +252,18 @@ export default {
 
         let state = this.conditionJudgmentIngotCheck(response)
         if (state) {
-          this.$router.push('/inspection/ingot/historical')
           this.$swal('Success', 'Add sample success, Pengecekan tidak ada abnormal', 'success')
+          this.modalShowJudg = false
+          setTimeout(() => {
+            this.$swal.close()
+            this.$router.push('/inspection/ingot/historical')
+          }, 1000)
+
         }
       } catch (error) {
         console.log(error)
         this.$swal('Error', 'Error add sample code', 'error')
+        this.$swal.close()
       }
     },
     conditionJudgmentIngotCheck({ data }) {
@@ -281,6 +287,9 @@ export default {
         console.log(error);
 
         this.$swal('Error', 'Internal Server Error', 'error')
+        setTimeout(() => {
+          this.$swal.close()
+        }, 1000)
       }
     },
     async submitAbnormalSample() {
@@ -312,6 +321,9 @@ export default {
       } catch (error) {
         console.log(error);
         this.$swal('Error', 'Internal Server Error', 'error')
+        setTimeout(() => {
+          this.$swal.close()
+        }, 1000)
       }
     }
   },

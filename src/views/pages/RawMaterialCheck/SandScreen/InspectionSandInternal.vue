@@ -410,9 +410,6 @@ export default {
             percentIndex: element.percentIndex || null
           }
         })
-        // this.GET_ELEMENT_INPUT.gfnElement.value = elementsData?.gfnElement.value || null
-        // this.GET_ELEMENT_INPUT.dustElement.value = elementsData?.dustElement.value || null
-
         this.gfnElement = elementsData?.gfnElement
         this.dustElement = elementsData?.dustElement
         this.natriumElements = elementsData?.natriumElements.map(item => {
@@ -468,7 +465,6 @@ export default {
         this.ACTION_SHIFT()
         this.ACTION_MACHINE({ materialCategory: 'SAND' })
         this.checkDateInit()
-        // this.ACTION_SAND_ELEMENT_CHECK()
       }
     },
     'data.headers.time': function () {
@@ -476,13 +472,6 @@ export default {
         this.isNightCondition()
       }
     },
-    // 'natriumElements': {
-    //   handler: function () {
-    //     console.log('natriumElements', this.natriumElements);
-    //     this.data.elements = this.natriumElements
-    //   },
-    //   deep: true
-    // }
   },
   computed: {
     ...mapGetters([IS_LOADING, GET_SHIFT, GET_MACHINE, GET_ELEMENT_INPUT]),
@@ -736,7 +725,11 @@ export default {
         const response = await this.ACTION_SAMPLE_SAND(objPayloadFinal)
         if (response) {
           this.$swal('Success', 'Add sample success, Pengecekan tidak ada abnormal', 'success')
-          this.$router.push('/inspection/sand/historical')
+          this.modalShowJudg = false
+          setTimeout(() => {
+            this.$swal.close()
+            this.$router.push('/inspection/sand/historical')
+          }, 1000)
         } else {
           this.$swal('Error', 'Internal Server Error', 'error')
         }
@@ -857,27 +850,36 @@ export default {
         this.objPayload = null
         if (response) {
           this.$swal('Success', 'Add sample success, Pengecekan dengan abnormal', 'success')
-          this.$router.push('/inspection/sand/historical')
+          this.modalShowJudg = false
+          setTimeout(() => {
+            this.$swal.close()
+            this.$router.push('/inspection/sand/historical')
+          }, 1000)
         } else {
           this.$swal('Error', 'Internal Server Error', 'error')
+          this.$swal.close()
         }
       } catch (error) {
         this.$swal('Error', 'Internal Server Error', 'error')
+        this.$swal.close()
       }
     },
     async getDetailSandCheck(id) {
       try {
-        await this.ACTION_SAMPLE_SAND_DETAIL(id)
-
-        // this.data.headers = response?.data?.headers || {}
-        // this.meshElements = response?.data?.elements?.meshElements || []
-        // this.natriumElements = response?.data?.elements?.natriumElements || []
-        // this.dustElement = response?.data?.elements?.dustElement || {}
-        // this.gfnElement = response?.data?.elements?.gfnElement || {}
-        // this.selectedShift(this.data.headers.shiftId)
-        // this.notes = response?.data?.notes || null
-        // this.isHeaderNotEmpty = response?.data?.headers != null
-        // this.isElementNotEmpty = response?.data?.elements?.length !== 0
+        if (this.isSubmitted) {
+          const response = await this.ACTION_SAMPLE_SAND_DETAIL(id)
+          this.data.headers = response?.data?.headers || {}
+          this.meshElements = response?.data?.elements?.meshElements || []
+          this.natriumElements = response?.data?.elements?.natriumElements || []
+          this.dustElement = response?.data?.elements?.dustElement || {}
+          this.gfnElement = response?.data?.elements?.gfnElement || {}
+          this.selectedShift(this.data.headers.shiftId)
+          this.notes = response?.data?.notes || null
+          this.isHeaderNotEmpty = response?.data?.headers != null
+          this.isElementNotEmpty = response?.data?.elements?.length !== 0
+        } else {
+          await this.ACTION_SAMPLE_SAND_DETAIL(id)
+        }
       } catch (error) {
         console.log(error);
 
@@ -890,18 +892,17 @@ export default {
     HeaderComp,
     LoadingComponent,
   },
-  mounted() {
-    this.ACTION_SHIFT()
-    this.ACTION_MACHINE({ materialCategory: 'SAND' })
-
+  async mounted() {
+    await this.ACTION_SHIFT()
+    await this.ACTION_MACHINE({ materialCategory: 'SAND' })
     if (this.$route.query.id) {
       this.isSubmitted = true
       this.isSandCheck = true
-      this.getDetailSandCheck(this.$route.query.id)
+      await this.getDetailSandCheck(this.$route.query.id)
     } else {
       this.checkDateInit()
       this.isNightCondition()
-      this.ACTION_SAND_ELEMENT_CHECK()
+      await this.ACTION_SAND_ELEMENT_CHECK()
     }
   }
 }
