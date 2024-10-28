@@ -28,37 +28,37 @@ System.register([], function (exports) {
 
       var singleSpa = /*#__PURE__*/Object.freeze({
         __proto__: null,
-        get start() { return start; },
-        get ensureJQuerySupport() { return ensureJQuerySupport; },
-        get setBootstrapMaxTime() { return setBootstrapMaxTime; },
-        get setMountMaxTime() { return setMountMaxTime; },
-        get setUnmountMaxTime() { return setUnmountMaxTime; },
-        get setUnloadMaxTime() { return setUnloadMaxTime; },
-        get registerApplication() { return registerApplication; },
-        get unregisterApplication() { return unregisterApplication; },
-        get getMountedApps() { return getMountedApps; },
-        get getAppStatus() { return getAppStatus; },
-        get unloadApplication() { return unloadApplication; },
-        get checkActivityFunctions() { return checkActivityFunctions; },
-        get getAppNames() { return getAppNames; },
-        get pathToActiveWhen() { return pathToActiveWhen; },
-        get navigateToUrl() { return navigateToUrl; },
-        get triggerAppChange() { return triggerAppChange; },
-        get addErrorHandler() { return addErrorHandler; },
-        get removeErrorHandler() { return removeErrorHandler; },
-        get mountRootParcel() { return mountRootParcel; },
-        get NOT_LOADED() { return NOT_LOADED; },
-        get LOADING_SOURCE_CODE() { return LOADING_SOURCE_CODE; },
-        get NOT_BOOTSTRAPPED() { return NOT_BOOTSTRAPPED; },
-        get BOOTSTRAPPING() { return BOOTSTRAPPING; },
-        get NOT_MOUNTED() { return NOT_MOUNTED; },
-        get MOUNTING() { return MOUNTING; },
-        get UPDATING() { return UPDATING; },
-        get LOAD_ERROR() { return LOAD_ERROR; },
-        get MOUNTED() { return MOUNTED; },
-        get UNLOADING() { return UNLOADING; },
-        get UNMOUNTING() { return UNMOUNTING; },
-        get SKIP_BECAUSE_BROKEN() { return SKIP_BECAUSE_BROKEN; }
+        get start () { return start; },
+        get ensureJQuerySupport () { return ensureJQuerySupport; },
+        get setBootstrapMaxTime () { return setBootstrapMaxTime; },
+        get setMountMaxTime () { return setMountMaxTime; },
+        get setUnmountMaxTime () { return setUnmountMaxTime; },
+        get setUnloadMaxTime () { return setUnloadMaxTime; },
+        get registerApplication () { return registerApplication; },
+        get unregisterApplication () { return unregisterApplication; },
+        get getMountedApps () { return getMountedApps; },
+        get getAppStatus () { return getAppStatus; },
+        get unloadApplication () { return unloadApplication; },
+        get checkActivityFunctions () { return checkActivityFunctions; },
+        get getAppNames () { return getAppNames; },
+        get pathToActiveWhen () { return pathToActiveWhen; },
+        get navigateToUrl () { return navigateToUrl; },
+        get triggerAppChange () { return triggerAppChange; },
+        get addErrorHandler () { return addErrorHandler; },
+        get removeErrorHandler () { return removeErrorHandler; },
+        get mountRootParcel () { return mountRootParcel; },
+        get NOT_LOADED () { return NOT_LOADED; },
+        get LOADING_SOURCE_CODE () { return LOADING_SOURCE_CODE; },
+        get NOT_BOOTSTRAPPED () { return NOT_BOOTSTRAPPED; },
+        get BOOTSTRAPPING () { return BOOTSTRAPPING; },
+        get NOT_MOUNTED () { return NOT_MOUNTED; },
+        get MOUNTING () { return MOUNTING; },
+        get UPDATING () { return UPDATING; },
+        get LOAD_ERROR () { return LOAD_ERROR; },
+        get MOUNTED () { return MOUNTED; },
+        get UNLOADING () { return UNLOADING; },
+        get UNMOUNTING () { return UNMOUNTING; },
+        get SKIP_BECAUSE_BROKEN () { return SKIP_BECAUSE_BROKEN; }
       });
 
       function _typeof(obj) {
@@ -96,10 +96,10 @@ System.register([], function (exports) {
 
       var NativeCustomEvent = commonjsGlobal.CustomEvent;
 
-      function useNative() {
+      function useNative () {
         try {
           var p = new NativeCustomEvent('cat', { detail: { foo: 'bar' } });
-          return 'cat' === p.type && 'bar' === p.detail.foo;
+          return  'cat' === p.type && 'bar' === p.detail.foo;
         } catch (e) {
         }
         return false;
@@ -115,32 +115,32 @@ System.register([], function (exports) {
 
       var customEvent = useNative() ? NativeCustomEvent :
 
-        // IE >= 9
-        'undefined' !== typeof document && 'function' === typeof document.createEvent ? function CustomEvent(type, params) {
-          var e = document.createEvent('CustomEvent');
-          if (params) {
-            e.initCustomEvent(type, params.bubbles, params.cancelable, params.detail);
-          } else {
-            e.initCustomEvent(type, false, false, void 0);
-          }
-          return e;
-        } :
+      // IE >= 9
+      'undefined' !== typeof document && 'function' === typeof document.createEvent ? function CustomEvent (type, params) {
+        var e = document.createEvent('CustomEvent');
+        if (params) {
+          e.initCustomEvent(type, params.bubbles, params.cancelable, params.detail);
+        } else {
+          e.initCustomEvent(type, false, false, void 0);
+        }
+        return e;
+      } :
 
-          // IE <= 8
-          function CustomEvent(type, params) {
-            var e = document.createEventObject();
-            e.type = type;
-            if (params) {
-              e.bubbles = Boolean(params.bubbles);
-              e.cancelable = Boolean(params.cancelable);
-              e.detail = params.detail;
-            } else {
-              e.bubbles = false;
-              e.cancelable = false;
-              e.detail = void 0;
-            }
-            return e;
-          };
+      // IE <= 8
+      function CustomEvent (type, params) {
+        var e = document.createEventObject();
+        e.type = type;
+        if (params) {
+          e.bubbles = Boolean(params.bubbles);
+          e.cancelable = Boolean(params.cancelable);
+          e.detail = params.detail;
+        } else {
+          e.bubbles = false;
+          e.cancelable = false;
+          e.detail = void 0;
+        }
+        return e;
+      };
 
       var errorHandlers = [];
       function handleAppError(err, app, newStatus) {
@@ -158,14 +158,14 @@ System.register([], function (exports) {
       }
       function addErrorHandler(handler) {
         if (typeof handler !== "function") {
-          throw Error(formatErrorMessage(28, "a single-spa error handler must be a function"));
+          throw Error(formatErrorMessage(28,  "a single-spa error handler must be a function"));
         }
 
         errorHandlers.push(handler);
       }
       function removeErrorHandler(handler) {
         if (typeof handler !== "function") {
-          throw Error(formatErrorMessage(29, "a single-spa error handler must be a function"));
+          throw Error(formatErrorMessage(29,  "a single-spa error handler must be a function"));
         }
 
         var removedSomething = false;
@@ -198,7 +198,7 @@ System.register([], function (exports) {
 
           result = ogErr;
         } else {
-          console.warn(formatErrorMessage(30, "While ".concat(appOrParcel.status, ", '").concat(toName(appOrParcel), "' rejected its lifecycle function promise with a non-Error. This will cause stack traces to not be accurate."), appOrParcel.status, toName(appOrParcel)));
+          console.warn(formatErrorMessage(30,  "While ".concat(appOrParcel.status, ", '").concat(toName(appOrParcel), "' rejected its lifecycle function promise with a non-Error. This will cause stack traces to not be accurate."), appOrParcel.status, toName(appOrParcel)));
 
           try {
             result = Error(errPrefix + JSON.stringify(ogErr));
@@ -302,7 +302,7 @@ System.register([], function (exports) {
           return fns.reduce(function (resultPromise, fn, index) {
             return resultPromise.then(function () {
               var thisPromise = fn(props);
-              return smellsLikeAPromise(thisPromise) ? thisPromise : Promise.reject(formatErrorMessage(15, "Within ".concat(type, " ").concat(name, ", the lifecycle function ").concat(lifecycle, " at array index ").concat(index, " did not return a promise"), type, name, lifecycle, index));
+              return smellsLikeAPromise(thisPromise) ? thisPromise : Promise.reject(formatErrorMessage(15,  "Within ".concat(type, " ").concat(name, ", the lifecycle function ").concat(lifecycle, " at array index ").concat(index, " did not return a promise"), type, name, lifecycle, index));
             });
           }, Promise.resolve());
         };
@@ -428,7 +428,7 @@ System.register([], function (exports) {
       function toUpdatePromise(parcel) {
         return Promise.resolve().then(function () {
           if (parcel.status !== MOUNTED) {
-            throw Error(formatErrorMessage(32, "Cannot update parcel '".concat(toName(parcel), "' because it is not mounted"), toName(parcel)));
+            throw Error(formatErrorMessage(32,  "Cannot update parcel '".concat(toName(parcel), "' because it is not mounted"), toName(parcel)));
           }
 
           parcel.status = UPDATING;
@@ -453,19 +453,19 @@ System.register([], function (exports) {
         var owningAppOrParcel = this; // Validate inputs
 
         if (!config || _typeof(config) !== "object" && typeof config !== "function") {
-          throw Error(formatErrorMessage(2, "Cannot mount parcel without a config object or config loading function"));
+          throw Error(formatErrorMessage(2,  "Cannot mount parcel without a config object or config loading function"));
         }
 
         if (config.name && typeof config.name !== "string") {
-          throw Error(formatErrorMessage(3, "Parcel name must be a string, if provided. Was given ".concat(_typeof(config.name)), _typeof(config.name)));
+          throw Error(formatErrorMessage(3,  "Parcel name must be a string, if provided. Was given ".concat(_typeof(config.name)), _typeof(config.name)));
         }
 
         if (_typeof(customProps) !== "object") {
-          throw Error(formatErrorMessage(4, "Parcel ".concat(name, " has invalid customProps -- must be an object but was given ").concat(_typeof(customProps)), name, _typeof(customProps)));
+          throw Error(formatErrorMessage(4,  "Parcel ".concat(name, " has invalid customProps -- must be an object but was given ").concat(_typeof(customProps)), name, _typeof(customProps)));
         }
 
         if (!customProps.domElement) {
-          throw Error(formatErrorMessage(5, "Parcel ".concat(name, " cannot be mounted without a domElement provided as a prop"), name));
+          throw Error(formatErrorMessage(5,  "Parcel ".concat(name, " cannot be mounted without a domElement provided as a prop"), name));
         }
 
         var id = parcelCount++;
@@ -483,7 +483,7 @@ System.register([], function (exports) {
           unmountThisParcel: function unmountThisParcel() {
             return mountPromise.then(function () {
               if (parcel.status !== MOUNTED) {
-                throw Error(formatErrorMessage(6, "Cannot unmount parcel '".concat(name, "' -- it is in a ").concat(parcel.status, " status"), name, parcel.status));
+                throw Error(formatErrorMessage(6,  "Cannot unmount parcel '".concat(name, "' -- it is in a ").concat(parcel.status, " status"), name, parcel.status));
               }
 
               return toUnmountPromise(parcel, true);
@@ -510,31 +510,31 @@ System.register([], function (exports) {
         var loadPromise = configLoadingFunction();
 
         if (!loadPromise || typeof loadPromise.then !== "function") {
-          throw Error(formatErrorMessage(7, "When mounting a parcel, the config loading function must return a promise that resolves with the parcel config"));
+          throw Error(formatErrorMessage(7,  "When mounting a parcel, the config loading function must return a promise that resolves with the parcel config"));
         }
 
         loadPromise = loadPromise.then(function (config) {
           if (!config) {
-            throw Error(formatErrorMessage(8, "When mounting a parcel, the config loading function returned a promise that did not resolve with a parcel config"));
+            throw Error(formatErrorMessage(8,  "When mounting a parcel, the config loading function returned a promise that did not resolve with a parcel config"));
           }
 
           var name = config.name || "parcel-".concat(id);
 
           if ( // ES Module objects don't have the object prototype
-            Object.prototype.hasOwnProperty.call(config, "bootstrap") && !validLifecycleFn(config.bootstrap)) {
-            throw Error(formatErrorMessage(9, "Parcel ".concat(name, " provided an invalid bootstrap function"), name));
+          Object.prototype.hasOwnProperty.call(config, "bootstrap") && !validLifecycleFn(config.bootstrap)) {
+            throw Error(formatErrorMessage(9,  "Parcel ".concat(name, " provided an invalid bootstrap function"), name));
           }
 
           if (!validLifecycleFn(config.mount)) {
-            throw Error(formatErrorMessage(10, "Parcel ".concat(name, " must have a valid mount function"), name));
+            throw Error(formatErrorMessage(10,  "Parcel ".concat(name, " must have a valid mount function"), name));
           }
 
           if (!validLifecycleFn(config.unmount)) {
-            throw Error(formatErrorMessage(11, "Parcel ".concat(name, " must have a valid unmount function"), name));
+            throw Error(formatErrorMessage(11,  "Parcel ".concat(name, " must have a valid unmount function"), name));
           }
 
           if (config.update && !validLifecycleFn(config.update)) {
-            throw Error(formatErrorMessage(12, "Parcel ".concat(name, " provided an invalid update function"), name));
+            throw Error(formatErrorMessage(12,  "Parcel ".concat(name, " provided an invalid update function"), name));
           }
 
           var bootstrap = flattenFnArray(config, "bootstrap");
@@ -573,7 +573,7 @@ System.register([], function (exports) {
           mount: function mount() {
             return promiseWithoutReturnValue(Promise.resolve().then(function () {
               if (parcel.status !== NOT_MOUNTED) {
-                throw Error(formatErrorMessage(13, "Cannot mount parcel '".concat(name, "' -- it is in a ").concat(parcel.status, " status"), name, parcel.status));
+                throw Error(formatErrorMessage(13,  "Cannot mount parcel '".concat(name, "' -- it is in a ").concat(parcel.status, " status"), name, parcel.status));
               } // Add to owning app or parcel
 
 
@@ -607,7 +607,7 @@ System.register([], function (exports) {
 
         if (_typeof(customProps) !== "object" || customProps === null || Array.isArray(customProps)) {
           customProps = {};
-          console.warn(formatErrorMessage(40, "single-spa: ".concat(name, "'s customProps function must return an object. Received ").concat(customProps)), name, customProps);
+          console.warn(formatErrorMessage(40,  "single-spa: ".concat(name, "'s customProps function must return an object. Received ").concat(customProps)), name, customProps);
         }
 
         var result = assign({}, customProps, {
@@ -653,7 +653,7 @@ System.register([], function (exports) {
       };
       function setBootstrapMaxTime(time, dieOnTimeout, warningMillis) {
         if (typeof time !== "number" || time <= 0) {
-          throw Error(formatErrorMessage(16, "bootstrap max time must be a positive integer number of milliseconds"));
+          throw Error(formatErrorMessage(16,  "bootstrap max time must be a positive integer number of milliseconds"));
         }
 
         globalTimeoutConfig.bootstrap = {
@@ -664,7 +664,7 @@ System.register([], function (exports) {
       }
       function setMountMaxTime(time, dieOnTimeout, warningMillis) {
         if (typeof time !== "number" || time <= 0) {
-          throw Error(formatErrorMessage(17, "mount max time must be a positive integer number of milliseconds"));
+          throw Error(formatErrorMessage(17,  "mount max time must be a positive integer number of milliseconds"));
         }
 
         globalTimeoutConfig.mount = {
@@ -675,7 +675,7 @@ System.register([], function (exports) {
       }
       function setUnmountMaxTime(time, dieOnTimeout, warningMillis) {
         if (typeof time !== "number" || time <= 0) {
-          throw Error(formatErrorMessage(18, "unmount max time must be a positive integer number of milliseconds"));
+          throw Error(formatErrorMessage(18,  "unmount max time must be a positive integer number of milliseconds"));
         }
 
         globalTimeoutConfig.unmount = {
@@ -686,7 +686,7 @@ System.register([], function (exports) {
       }
       function setUnloadMaxTime(time, dieOnTimeout, warningMillis) {
         if (typeof time !== "number" || time <= 0) {
-          throw Error(formatErrorMessage(19, "unload max time must be a positive integer number of milliseconds"));
+          throw Error(formatErrorMessage(19,  "unload max time must be a positive integer number of milliseconds"));
         }
 
         globalTimeoutConfig.unload = {
@@ -715,7 +715,7 @@ System.register([], function (exports) {
           setTimeout(function () {
             return maybeTimingOut(true);
           }, timeoutConfig.millis);
-          var errMsg = formatErrorMessage(31, "Lifecycle function ".concat(lifecycle, " for ").concat(type, " ").concat(toName(appOrParcel), " lifecycle did not resolve or reject for ").concat(timeoutConfig.millis, " ms."), lifecycle, type, toName(appOrParcel), timeoutConfig.millis);
+          var errMsg = formatErrorMessage(31,  "Lifecycle function ".concat(lifecycle, " for ").concat(type, " ").concat(toName(appOrParcel), " lifecycle did not resolve or reject for ").concat(timeoutConfig.millis, " ms."), lifecycle, type, toName(appOrParcel), timeoutConfig.millis);
 
           function maybeTimingOut(shouldError) {
             if (!finished) {
@@ -770,7 +770,7 @@ System.register([], function (exports) {
             if (!smellsLikeAPromise(loadPromise)) {
               // The name of the app will be prepended to this error message inside of the handleAppError function
               isUserErr = true;
-              throw Error(formatErrorMessage(33, "single-spa loading function did not return a promise. Check the second argument to registerApplication('".concat(toName(app), "', loadingFunction, activityFunction)"), toName(app)));
+              throw Error(formatErrorMessage(33,  "single-spa loading function did not return a promise. Check the second argument to registerApplication('".concat(toName(app), "', loadingFunction, activityFunction)"), toName(app)));
             }
 
             return loadPromise.then(function (val) {
@@ -787,7 +787,7 @@ System.register([], function (exports) {
               }
 
               if ( // ES Modules don't have the Object prototype
-                Object.prototype.hasOwnProperty.call(appOpts, "bootstrap") && !validLifecycleFn(appOpts.bootstrap)) {
+              Object.prototype.hasOwnProperty.call(appOpts, "bootstrap") && !validLifecycleFn(appOpts.bootstrap)) {
                 validationErrCode = 35;
 
                 {
@@ -818,9 +818,9 @@ System.register([], function (exports) {
 
                 try {
                   appOptsStr = JSON.stringify(appOpts);
-                } catch (_unused) { }
+                } catch (_unused) {}
 
-                console.error(formatErrorMessage(validationErrCode, "The loading function for single-spa ".concat(type, " '").concat(toName(app), "' resolved with the following, which does not have bootstrap, mount, and unmount functions"), type, toName(app), appOptsStr), appOpts);
+                console.error(formatErrorMessage(validationErrCode,  "The loading function for single-spa ".concat(type, " '").concat(toName(app), "' resolved with the following, which does not have bootstrap, mount, and unmount functions"), type, toName(app), appOptsStr), appOpts);
                 handleAppError(validationErrMessage, app, SKIP_BECAUSE_BROKEN);
                 return app;
               }
@@ -879,7 +879,7 @@ System.register([], function (exports) {
           url = obj.currentTarget.href;
           obj.preventDefault();
         } else {
-          throw Error(formatErrorMessage(14, "singleSpaNavigate/navigateToUrl must be either called with a string url, with an <a> tag as its context, or with an event whose currentTarget is an <a> tag"));
+          throw Error(formatErrorMessage(14,  "singleSpaNavigate/navigateToUrl must be either called with a string url, with an <a> tag as its context, or with an event whose currentTarget is an <a> tag"));
         }
 
         var current = parseUri(window.location.href);
@@ -1013,7 +1013,7 @@ System.register([], function (exports) {
         window.history.replaceState = patchedUpdateState(window.history.replaceState, "replaceState");
 
         if (window.singleSpaNavigate) {
-          console.warn(formatErrorMessage(41, "single-spa has been loaded twice on the page. This can result in unexpected behavior."));
+          console.warn(formatErrorMessage(41,  "single-spa has been loaded twice on the page. This can result in unexpected behavior."));
         } else {
           /* For convenience in `onclick` attributes, we expose a global function for navigating to
            * whatever an <a> tag's href is.
@@ -1163,9 +1163,9 @@ System.register([], function (exports) {
       var apps = [];
       function getAppChanges() {
         var appsToUnload = [],
-          appsToUnmount = [],
-          appsToLoad = [],
-          appsToMount = []; // We re-attempt to download applications in LOAD_ERROR after a timeout of 200 milliseconds
+            appsToUnmount = [],
+            appsToLoad = [],
+            appsToMount = []; // We re-attempt to download applications in LOAD_ERROR after a timeout of 200 milliseconds
 
         var currentTime = new Date().getTime();
         apps.forEach(function (app) {
@@ -1231,7 +1231,7 @@ System.register([], function (exports) {
       }
       function registerApplication(appNameOrConfig, appOrLoadApp, activeWhen, customProps) {
         var registration = sanitizeArguments(appNameOrConfig, appOrLoadApp, activeWhen, customProps);
-        if (getAppNames().indexOf(registration.name) !== -1) throw Error(formatErrorMessage(21, "There is already an app registered with name ".concat(registration.name), registration.name));
+        if (getAppNames().indexOf(registration.name) !== -1) throw Error(formatErrorMessage(21,  "There is already an app registered with name ".concat(registration.name), registration.name));
         apps.push(assign({
           loadErrorTime: null,
           status: NOT_LOADED,
@@ -1259,7 +1259,7 @@ System.register([], function (exports) {
         if (apps.filter(function (app) {
           return toName(app) === appName;
         }).length === 0) {
-          throw Error(formatErrorMessage(25, "Cannot unregister application '".concat(appName, "' because no such application has been registered"), appName));
+          throw Error(formatErrorMessage(25,  "Cannot unregister application '".concat(appName, "' because no such application has been registered"), appName));
         }
 
         return unloadApplication(appName).then(function () {
@@ -1273,7 +1273,7 @@ System.register([], function (exports) {
         };
 
         if (typeof appName !== "string") {
-          throw Error(formatErrorMessage(26, "unloadApplication requires a string 'appName'"));
+          throw Error(formatErrorMessage(26,  "unloadApplication requires a string 'appName'"));
         }
 
         var app = find(apps, function (App) {
@@ -1281,7 +1281,7 @@ System.register([], function (exports) {
         });
 
         if (!app) {
-          throw Error(formatErrorMessage(27, "Could not unload application '".concat(appName, "' because no such application has been registered"), appName));
+          throw Error(formatErrorMessage(27,  "Could not unload application '".concat(appName, "' because no such application has been registered"), appName));
         }
 
         var appUnloadInfo = getAppUnloadInfo(toName(app));
@@ -1334,28 +1334,28 @@ System.register([], function (exports) {
       }
 
       function validateRegisterWithArguments(name, appOrLoadApp, activeWhen, customProps) {
-        if (typeof name !== "string" || name.length === 0) throw Error(formatErrorMessage(20, "The 1st argument to registerApplication must be a non-empty string 'appName'"));
-        if (!appOrLoadApp) throw Error(formatErrorMessage(23, "The 2nd argument to registerApplication must be an application or loading application function"));
-        if (typeof activeWhen !== "function") throw Error(formatErrorMessage(24, "The 3rd argument to registerApplication must be an activeWhen function"));
-        if (!validCustomProps(customProps)) throw Error(formatErrorMessage(22, "The optional 4th argument is a customProps and must be an object"));
+        if (typeof name !== "string" || name.length === 0) throw Error(formatErrorMessage(20,  "The 1st argument to registerApplication must be a non-empty string 'appName'"));
+        if (!appOrLoadApp) throw Error(formatErrorMessage(23,  "The 2nd argument to registerApplication must be an application or loading application function"));
+        if (typeof activeWhen !== "function") throw Error(formatErrorMessage(24,  "The 3rd argument to registerApplication must be an activeWhen function"));
+        if (!validCustomProps(customProps)) throw Error(formatErrorMessage(22,  "The optional 4th argument is a customProps and must be an object"));
       }
 
       function validateRegisterWithConfig(config) {
-        if (Array.isArray(config) || config === null) throw Error(formatErrorMessage(39, "Configuration object can't be an Array or null!"));
+        if (Array.isArray(config) || config === null) throw Error(formatErrorMessage(39,  "Configuration object can't be an Array or null!"));
         var validKeys = ["name", "app", "activeWhen", "customProps"];
         var invalidKeys = Object.keys(config).reduce(function (invalidKeys, prop) {
           return validKeys.indexOf(prop) >= 0 ? invalidKeys : invalidKeys.concat(prop);
         }, []);
-        if (invalidKeys.length !== 0) throw Error(formatErrorMessage(38, "The configuration object accepts only: ".concat(validKeys.join(", "), ". Invalid keys: ").concat(invalidKeys.join(", "), "."), validKeys.join(", "), invalidKeys.join(", ")));
-        if (typeof config.name !== "string" || config.name.length === 0) throw Error(formatErrorMessage(20, "The config.name on registerApplication must be a non-empty string"));
-        if (_typeof(config.app) !== "object" && typeof config.app !== "function") throw Error(formatErrorMessage(20, "The config.app on registerApplication must be an application or a loading function"));
+        if (invalidKeys.length !== 0) throw Error(formatErrorMessage(38,  "The configuration object accepts only: ".concat(validKeys.join(", "), ". Invalid keys: ").concat(invalidKeys.join(", "), "."), validKeys.join(", "), invalidKeys.join(", ")));
+        if (typeof config.name !== "string" || config.name.length === 0) throw Error(formatErrorMessage(20,  "The config.name on registerApplication must be a non-empty string"));
+        if (_typeof(config.app) !== "object" && typeof config.app !== "function") throw Error(formatErrorMessage(20,  "The config.app on registerApplication must be an application or a loading function"));
 
         var allowsStringAndFunction = function allowsStringAndFunction(activeWhen) {
           return typeof activeWhen === "string" || typeof activeWhen === "function";
         };
 
-        if (!allowsStringAndFunction(config.activeWhen) && !(Array.isArray(config.activeWhen) && config.activeWhen.every(allowsStringAndFunction))) throw Error(formatErrorMessage(24, "The config.activeWhen on registerApplication must be a string, function or an array with both"));
-        if (!validCustomProps(config.customProps)) throw Error(formatErrorMessage(22, "The optional config.customProps must be an object"));
+        if (!allowsStringAndFunction(config.activeWhen) && !(Array.isArray(config.activeWhen) && config.activeWhen.every(allowsStringAndFunction))) throw Error(formatErrorMessage(24,  "The config.activeWhen on registerApplication must be a string, function or an array with both"));
+        if (!validCustomProps(config.customProps)) throw Error(formatErrorMessage(22,  "The optional config.customProps must be an object"));
       }
 
       function validCustomProps(customProps) {
@@ -1434,8 +1434,8 @@ System.register([], function (exports) {
 
       function toDynamicPathValidatorRegex(path, exactMatch) {
         var lastIndex = 0,
-          inDynamic = false,
-          regexStr = "^";
+            inDynamic = false,
+            regexStr = "^";
 
         if (path[0] !== "/") {
           path = "/" + path;
@@ -1471,7 +1471,7 @@ System.register([], function (exports) {
               // any characters.
               var suffix = exactMatch ? "" : ".*";
               regexStr = // use charAt instead as we could not use es6 method endsWith
-                regexStr.charAt(regexStr.length - 1) === "/" ? "".concat(regexStr).concat(suffix, "$") : "".concat(regexStr, "(/").concat(suffix, ")?(#.*)?$");
+              regexStr.charAt(regexStr.length - 1) === "/" ? "".concat(regexStr).concat(suffix, "$") : "".concat(regexStr, "(/").concat(suffix, ")?(#.*)?$");
             }
           }
 
@@ -1486,8 +1486,8 @@ System.register([], function (exports) {
       }
 
       var appChangeUnderway = false,
-        peopleWaitingOnAppChange = [],
-        currentUrl = isInBrowser && window.location.href;
+          peopleWaitingOnAppChange = [],
+          currentUrl = isInBrowser && window.location.href;
       function triggerAppChange() {
         // Call reroute with no arguments, intentionally
         return reroute();
@@ -1507,15 +1507,15 @@ System.register([], function (exports) {
         }
 
         var _getAppChanges = getAppChanges(),
-          appsToUnload = _getAppChanges.appsToUnload,
-          appsToUnmount = _getAppChanges.appsToUnmount,
-          appsToLoad = _getAppChanges.appsToLoad,
-          appsToMount = _getAppChanges.appsToMount;
+            appsToUnload = _getAppChanges.appsToUnload,
+            appsToUnmount = _getAppChanges.appsToUnmount,
+            appsToLoad = _getAppChanges.appsToLoad,
+            appsToMount = _getAppChanges.appsToMount;
 
         var appsThatChanged,
-          navigationIsCanceled = false,
-          oldUrl = currentUrl,
-          newUrl = currentUrl = window.location.href;
+            navigationIsCanceled = false,
+            oldUrl = currentUrl,
+            newUrl = currentUrl = window.location.href;
 
         if (isStarted()) {
           appChangeUnderway = true;
@@ -1534,12 +1534,12 @@ System.register([], function (exports) {
           return Promise.resolve().then(function () {
             var loadPromises = appsToLoad.map(toLoadPromise);
             return Promise.all(loadPromises).then(callAllEventListeners) // there are no mounted apps, before start() is called, so we always return []
-              .then(function () {
-                return [];
-              }).catch(function (err) {
-                callAllEventListeners();
-                throw err;
-              });
+            .then(function () {
+              return [];
+            }).catch(function (err) {
+              callAllEventListeners();
+              throw err;
+            });
           });
         }
 
@@ -1751,7 +1751,7 @@ System.register([], function (exports) {
       if (isInBrowser) {
         setTimeout(function () {
           if (!started) {
-            console.warn(formatErrorMessage(1, "singleSpa.start() has not been called, 5000ms after single-spa was loaded. Before start() is called, apps can be declared and loaded, but not bootstrapped or mounted."));
+            console.warn(formatErrorMessage(1,  "singleSpa.start() has not been called, 5000ms after single-spa was loaded. Before start() is called, apps can be declared and loaded, but not bootstrapped or mounted."));
           }
         }, 5000);
       }
