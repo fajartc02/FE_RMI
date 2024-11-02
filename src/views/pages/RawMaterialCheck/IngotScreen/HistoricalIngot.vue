@@ -103,7 +103,7 @@ export default {
       this.filters.splice(idxStatusInput, 1, InputModel('Status', 'option', 'Select Status', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'REVISION', label: 'REVISION' }], null, false))
     },
     isLineChanges: function () {
-      this.ACTION_MACHINE({ lineId: this.isLineChanges })
+      this.ACTION_MACHINE({ lineId: this.isLineChanges, materialCategory: 'INGOT' })
     },
     isLineSelected: function () {
       if (!this.isLineSelected) {

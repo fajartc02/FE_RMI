@@ -68,7 +68,7 @@ export default {
       this.filters.splice(idxShiftInput, 1, InputModel('Shift', 'treeselect', 'Select Shift', 'NONE', this.GET_SHIFT_TREESELECT, null, false, 'shiftId'))
     },
     isLineChanges: function () {
-      this.ACTION_MACHINE({ lineId: this.isLineChanges })
+      this.ACTION_MACHINE({ lineId: this.isLineChanges, materialCategory: 'SAND' })
       // this.ACTION_MACHINE({ materialCategory: 'SAND' })
     },
     isLineSelected: function () {
