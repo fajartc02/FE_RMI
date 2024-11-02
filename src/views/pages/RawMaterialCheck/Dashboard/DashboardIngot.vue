@@ -102,12 +102,12 @@ export default {
     isLineSelected: function () {
       if (!this.isLineSelected) {
         let idxMachineInput = this.fieldsInput.findIndex(x => x.title == 'Machine');
-        this.fieldsInput.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', [{ id: 'NONE', label: 'All' }, ...this.GET_MACHINE_TREESELECT], null, true, 'machineId'))
+        this.fieldsInput.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', [...this.GET_MACHINE_TREESELECT], null, true, 'machineId'))
       }
     },
     selectedLineId: function () {
       if (this.selectedLineId) {
-        this.ACTION_MACHINE({ lineId: this.selectedLineId })
+        this.ACTION_MACHINE({ lineId: this.selectedLineId, materialCategory: 'INGOT' })
       }
     },
     'filters.incharge': function () {

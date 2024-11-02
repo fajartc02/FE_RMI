@@ -102,7 +102,7 @@ export default {
     },
     selectedLineId: function () {
       if (this.selectedLineId) {
-        this.ACTION_MACHINE({ lineId: this.selectedLineId })
+        this.ACTION_MACHINE({ lineId: this.selectedLineId, materialCategory: 'SAND' })
       }
     }
   },

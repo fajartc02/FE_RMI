@@ -845,6 +845,10 @@ export default {
     async submitAbnormalSample() {
       try {
         this.objPayload.notes = this.notes
+        if (!this.notes || this.notes === '') {
+          this.$swal('', 'Notes tidak boleh kosong, silahkan di isi terlebihdahulu!', 'info')
+          return;
+        }
         const response = await this.ACTION_SAMPLE_SAND(this.objPayload)
 
         this.objPayload = null

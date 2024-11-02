@@ -17,7 +17,7 @@
           <template v-for="(value, key, idxChild) in item" :key="idxChild + 2">
             <CTableDataCell v-if="key != 'id' && !key.toLowerCase().includes('id')"
               :class="`${value === 'OK' ? 'text-success' : value === 'NG' ? 'text-danger' : `${value}`.includes('REVISION') || `${value}`.includes('WARNING') ? 'text-warning' : ''}`">
-              {{ typeof value === 'object' ? value?.name : value }}
+              {{ typeof value === 'object' ? value?.name : typeof value === 'boolean' ? (value ? '✔️' : '') : value }}
             </CTableDataCell>
           </template>
           <CTableDataCell>
