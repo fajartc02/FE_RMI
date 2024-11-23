@@ -8,7 +8,7 @@
     <div class="row mt-1">
       <div class="col-12">
         <div class="card p-2 overflow-auto mb-2">
-          <TableComponentVue :dataTable="GET_SAMPLE_SAND" @emit-data="onDataSelected" />
+          <TableComponentVue :dataTable="remapData" @emit-data="onDataSelected" includeLoading="true" />
         </div>
         <PaginationComponent />
       </div>
@@ -47,7 +47,11 @@ export default {
         InputModel('Status', 'option', 'Select Status', null, [{ id: 'NONE', label: 'All' }, { id: 'OK', label: 'OK' }, { id: 'NG', label: 'NG' }, { id: 'REVISION', label: 'REVISION' }], null, false)
       ],
       isLineChanges: false,
-      isLineSelected: false
+      isLineSelected: false,
+      remapData: {
+        data: [],
+      },
+      isLoading: false,
     }
   },
   watch: {
@@ -70,6 +74,52 @@ export default {
     isLineChanges: function () {
       this.ACTION_MACHINE({ lineId: this.isLineChanges, materialCategory: 'SAND' })
       // this.ACTION_MACHINE({ materialCategory: 'SAND' })
+    },
+    GET_SAMPLE_SAND: function () {
+      try {
+        this.isLoading = true;
+        if (this.GET_SAMPLE_SAND?.data.length > 0 && this.GET_SAMPLE_SAND?.data) {
+          console.log(this.GET_SAMPLE_SAND?.data)
+          this.remapData.data = this.GET_SAMPLE_SAND?.data.map((x, idx) => {
+            let objData = {
+              no: idx + 1,
+              id: x.id,
+              date: null,
+              time: null,
+              machine: null,
+              shift: null,
+              pic: null,
+              isNight: null,
+              totalGfn: null,
+              totalPercIndex: null,
+              status: null,
+            }
+            let date = moment(x.date).format('YYYY-MM-DD')
+            let time = x.time
+            let machine = x.machine.name
+            let shift = x.shift.name
+            let pic = x.pic
+            let isNight = x.isNight
+            let totalGfn = x.totalGfn
+            let totalPercIndex = x.totalPercIndex
+            let status = x.status
+            objData.date = date
+            objData.time = time
+            objData.machine = machine
+            objData.shift = shift
+            objData.pic = pic
+            objData.isNight = isNight
+            objData.totalGfn = totalGfn
+            objData.totalPercIndex = totalPercIndex
+            objData.status = status
+
+            return objData
+          })
+        }
+      } catch (error) {
+        console.log(error);
+        this.isLoading = false;
+      }
     },
     isLineSelected: function () {
       if (!this.isLineSelected) {

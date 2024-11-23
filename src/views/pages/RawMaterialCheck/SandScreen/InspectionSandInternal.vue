@@ -55,7 +55,7 @@
             Check</button>
           <template v-if="isSandCheck">
             <input class="form-control form-control-sm mx-2" type="date" v-model="data.headers.date"
-              :max="data.headers.date">
+              :max="data.headers.date" :disabled="isSubmitted">
             <button :class="`btn btn-warning mx-2`" @click="resetInput">Reset</button>
           </template>
         </div>
@@ -115,7 +115,7 @@
                           {{ getYearDate }}
                         </td>
                         <td colspan="4">
-                          <select class="form-select" v-model="data.headers.machineId">
+                          <select class="form-select" v-model="data.headers.machineId" :disabled="isSubmitted">
                             <option disabled value=null>Pilih Machine</option>
                             <option v-for="machine in GET_MACHINE" :key="machine.id" :value="machine.id">
                               {{ machine.name }}
@@ -123,7 +123,8 @@
                           </select>
                         </td>
                         <td>
-                          <input class="form-control" type="time" v-model="data.headers.time" :max="data.headers.time">
+                          <input class="form-control" type="time" v-model="data.headers.time" :max="data.headers.time"
+                            :disabled="isSubmitted">
                         </td>
                       </tr>
                     </thead>
@@ -153,7 +154,8 @@
                           {{ element.description || element.name }}
                         </td>
                         <td colspan="2" style="width: 200px">
-                          <input class="form-control" type="number" min="0" v-model="element.value">
+                          <input class="form-control" type="number" min="0" v-model="element.value"
+                            :disabled="isSubmitted">
                         </td>
                         <td colspan="2" style="width: 200px">
                           {{ calcelementIndex(element.value, 1) }}
@@ -238,7 +240,7 @@
                                 getCalculateBinderType2 }}</b>
                             <input
                               v-if="subElement?.name.toUpperCase() !== 'SODA' && subElement?.name.toUpperCase() !== 'BINDER'"
-                              type="number" class="form-control" v-model="subElement.value">
+                              type="number" :disabled="isSubmitted" class="form-control" v-model="subElement.value">
                           </th>
                         </tr>
                       </template>
@@ -540,8 +542,8 @@ export default {
       // Soda Type 1 X 4.09
       return +(sodaValue * 4.09).toFixed(2)
     },
-    isNightCondition() {
-      if (this.data.headers.time) {
+    isNightCondition(timeHeader) {
+      if (this.data.headers.time || timeHeader) {
         const startTime = moment(`${moment(this.data.headers.date).format('YYYY-MM-DD')} 06:00`)
         const endTime = moment(`${moment(this.data.headers.date).format('YYYY-MM-DD')} 20:00`)
         const currentTime = moment(`${moment(this.data.headers.date).format('YYYY-MM-DD')} ${this.data.headers.time}`)
@@ -878,6 +880,7 @@ export default {
           this.dustElement = response?.data?.elements?.dustElement || {}
           this.gfnElement = response?.data?.elements?.gfnElement || {}
           this.selectedShift(this.data.headers.shiftId)
+          this.isNightCondition(this.data.headers.time)
           this.notes = response?.data?.notes || null
           this.isHeaderNotEmpty = response?.data?.headers != null
           this.isElementNotEmpty = response?.data?.elements?.length !== 0

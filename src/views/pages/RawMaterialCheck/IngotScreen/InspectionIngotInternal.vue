@@ -170,7 +170,8 @@ export default {
       sampleCodeSuggested: [],
       elementOutOfRanged: [],
       modalShowJudg: false,
-      notes: null
+      notes: null,
+      paramsSampleCode: null
     }
   },
   watch: {
@@ -203,6 +204,12 @@ export default {
       if (this.selectedValidSampleCode) {
         this.input.sampleCode = this.selectedValidSampleCode
         await this.$store.dispatch(ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, this.selectedValidSampleCode)
+      }
+    },
+    paramsSampleCode() {
+      console.log('paramsSampleCode: ', this.paramsSampleCode)
+      if (this.paramsSampleCode) {
+        this.selectedValidSampleCode = this.paramsSampleCode
       }
     }
   },
@@ -325,6 +332,9 @@ export default {
           this.$swal.close()
         }, 1000)
       }
+    },
+    isSampleReadyOnParams() {
+      this.paramsSampleCode = this.$route.query.sampleCode;
     }
   },
   components: {
@@ -336,6 +346,9 @@ export default {
     Treeselect
   },
   async mounted() {
+    if (this.$route.query.sampleCode) {
+      this.isSampleReadyOnParams()
+    }
     await this.$store.dispatch(ACTION_RESET_SAMPLE_INGOT)
     await this.$store.dispatch(ACTION_RESET_QR_SAMPLE)
   }

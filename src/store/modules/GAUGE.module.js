@@ -1,6 +1,6 @@
 import ApiService from '../services/api.service'
-import {ACTION_LOADING} from './LOADING.module'
-import {ACTION_SET_META} from "@/store/modules/META.module";
+import { ACTION_LOADING } from './LOADING.module'
+import { ACTION_SET_META } from "@/store/modules/META.module";
 import commonUtils from "@/utils/CommonUtils";
 
 export const GET_GAUGE = 'GET_GAUGE'
@@ -53,27 +53,28 @@ const mutations = {
 }
 
 const actions = {
-  async ACTION_GAUGE({commit, dispatch}, params) {
+  async ACTION_GAUGE({ commit, dispatch }, params) {
     try {
       ApiService.setHeader()
       dispatch(ACTION_LOADING, true)
-      const {data} = await ApiService.query('gauge/', params)
+      const { data } = await ApiService.query('gauge/', params)
       dispatch(ACTION_LOADING, false)
-      commit(SET_GAUGE, data.data)
+      commit(SET_GAUGE, data?.data)
+      return data?.data
     } catch (error) {
       console.error(error)
       dispatch(ACTION_LOADING, false)
       return error
     }
   },
-  async ACTION_TBL_GAUGE({commit, dispatch}, filter) {
+  async ACTION_TBL_GAUGE({ commit, dispatch }, filter) {
     try {
       dispatch(ACTION_LOADING, true)
 
       const fetch = async () => {
         ApiService.setHeader()
         console.log('ACTION_TBL_GAUGE', 'filter', filter);
-        const {data} = await ApiService.query('gauge', filter)
+        const { data } = await ApiService.query('gauge', filter)
         console.log('ACTION_TBL_GAUGE', 'data', data);
         const pagination = data.meta.pagination
         pagination ? dispatch(ACTION_SET_META, pagination) : null
@@ -96,11 +97,11 @@ const actions = {
       return error
     }
   },
-  async ACTION_ADD_GAUGE({commit, dispatch, state}, params) {
+  async ACTION_ADD_GAUGE({ commit, dispatch, state }, params) {
     try {
       delete params.id;
       ApiService.setHeader();
-      const {data} = await ApiService.post('gauge', params);
+      const { data } = await ApiService.post('gauge', params);
       console.log('ACTION_ADD_GAUGE', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -118,13 +119,13 @@ const actions = {
       throw e;
     }
   },
-  async ACTION_EDIT_GAUGE({commit, dispatch}, GAUGEData) {
+  async ACTION_EDIT_GAUGE({ commit, dispatch }, GAUGEData) {
     try {
       const id = GAUGEData.id;
       delete GAUGEData.id;
 
       ApiService.setHeader()
-      const {data} = await ApiService.put(`gauge/${id}`, GAUGEData)
+      const { data } = await ApiService.put(`gauge/${id}`, GAUGEData)
       console.log('ACTION_EDIT_GAUGE', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -143,10 +144,10 @@ const actions = {
       throw e;
     }
   },
-  async ACTION_REMOVE_GAUGE({commit, dispatch}, GAUGEData) {
+  async ACTION_REMOVE_GAUGE({ commit, dispatch }, GAUGEData) {
     try {
       ApiService.setHeader()
-      const {data} = await ApiService.delete(`gauge/${GAUGEData.id}`)
+      const { data } = await ApiService.delete(`gauge/${GAUGEData.id}`)
       console.log('ACTION_REMOVE_GAUGE', data);
 
       if (commonUtils.isMock()) {

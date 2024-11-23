@@ -16,6 +16,8 @@ export const ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL =
   'ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL'
 export const ACT_SAMP_INGOT_VEN_HIS_DET = 'ACT_SAMP_INGOT_VEN_HIS_DET'
 
+export const ACTION_SHIMADZU_INCOMPLETED = 'ACTION_SHIMADZU_INCOMPLETED'
+
 const state = {
   SAMPLE_INGOT_DATA: {
     headers: null,
@@ -52,10 +54,10 @@ const mutations = {
     state.SAMPLE_INGOT_DATA = payload
       ? payload
       : {
-          headers: null,
-          tablePureVendor: null,
-          tableInternalVendor: null,
-        }
+        headers: null,
+        tablePureVendor: null,
+        tableInternalVendor: null,
+      }
   },
   SET_SAMPLE_INGOT_HISTORICAL(state, payload) {
     state.SAMPLE_INGOT_HISTORICAL.data = payload.data ? payload.data : []
@@ -86,10 +88,10 @@ const actions = {
         return data.data
           ? data.data
           : {
-              headers: null,
-              tablePureVendor: null,
-              tableInternalVendor: null,
-            }
+            headers: null,
+            tablePureVendor: null,
+            tableInternalVendor: null,
+          }
       } else {
         const { data } = await ApiService.get(`shimadzu`, gaugeId)
         dispatch(ACTION_LOADING, false)
@@ -97,15 +99,28 @@ const actions = {
         return data.data
           ? data.data
           : {
-              headers: null,
-              tablePureVendor: null,
-              tableInternalVendor: null,
-            }
+            headers: null,
+            tablePureVendor: null,
+            tableInternalVendor: null,
+          }
       }
     } catch (error) {
       dispatch(ACTION_LOADING, false)
       console.error(error)
       return error
+    }
+  },
+  async ACTION_SHIMADZU_INCOMPLETED({ commit, dispatch }, { gaugeId, inCompleted = true, take }) {
+    try {
+      ApiService.setHeader()
+      dispatch(ACTION_LOADING, true)
+      const response = await ApiService.query('shimadzu', { inCompleted, gaugeId, take })
+      dispatch(ACTION_LOADING, false)
+      return response?.data?.data
+    } catch (error) {
+      dispatch(ACTION_LOADING, false)
+      console.error(error)
+      throw error
     }
   },
   ACTION_RESET_SAMPLE_INGOT({ commit }) {
@@ -119,7 +134,6 @@ const actions = {
     try {
       ApiService.setHeader()
       dispatch(ACTION_LOADING, true)
-      console.log(filter)
 
       const { data } = await ApiService.query('sample-ingot/historical', filter)
       console.log(data)

@@ -32,10 +32,65 @@
       </template>
     </CModalBody>
   </CModal>
+  <CModal class="w-100" scrollable size="xl" :visible="showModalIncompleted" backdrop="static" @close="() => {
+    showModalIncompleted = false
+    sampleCodeIncompleted = []
+  }">
+    <CModalHeader>
+      <div class="row align-items-center">
+        <CModalTitle class="col-auto">Sample Code Not Completed Check</CModalTitle>
+      </div>
+    </CModalHeader>
+    <CModalBody>
+      <table class="table table-bordered table-striped text-center">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Sample Code</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody v-if="sampleCodeIncompleted.length > 0">
+          <tr v-for="(sample, idx) in sampleCodeIncompleted" :key="idx">
+            <td>{{ idx + 1 }}</td>
+            <td>{{ sample?.sampleCode }}</td>
+            <td>
+              <button class="btn btn-primary"
+                @click="$router.push(`/inspection/ingot/internal?sampleCode=${sample?.id}`)">Check!</button>
+            </td>
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr>
+            <td colspan="3">
+              <data-not-found :message="'Data not available'" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </CModalBody>
+  </CModal>
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
         <FilterComponentVue :fieldsInput="filters" @emit-filter="onChangeFilter" />
+      </div>
+    </div>
+    <h4 class="text-muted my-3">Sample Code Not Completed Check:</h4>
+    <div class="row mt-1">
+      <div v-for="gauge in gauges" :key="gauge.id" class="col-6">
+        <div class="card">
+          <div class="card-body">
+            <h6>{{ gauge.code }}</h6>
+            <h1>
+              {{ gauge.total }}
+            </h1>
+            <small style="color: blue;text-decoration: underline;cursor: pointer;" @click="() => {
+              showModalIncompleted = true
+              sampleCodeIncompleted = gauge.data
+            }">Click Here !</small>
+          </div>
+        </div>
       </div>
     </div>
     <div class="row mt-1">
@@ -63,11 +118,12 @@ import { ACTION_LINE, GET_LINE_TREESELECT } from '@/store/modules/LINE.module';
 import { ACTION_MACHINE, GET_MACHINE_TREESELECT } from '@/store/modules/MACHINE.module';
 
 import { mapActions, mapGetters } from 'vuex';
-import { ACTION_SAMPLE_INGOT_HISTORICAL, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, GET_SAMPLE_INGOT_HISTORICAL, ACT_SAMP_INGOT_VEN_HIS_DET } from '@/store/modules/SAMPLE_INGOT.module';
+import { ACTION_SAMPLE_INGOT_HISTORICAL, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, GET_SAMPLE_INGOT_HISTORICAL, ACT_SAMP_INGOT_VEN_HIS_DET, ACTION_SHIMADZU_INCOMPLETED } from '@/store/modules/SAMPLE_INGOT.module';
 import { ACTION_RESET_QR_SAMPLE, GET_QR_SAMPLE } from '@/store/modules/QR.module';
 import { GET_META } from '@/store/modules/META.module';
 import moment from 'moment'
 import STATUS_CONSTANT from '@/constants/STATUS_CONSTANT';
+import { ACTION_GAUGE } from '@/store/modules/GAUGE.module';
 
 export default {
   name: "HistoricalIngotVendor",
@@ -86,7 +142,10 @@ export default {
       ],
       isLineChanges: false,
       selectedIncharge: null,
-      isLineSelected: false
+      isLineSelected: false,
+      gauges: [],
+      sampleCodeIncompleted: [],
+      showModalIncompleted: false,
     }
   },
   watch: {
@@ -117,7 +176,7 @@ export default {
 
   },
   methods: {
-    ...mapActions([ACTION_LINE, ACTION_MACHINE, ACTION_SAMPLE_INGOT_HISTORICAL, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, ACTION_RESET_QR_SAMPLE, ACT_SAMP_INGOT_VEN_HIS_DET]),
+    ...mapActions([ACTION_LINE, ACTION_MACHINE, ACTION_SAMPLE_INGOT_HISTORICAL, ACTION_SAMPLE_INGOT_HISTORICAL_DETAIL, ACTION_RESET_QR_SAMPLE, ACT_SAMP_INGOT_VEN_HIS_DET, ACTION_GAUGE, ACTION_SHIMADZU_INCOMPLETED]),
     async onChangeFilter(filter) {
       this.isLineSelected = false
       if (filter.lineId) {
@@ -130,6 +189,33 @@ export default {
       } catch (error) {
         console.log(error);
         this.$swal('Error', 'Internal Server Error', 'error')
+      }
+    },
+    async getGauge() {
+      try {
+        const gauges = await this.ACTION_GAUGE({ orderDirection: 'ASC', orderField: 'code' })
+
+        const waitGaugesData = await gauges.map(async gauge => {
+          const sampleCode = await this.getSampleInCompleted(gauge.id)
+
+          return {
+            id: gauge.id,
+            code: gauge.code,
+            total: sampleCode.length,
+            data: sampleCode
+          }
+        })
+        this.gauges = await Promise.all(waitGaugesData)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async getSampleInCompleted(gaugeId) {
+      try {
+        const incompletedSampleCode = await this.ACTION_SHIMADZU_INCOMPLETED({ gaugeId, inCompleted: true, take: 1000 })
+        return incompletedSampleCode || []
+      } catch (error) {
+        console.log(error)
       }
     },
     async onDataSelected(data) {
@@ -167,6 +253,7 @@ export default {
     PaginationComponent
   },
   async mounted() {
+    this.getGauge()
     try {
       setTimeout(() => {
         this.ACTION_LINE({ page: 1, line: null })

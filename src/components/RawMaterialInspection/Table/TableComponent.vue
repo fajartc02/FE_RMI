@@ -32,7 +32,6 @@
         <LoadingComponent />
       </div>
     </div>
-
   </div>
 </template>
 
