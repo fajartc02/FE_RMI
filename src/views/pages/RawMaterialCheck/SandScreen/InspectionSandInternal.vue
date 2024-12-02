@@ -90,9 +90,9 @@
                           :class="`${daytime.isActive ? 'bg-success text-white' : ''}`">{{ daytime.name
                           }}</td>
                         <td style="width: 200px;">
-                          <i class="text-muted">{{ 'Hook data from 3rd Party' }}</i>
-                          <!-- <treeselect v-model="data.headers.pic" :options="[]" :clearable="true"
-                            placeholder="Pilih PIC" /> -->
+                          <!-- <i class="text-muted">{{ 'Hook data from 3rd Party' }}</i> -->
+                          <Treeselect v-model="data.headers.pic" :options="userOptions" :clearable="true"
+                            :disabled="isSubmitted" style="z-index: 100;" />
                         </td>
                       </tr>
                       <!-- End: Header 1 -->
@@ -153,9 +153,13 @@
                         <td>
                           {{ element.description || element.name }}
                         </td>
-                        <td colspan="2" style="width: 200px">
-                          <input class="form-control" type="number" min="0" v-model="element.value"
-                            :disabled="isSubmitted">
+                        <td colspan="2"
+                          :style="`background-color: ${colorCondition(element.value, element.min, element.max)};width: 200px`">
+                          <div class="d-flex justify-content-between">
+                            <input class="form-control" type="number" min="0" v-model="element.value"
+                              :disabled="isSubmitted" style="width: 70%;">
+                            <small class="mt-2 text-muted">Std: {{ element.min }} - {{ element.max }}</small>
+                          </div>
                         </td>
                         <td colspan="2" style="width: 200px">
                           {{ calcelementIndex(element.value, 1) }}
@@ -185,7 +189,8 @@
                         <td class="bg-dark" rowspan="2" colspan="3"></td>
                         <th colspan="2">Total % X Index</th>
                         <th>GFN</th>
-                        <th rowspan="2" style="font-size: 20px;">
+                        <th rowspan="2"
+                          :style="`font-size: 20px;background-color: ${colorCondition(calcGfn(sumOfElementValue), gfnElement.min, gfnElement.max)}`">
                           {{ calcGfn(sumOfElementValue) }}
                         </th>
                       </tr>
@@ -216,8 +221,13 @@
                         </tr>
                         <tr>
                           <th>Standard</th>
-                          <th v-for="subElement in element?.elements" :key="subElement.id">{{ subElement.min }} ~ {{
-                            subElement.max }}</th>
+                          <th v-for="subElement in element?.elements" :key="subElement.id">
+                            <div v-if="subElement.min || subElement.max">
+                              {{
+                                subElement.min }} ~ {{
+                                subElement.max }}
+                            </div>
+                          </th>
                         </tr>
                         <tr>
                           <th>{{ element.name }}</th>
@@ -231,12 +241,14 @@
                               style="font-size: 20px;">{{
                                 getCalculateSodaType2
                               }}</b>
-                            <b v-if="subElement?.name.toUpperCase() === 'BINDER' && element?.code.toUpperCase() === 'NATRIUM_TYPE_1'"
-                              style="font-size: 20px;">{{
+                            <b class="p-1"
+                              v-if="subElement?.name.toUpperCase() === 'BINDER' && element?.code.toUpperCase() === 'NATRIUM_TYPE_1'"
+                              :style="`font-size: 20px;background-color: ${colorCondition(getCalculateBinderType1, subElement.min, subElement.max)}`">{{
                                 getCalculateBinderType1
                               }}</b>
-                            <b v-if="subElement?.name.toUpperCase() === 'BINDER' && element?.code.toUpperCase() === 'NATRIUM_TYPE_2'"
-                              style="font-size: 20px;">{{
+                            <b class="p-1"
+                              v-if="subElement?.name.toUpperCase() === 'BINDER' && element?.code.toUpperCase() === 'NATRIUM_TYPE_2'"
+                              :style="`font-size: 20px;background-color: ${colorCondition(getCalculateBinderType2, subElement.min, subElement.max)}`">{{
                                 getCalculateBinderType2 }}</b>
                             <input
                               v-if="subElement?.name.toUpperCase() !== 'SODA' && subElement?.name.toUpperCase() !== 'BINDER'"
@@ -320,6 +332,7 @@ import { isNumber } from 'highcharts';
 import STATUS_ELEMENT_CONSTANT from '@/constants/STATUS_ELEMENT_CONSTANT';
 import { ACTION_SAMPLE_SAND, ACTION_SAMPLE_SAND_DETAIL, ADD_SAMPLE_SAND } from '@/store/modules/SAMPLE_SAND.module';
 import SAND_COL_CONSTANT from '@/constants/SAND_COL_CONSTANT';
+import { ACTION_TBL_USER, GET_TBL_USER } from '@/store/modules/USER.module';
 
 export default {
   name: 'InspectionSandInternal',
@@ -356,10 +369,22 @@ export default {
       notes: null,
       objPayload: null,
       isSubmitted: false,
-      isFormReady: false
+      isFormReady: false,
+      userOptions: [],
     }
   },
   watch: {
+    GET_TBL_USER: function () {
+      if (this.GET_TBL_USER?.data.length > 0) {
+        const userData = this.GET_TBL_USER?.data || []
+        this.userOptions = userData.map((user) => {
+          return {
+            id: user?.id,
+            label: `${user?.firstName} ${user?.lastName}`,
+          }
+        })
+      }
+    },
     GET_SHIFT: function () {
       if (this.GET_SHIFT.length > 0) {
         this.shiftData = this.GET_SHIFT.map((shift) => {
@@ -476,7 +501,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([IS_LOADING, GET_SHIFT, GET_MACHINE, GET_ELEMENT_INPUT]),
+    ...mapGetters([IS_LOADING, GET_SHIFT, GET_MACHINE, GET_ELEMENT_INPUT, GET_TBL_USER]),
     getDayDate() {
       return moment(this.data.headers.date).format('DD')
     },
@@ -524,15 +549,35 @@ export default {
     },
   },
   methods: {
-    ...mapActions([ACTION_SHIFT, ACTION_MACHINE, ACTION_SAND_ELEMENT_CHECK, ACTION_SAMPLE_SAND, ACTION_SAMPLE_SAND_DETAIL, ADD_SAMPLE_SAND]),
+    ...mapActions([ACTION_SHIFT, ACTION_MACHINE, ACTION_SAND_ELEMENT_CHECK, ACTION_SAMPLE_SAND, ACTION_SAMPLE_SAND_DETAIL, ADD_SAMPLE_SAND, ACTION_TBL_USER]),
     selectedDay(dayIndex) {
       this.DAY_CONSTANT.forEach((day) => {
         day.isActive = day.idx === dayIndex ? true : false
       })
     },
+    colorCondition(value, min, max) {
+      if (!value && (min !== 0 || max !== 0)) {
+        return ''
+      }
+
+      if (value >= min && value <= max) {
+        return '#89f996'
+      } else {
+        return '#f98989'
+      }
+
+    },
     calculateSodaType1(volumeValue) {
       // ((19.9 - Vol.) X 0.31): 10
       return +(((19.9 - volumeValue) * 0.31) / 10).toFixed(2)
+    },
+    async fetchUserData() {
+      try {
+        const userData = await this.ACTION_TBL_USER()
+        console.log('userData: ', userData)
+      } catch (error) {
+        console.log(error)
+      }
     },
     calculateSodaType2(volumeValue) {
       // ((9.9- Vol.) X 0.31): 10
@@ -896,12 +941,14 @@ export default {
   },
   components: {
     // QRScanner,
+    Treeselect,
     HeaderComp,
     LoadingComponent,
   },
   async mounted() {
     await this.ACTION_SHIFT()
     await this.ACTION_MACHINE({ materialCategory: 'SAND' })
+    await this.fetchUserData()
     if (this.$route.query.id) {
       this.isSubmitted = true
       this.isSandCheck = true

@@ -1,6 +1,6 @@
 import ApiService from '../services/api.service'
-import {ACTION_LOADING} from './LOADING.module'
-import {ACTION_SET_META} from "@/store/modules/META.module";
+import { ACTION_LOADING } from './LOADING.module'
+import { ACTION_SET_META } from "@/store/modules/META.module";
 import commonUtils from "@/utils/CommonUtils";
 
 export const GET_TBL_USER = 'GET_TBL_USER';
@@ -39,19 +39,20 @@ const mutations = {
 }
 
 const actions = {
-  async ACTION_TBL_USER({commit, dispatch}, filter) {
+  async ACTION_TBL_USER({ commit, dispatch }, filter) {
     try {
       dispatch(ACTION_LOADING, true)
 
       const fetch = async () => {
         ApiService.setHeader()
-        console.log('ACTION_TBL_USER', 'filter', filter);
-        const {data} = await ApiService.query('user', filter)
+        // console.log('ACTION_TBL_USER', 'filter', filter);
+        const { data } = await ApiService.query('user', filter)
         console.log('ACTION_TBL_USER', 'data', data);
         const pagination = data.meta.pagination
         pagination ? dispatch(ACTION_SET_META, pagination) : null
         dispatch(ACTION_LOADING, false)
         commit(SET_TBL_USER, data)
+        return data
       }
 
       if (commonUtils.isMock()) {
@@ -68,11 +69,11 @@ const actions = {
       throw error;
     }
   },
-  async ACTION_ADD_USER({commit, dispatch, state}, params) {
+  async ACTION_ADD_USER({ commit, dispatch, state }, params) {
     try {
       delete params.id;
       ApiService.setHeader();
-      const {data} = await ApiService.post('user', params);
+      const { data } = await ApiService.post('user', params);
       console.log('ACTION_ADD_USER', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -90,13 +91,13 @@ const actions = {
       throw e;
     }
   },
-  async ACTION_EDIT_USER({commit, dispatch}, USERData) {
+  async ACTION_EDIT_USER({ commit, dispatch }, USERData) {
     try {
       const id = USERData.id;
       delete USERData.id;
 
       ApiService.setHeader()
-      const {data} = await ApiService.put(`user/${id}`, USERData)
+      const { data } = await ApiService.put(`user/${id}`, USERData)
       console.log('ACTION_EDIT_USER', 'data', data);
 
       if (commonUtils.isMock()) {
@@ -115,10 +116,10 @@ const actions = {
       throw e;
     }
   },
-  async ACTION_REMOVE_USER({commit, dispatch}, USERData) {
+  async ACTION_REMOVE_USER({ commit, dispatch }, USERData) {
     try {
       ApiService.setHeader()
-      const {data} = await ApiService.delete(`user/${USERData.id}`)
+      const { data } = await ApiService.delete(`user/${USERData.id}`)
       console.log('ACTION_REMOVE_USER', 'data', data);
 
       if (commonUtils.isMock()) {
