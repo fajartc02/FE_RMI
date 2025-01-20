@@ -71,9 +71,9 @@ export default {
 
           if (isValidDate) {
             if (key === 'startDate') {
-              this.form[label ? key : input.id] = moment(moment(input.value)).hour(0).minute(0).second(0).unix()
+              this.form[label ? key : input.id] = moment(input.value).hour(0).minute(0).second(0).add(7, 'hours').unix()
             } else {
-              this.form[label ? key : input.id] = moment(moment(input.value)).hour(23).minute(59).second(59).unix()
+              this.form[label ? key : input.id] = moment(input.value).hour(23).minute(59).second(59).unix()
             }
           } else {
             if (input.value != 'NONE' && input.value)

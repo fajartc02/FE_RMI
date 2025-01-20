@@ -6,7 +6,7 @@ import JwtService from './jwt.service'
  */
 const ApiService = {
   init() {
-    axios.defaults.baseURL = 'http://localhost:3000/'
+    axios.defaults.baseURL = 'http://10.70.20.51:3000/'
     //  axios.defaults.baseURL = 'http://mt-system.id:3222/'
   },
 

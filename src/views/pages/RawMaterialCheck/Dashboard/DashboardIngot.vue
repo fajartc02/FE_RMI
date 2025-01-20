@@ -6,6 +6,14 @@
         <FilterComponentVue :fieldsInput="fieldsInput" @emit-filter="onChangeFilter" :isDisabledPagination="true" />
       </div>
     </div>
+    <!-- <div class="row">
+      <div class="col-6 card">
+        <ChartParameterNew />
+      </div>
+      <div class="col-6 card">
+        <ChartParameterNew2 />
+      </div>
+    </div> -->
     <div class="row mt-2">
       <div v-for="(incharge, i) in incharges" :key="i" class="col-12 my-1">
         <CAccordion :active-item-key="1">
@@ -22,7 +30,9 @@
                       <h6 v-else-if="!this.filters?.elementId">{{ element.label }} ({{ element.code }})</h6>
                       <div class="card" v-if="!this.filters?.elementId">
                         <div class="card-body p-0">
-                          <ChartParameterVue :inCharge="incharge.label" :elementId="element.id" :filters="filters"
+                          <!-- <ChartParameterVue :inCharge="incharge.label" :elementId="element.id" :filters="filters"
+                            :element="'INGOT'" /> -->
+                          <ChartParameterNew2 :inCharge="incharge.label" :elementId="element.id" :filters="filters"
                             :element="'INGOT'" />
                         </div>
                       </div>
@@ -51,6 +61,8 @@ import InputModel from '@/components/RawMaterialInspection/Filter/InputModel'
 import { mapActions, mapGetters } from 'vuex'
 import { ACTION_LINE, GET_LINE_TREESELECT } from '@/store/modules/LINE.module'
 import ChartParameterVue from '@/components/RawMaterialInspection/Charts/ChartParameter.vue'
+import ChartParameterNew from '@/components/RawMaterialInspection/Charts/ChartParameterNew.vue'
+import ChartParameterNew2 from '@/components/RawMaterialInspection/Charts/ChartParameterNew2.vue'
 import moment from 'moment'
 import { ACTION_INGOT_ELEMENT, GET_ELEMENT } from '@/store/modules/ELEMENTS.module'
 import { ACTION_MACHINE, GET_MACHINE_TREESELECT } from '@/store/modules/MACHINE.module'
@@ -86,7 +98,7 @@ export default {
     GET_MACHINE_TREESELECT: function () {
       let idxMachineInput = this.fieldsInput.findIndex(x => x.title == 'Machine');
       let idxInchargeInput = this.fieldsInput.findIndex(x => x.title == 'In Charge');
-      this.fieldsInput.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', [{ id: 'NONE', label: 'All' }, ...this.GET_MACHINE_TREESELECT], null, false, 'machineId'))
+      this.fieldsInput.splice(idxMachineInput, 1, InputModel('Machine', 'treeselect', 'Select Machine', 'NONE', [{ id: 'NONE', label: 'All' }, ...this.GET_MACHINE_TREESELECT], null, true, 'machineId'))
       this.fieldsInput.splice(idxInchargeInput, 1, InputModel('In Charge', 'option', 'Select In Charge', 'NONE', [{ id: 'NONE', label: 'All' }, { id: 'VENDOR', label: 'VENDOR' }, { id: 'INTERNAL', label: 'INTERNAL' }], null, false))
     },
     GET_ELEMENT: function () {
@@ -136,7 +148,9 @@ export default {
   },
   components: {
     FilterComponentVue,
-    ChartParameterVue
+    ChartParameterVue,
+    // ChartParameterNew,
+    ChartParameterNew2,
   },
   async mounted() {
     // this.$router.go()
